@@ -20,10 +20,3 @@ class AbstractBaseContent(models.Model):
     class Meta:
         abstract = True
         ordering = ('-pub_date',)
-
-
-class BaseContent(AbstractBaseContent):
-    '''
-    A basic common parent class for content from across the site to inherit from.
-    '''
-    pass

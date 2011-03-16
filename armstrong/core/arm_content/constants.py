@@ -1,10 +1,8 @@
-PUB_STATUS_DRAFT = 'D'
-PUB_STATUS_EDIT = 'E'
-PUB_STATUS_PUBLISHED = 'P'
-PUB_STATUS_TRASH = 'T'
 PUB_STATUS_CHOICES = (
-    (PUB_STATUS_DRAFT, 'Draft'),
-    (PUB_STATUS_EDIT, 'Edit'),
-    (PUB_STATUS_PUBLISHED, 'Published'),
-    (PUB_STATUS_TRASH, 'Trash'),
+    ('D', 'Draft'),
+    ('E', 'Edit'),
+    ('P', 'Published'),
+    ('T', 'Trash'),
 )
+
+PUB_STATUSES = dict((pair[1], pair[0]) for pair in PUB_STATUS_CHOICES)

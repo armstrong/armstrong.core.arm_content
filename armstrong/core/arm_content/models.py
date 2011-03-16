@@ -1,4 +1,7 @@
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models.query import QuerySet
 
 from .constants import PUB_STATUS_CHOICES
 
@@ -16,7 +19,56 @@ class AbstractBaseContent(models.Model):
     pub_date = models.DateTimeField(db_index=True)
     pub_status = models.CharField((u'Publication status'), max_length=1,
         choices=PUB_STATUS_CHOICES, help_text=(u'Only published items will appear on the site'))
+    # Subclasses keep track of their content type here so the original
+    # subclassed object can be obtained given a BaseContent row from the DB.
+    content_type = models.ForeignKey(ContentType, editable=False, null=True)
 
     class Meta:
         abstract = True
         ordering = ('-pub_date',)
+
+    def save(self, *args, **kwargs):
+        if not self.content_type:
+            self.content_type = ContentType.objects.get_for_model(self.__class__)
+        super(AbstractBaseContent, self).save(*args, **kwargs)
+
+    def as_child_class(self):
+        Model = self.content_type.model_class()
+        if Model == self.__class__:
+            return self
+        else:
+            try:
+                return Model.objects.get(id=self.id)
+            except ObjectDoesNotExist:
+                return None
+
+
+class SubclassingQuerySet(QuerySet):
+    '''
+    Yields the child class version object for each item.
+
+    Requires a model that has as_child_class method that does the actual work.
+    Inspired by: http://www.djangosnippets.org/snippets/1034/
+    '''
+    # TODO: When a queryset is evaluated, we should try to pull all items of
+    # each type at the same time to use fewer queries.
+    def __getitem__(self, k):
+        result = super(SubclassingQuerySet, self).__getitem__(k)
+        if isinstance(result, models.Model):
+            return result.as_child_class()
+        else:
+            return result
+
+    def iterator(self):
+        for item in super(SubclassingQuerySet, self).iterator():
+            child = item.as_child_class()
+            # When an error occurs while creating a Content item, the
+            # Content item may have already been created without the
+            # subclass creation succeeding. Ignore those.
+            if child is not None:
+                yield child
+
+
+class SubclassingManager(models.Manager):
+    def get_query_set(self):
+        return SubclassingQuerySet(self.model)

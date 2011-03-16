@@ -1,10 +1,12 @@
 from django.db import models
 
-from ...models import AbstractBaseContent
+from ...models import AbstractBaseContent, SubclassingManager
 
 
 class BaseContent(AbstractBaseContent):
     title = models.CharField(max_length=255)
+
+    objects = SubclassingManager()
 
 
 class Article(BaseContent):

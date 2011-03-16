@@ -33,14 +33,9 @@ class AbstractBaseContent(models.Model):
         super(AbstractBaseContent, self).save(*args, **kwargs)
 
     def as_child_class(self):
-        Model = self.content_type.model_class()
-        if Model == self.__class__:
-            return self
-        else:
-            try:
-                return Model.objects.get(id=self.id)
-            except ObjectDoesNotExist:
-                return None
+        if not hasattr(self, '_child_obj'):
+            self._child_obj = self.content_type.get_object_for_this_type(pk=self.pk)
+        return self._child_obj
 
 
 class SubclassingQuerySet(QuerySet):

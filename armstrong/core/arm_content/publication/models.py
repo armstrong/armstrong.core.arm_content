@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..constants import PUB_STATUS_CHOICES
+from .constants import PUB_STATUS_CHOICES
 
 
 class PublicationMixin(models.Model):

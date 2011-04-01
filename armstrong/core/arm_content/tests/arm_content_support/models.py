@@ -1,9 +1,10 @@
 from django.db import models
 
 from ...models import AbstractBaseContent, SubclassingManager
+from ...publication.models import PublicationMixin
 
 
-class BaseContent(AbstractBaseContent):
+class BaseContent(AbstractBaseContent, PublicationMixin):
     title = models.CharField(max_length=255)
 
     objects = SubclassingManager()

@@ -3,8 +3,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models.query import QuerySet
 
-from .constants import PUB_STATUS_CHOICES
-
 
 class AbstractBaseContent(models.Model):
     '''
@@ -16,16 +14,12 @@ class AbstractBaseContent(models.Model):
     a query. The overarching content model used in an Armstrong implementation
     should contain these fields.
     '''
-    pub_date = models.DateTimeField(db_index=True)
-    pub_status = models.CharField((u'Publication status'), max_length=1,
-        choices=PUB_STATUS_CHOICES, help_text=(u'Only published items will appear on the site'))
     # Subclasses keep track of their content type here so the original
     # subclassed object can be obtained given a BaseContent row from the DB.
     content_type = models.ForeignKey(ContentType, editable=False, null=True)
 
     class Meta:
         abstract = True
-        ordering = ('-pub_date',)
 
     def save(self, *args, **kwargs):
         if not self.content_type:

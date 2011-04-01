@@ -4,7 +4,7 @@ from .arm_content_support.models import BaseContent, Article, Video
 from ._utils import create_random_article, create_random_video
 
 
-class AbstractBaseContentTestCase(TestCase):
+class BaseContentTestCase(TestCase):
     def test_can_add_content(self):
         article = create_random_article()
         Article.objects.get(id=article.id)

@@ -1,13 +1,11 @@
 from django.db import models
+from polymorphic import PolymorphicModel
 
-from ...models import AbstractBaseContent, SubclassingManager
 from ...publication.models import PublicationMixin
 
 
-class BaseContent(AbstractBaseContent, PublicationMixin):
+class BaseContent(PolymorphicModel, PublicationMixin):
     title = models.CharField(max_length=255)
-
-    objects = SubclassingManager()
 
 
 class Article(BaseContent):

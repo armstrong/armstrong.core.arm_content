@@ -2,7 +2,7 @@ from datetime import datetime
 import random
 
 from .arm_content_support.models import Article, Video
-from ..constants import PUB_STATUSES
+from ..publication.constants import PUB_STATUSES
 
 
 def create_random_article(**options):

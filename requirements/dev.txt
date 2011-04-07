@@ -6,3 +6,4 @@
 # common fields for querying across the child content types. Our tests include
 # that use case.
 -e git://github.com/bconstantin/django_polymorphic.git@2c47db8fcc284a92d2c9769ba503603fbea92660#egg=django_polymorphic
+coverage

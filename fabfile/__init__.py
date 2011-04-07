@@ -10,5 +10,6 @@ def test():
         ),
         'ROOT_URLCONF': 'armstrong.core.arm_content.tests.arm_content_support.urls',
     }
-    run_tests(settings, 'arm_content_support', 'arm_content')
+    with html_coverage_report():
+        run_tests(settings, 'arm_content_support', 'arm_content')
 

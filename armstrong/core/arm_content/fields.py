@@ -1,5 +1,6 @@
+from django.conf import settings
 from django.db import models
-from django.db.models.fields.subclassing import Creator
+from django.utils.importlib import import_module
 import urllib2
 
 
@@ -15,7 +16,11 @@ class YouTubeBackend(object):
 class ExternalVideo(object):
     def __init__(self, url=None, backend=None):
         if not backend:
-            backend = YouTubeBackend
+            # TODO: Should raise an ImproperlyConfigured error if this isn't
+            #       present in the settings variable.
+            module, backend_class = settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND.rsplit(".", 1)
+            backend_module = import_module(module)
+            backend = getattr(backend_module, backend_class)
         self.backend = backend()
         self.raw_url = url
         self.query = None

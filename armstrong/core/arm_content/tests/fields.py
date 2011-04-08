@@ -1,7 +1,10 @@
 from django.db import models
+import fudge
+
 from ._utils import *
 from .arm_content_support.models import SimpleVideoModel
 
+from .. import fields
 from ..fields import ExternalVideo
 
 
@@ -73,3 +76,15 @@ class ExternalVideoTestCase(TestCase):
         self.assertEqual(random_id, v.id)
         self.assertEqual(random_url, v.url)
         self.assertEqual("Example", v.type)
+
+    def test_uses_configured_backend_if_nothing_is_provided(self):
+        settings = fudge.Fake(fields.settings)
+        backend = "armstrong.core.arm_content.tests.fields.ExampleBackend"
+        settings.has_attr(ARMSTRONG_EXTERNAL_VIDEO_BACKEND=backend)
+
+        with fudge.patched_context(fields, 'settings', settings):
+            random_url = "foobar-%d" % random.randint(100, 200)
+            random_id = "%d" % random.randint(100, 200)
+            v = ExternalVideo("%s:%s" % (random_url, random_id))
+            self.assertEqual(random_id, v.id)
+            self.assertEqual(random_url, v.url)

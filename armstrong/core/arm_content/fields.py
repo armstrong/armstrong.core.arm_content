@@ -3,23 +3,32 @@ from django.db.models.fields.subclassing import Creator
 import urllib2
 
 
+class YouTubeBackend(object):
+    type = "YouTube"
+
+    def parse(self, value):
+        url = urllib2.urlparse.urlparse(value)
+        query = urllib2.urlparse.parse_qs(url.query)['v'][0]
+        return (url, query)
+
+
 class ExternalVideo(object):
-    def __init__(self, url=None):
+    def __init__(self, url=None, backend=None):
+        if not backend:
+            backend = YouTubeBackend
+        self.backend = backend()
         self.raw_url = url
-        self.query = False
+        self.query = None
         if url:
-            self.url = urllib2.urlparse.urlparse(url)
-            self.query = urllib2.urlparse.parse_qs(self.url.query)
+            (self.url, self.query) = self.backend.parse(url)
 
     @property
     def id(self):
-        if self.query:
-            return self.query['v'][0]
-        return None
+        return self.query
 
     @property
     def type(self):
-        return "YouTube"
+        return self.backend.type
 
 
 class VideoField(models.URLField):

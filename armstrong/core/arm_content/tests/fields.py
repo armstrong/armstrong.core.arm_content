@@ -5,6 +5,27 @@ from .arm_content_support.models import SimpleVideoModel
 from ..fields import ExternalVideo
 
 
+class ExampleBackend(object):
+    type = "Example"
+
+    def parse(self, value):
+        return value.split(":")
+
+
+class ExampleBackendTestCase(TestCase):
+    def test_type_of_Example(self):
+        backend = ExampleBackend()
+        self.assertEqual("Example", backend.type)
+
+    def test_splits_on_colon(self):
+        random_url = "foobar.com/watch-%d" % random.randint(100, 200)
+        random_id = "%d" % random.randint(100, 200)
+        backend = ExampleBackend()
+        base_url, id = backend.parse("%s:%s" % (random_url, random_id))
+        self.assertEqual(base_url, random_url)
+        self.assertEqual(id, random_id)
+
+
 class VideoFieldTestCase(TestCase):
     def test_sets_source_to_ExternalVideo(self):
         video = SimpleVideoModel()
@@ -43,3 +64,12 @@ class ExternalVideoTestCase(TestCase):
         video.source = v
         self.assertEqual("YouTube", video.source.type, msg="sanity check")
         self.assertEqual("abc", video.source.id, msg="sanity check")
+
+    def test_uses_provided_backend(self):
+        random_url = "foobar-%d" % random.randint(100, 200)
+        random_id = "%d" % random.randint(100, 200)
+        v = ExternalVideo("%s:%s" % (random_url, random_id),
+                backend=ExampleBackend)
+        self.assertEqual(random_id, v.id)
+        self.assertEqual(random_url, v.url)
+        self.assertEqual("Example", v.type)

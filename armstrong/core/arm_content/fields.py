@@ -3,18 +3,8 @@ from django.db.models.fields.subclassing import Creator
 import urllib2
 
 
-def extract_id(self):
-    return self.source.id
-extract_id = property(extract_id)
-
-
-def extract_type(self):
-    return self.source.type
-extract_type = property(extract_type)
-
-
 class ExternalVideo(object):
-    def __init__(self, url):
+    def __init__(self, url=None):
         self.raw_url = url
         self.query = False
         if url:

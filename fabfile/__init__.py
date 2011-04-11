@@ -15,6 +15,7 @@ def pep8():
 def test():
     settings = {
         'INSTALLED_APPS': (
+            'django.contrib.auth',
             'django.contrib.contenttypes',
             'armstrong.core.arm_content',
             'armstrong.core.arm_content.tests.arm_content_support',

@@ -1,11 +1,11 @@
 from django.db import models
 import fudge
 
-from ._utils import *
-from .arm_content_support.models import SimpleVideoModel
+from .._utils import *
+from ..arm_content_support.models import SimpleVideoModel
 
-from .. import fields
-from ..fields import ExternalVideo
+from ... import fields
+from ...fields import ExternalVideo
 
 
 class ExampleBackend(object):

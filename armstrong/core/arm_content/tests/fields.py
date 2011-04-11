@@ -29,7 +29,7 @@ class ExampleBackendTestCase(TestCase):
         self.assertEqual(id, random_id)
 
 
-class VideoFieldTestCase(TestCase):
+class EmbeddedVideoFieldTestCase(TestCase):
     def test_sets_source_to_ExternalVideo(self):
         video = SimpleVideoModel()
         video.source = "http://www.youtube.com/watch?v=123"

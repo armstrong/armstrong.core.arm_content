@@ -36,12 +36,12 @@ class ExternalVideo(object):
         return self.backend.type
 
 
-class VideoField(models.URLField):
+class EmbeddedVideoField(models.URLField):
     __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = 255
-        super(VideoField, self).__init__(self, *args, **kwargs)
+        super(EmbeddedVideoField, self).__init__(self, *args, **kwargs)
 
     def get_prep_value(self, value):
         return value.raw_url

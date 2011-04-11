@@ -2,7 +2,7 @@ from django.db import models
 from polymorphic import PolymorphicModel
 
 from ...publication.models import PublicationMixin
-from ...fields import VideoField
+from ...fields import EmbeddedVideoField
 
 
 class BaseContent(PolymorphicModel, PublicationMixin):
@@ -18,4 +18,4 @@ class Video(BaseContent):
 
 
 class SimpleVideoModel(models.Model):
-    source = VideoField()
+    source = EmbeddedVideoField()

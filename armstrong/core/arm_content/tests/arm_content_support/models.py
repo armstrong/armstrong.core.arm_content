@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from polymorphic import PolymorphicModel
 
@@ -14,3 +15,10 @@ class Article(BaseContent):
 
 class Video(BaseContent):
     youtube_id = models.CharField(max_length=30)
+
+
+class SimpleProfile(models.Model):
+    user = models.OneToOneField(User)
+
+    def get_absolute_url(self):
+        return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')

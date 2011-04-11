@@ -1,9 +1,12 @@
 from django.contrib.auth.models import User
+import fudge
 import random
 
+from ..arm_content_support.models import SimpleProfile
 from .._utils import *
 
 from ...models import Authors
+from ... import models
 
 
 def generate_random_user():
@@ -19,6 +22,12 @@ def generate_random_users(n=2):
 def add_n_users_to_authors(authors, *users):
     for user in users:
         authors.users.add(user)
+
+
+def add_profile_to(profile_class, *users):
+    for user in users:
+        profile = profile_class.objects.create(user=user)
+        user._profile_cache = profile
 
 
 def generate_authors_with_two_users():
@@ -56,3 +65,26 @@ class AuthorsModelTestCase(TestCase):
 
         self.assertEqual(r, str(authors).count(','))
         self.assertEqual(1, str(authors).count(' and '), msg="sanity check")
+
+    def test_html_returns_plain_list_if_not_configured_with_profiles(self):
+        authors, bob, alice = generate_authors_with_two_users()
+        expected = "%s and %s" % (bob.get_full_name(), alice.get_full_name())
+
+        settings = fudge.Fake(models.settings)
+        settings.has_attr(AUTH_PROFILE_MODULE=None)
+        with fudge.patched_context(models, 'settings', settings):
+            self.assertEqual(expected, authors.html())
+
+    def test_html_returns_string_with_html_links(self):
+        authors, bob, alice = generate_authors_with_two_users()
+        add_profile_to(SimpleProfile, bob, alice)
+        expected_html_links = [
+                '<a href="/%s/">%s</a>' % (
+                    bob.get_full_name().lower().replace(' ', '-'),
+                    bob.get_full_name()),
+                '<a href="/%s/">%s</a>' % (
+                    alice.get_full_name().lower().replace(' ', '-'),
+                    alice.get_full_name()),
+        ]
+        expected = ' and '.join(expected_html_links)
+        self.assertEqual(expected, authors.html())

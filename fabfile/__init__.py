@@ -20,6 +20,7 @@ def test():
             'armstrong.core.arm_content',
             'armstrong.core.arm_content.tests.arm_content_support',
         ),
+        'AUTH_PROFILE_MODULE': 'arm_content_support.SimpleProfile',
         'ROOT_URLCONF': 'armstrong.core.arm_content.tests.arm_content_support.urls',
     }
     with html_coverage_report():

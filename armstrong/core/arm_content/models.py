@@ -1,5 +1,18 @@
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+
+
+def user_to_link(user):
+    try:
+        return '<a href="%s">%s</a>' % (user.get_profile().get_absolute_url(), user.get_full_name())
+    except ObjectDoesNotExist:
+        return user_to_name(user)
+
+
+def user_to_name(user):
+    return user.get_full_name()
 
 
 class Authors(models.Model):
@@ -7,11 +20,14 @@ class Authors(models.Model):
     override = models.CharField(max_length=200)
     extra = models.CharField(max_length=200)
 
-    def __unicode__(self):
+    def __unicode__(self, formatter=user_to_name):
         if self.override:
             return self.override
-        names = [a.get_full_name() for a in self.users.all()]
+        names = [formatter(a) for a in self.users.all()]
         ret = ', '.join(names[:-2] + [' and '.join(names[-2:])])
         if self.extra:
             ret = "%s %s" % (ret, self.extra)
         return ret
+
+    def html(self):
+        return self.__unicode__(formatter=user_to_link)

@@ -24,10 +24,10 @@ class Authors(models.Model):
         if self.override:
             return self.override
         names = [formatter(a) for a in self.users.all()]
-        ret = ', '.join(names[:-2] + \
-                [(', ' if self.extra else ' and ').join(names[-2:])])
+        ret = u', '.join(names[:-2] + \
+                [(u', ' if self.extra else u' and ').join(names[-2:])])
         if self.extra:
-            ret = "%s %s" % (ret, self.extra)
+            ret = u"%s %s" % (ret, self.extra)
         return ret
 
     def html(self):

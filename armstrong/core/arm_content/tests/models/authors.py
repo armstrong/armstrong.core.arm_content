@@ -1,3 +1,4 @@
+# coding=utf-8
 import fudge
 import random
 
@@ -8,6 +9,15 @@ from ... import models
 
 
 class AuthorsModelTestCase(TestCase):
+    def test_should_be_able_to_convert_to_unicode(self):
+        authors, bob, alice = generate_authors_with_two_users()
+        bob.first_name = u"Bøb"
+        bob.save()
+
+        self.assertTrue(type(authors.__unicode__()) is unicode)
+        expected = "%s and %s" % (bob.get_full_name(), alice.get_full_name())
+        self.assertEqual(expected, authors.__unicode__())
+
     def test_should_include_all_users_when_cast_to_a_string(self):
         authors, bob, alice = generate_authors_with_two_users()
         expected = "%s and %s" % (bob.get_full_name(), alice.get_full_name())

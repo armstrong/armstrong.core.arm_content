@@ -23,7 +23,7 @@ class AuthorsModelTestCase(TestCase):
         extra = "extra %d data" % random.randint(1000, 2000)
         authors, bob, alice = generate_authors_with_two_users()
         authors.extra = extra
-        expected = "%s and %s %s" % (bob.get_full_name(),
+        expected = "%s, %s %s" % (bob.get_full_name(),
                 alice.get_full_name(), extra)
         self.assertEqual(expected, str(authors))
 

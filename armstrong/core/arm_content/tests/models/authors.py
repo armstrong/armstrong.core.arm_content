@@ -68,3 +68,19 @@ class AuthorsModelTestCase(TestCase):
         ]
         expected = ' and '.join(expected_html_links)
         self.assertEqual(expected, authors.html())
+
+    def test_alpha_spacing_of_extra(self):
+        authors, bob, alice = generate_authors_with_two_users()
+        extra = "space expected before the s"
+        authors.extra = extra
+        expected = "%s, %s %s" % (bob.get_full_name(), alice.get_full_name(),
+                extra)
+        self.assertEqual(expected, str(authors))
+
+    def test_no_spacing_with_non_alpha_on_extras(self):
+        authors, bob, alice = generate_authors_with_two_users()
+        extra = ", no space expected before the s"
+        authors.extra = extra
+        expected = "%s, %s%s" % (bob.get_full_name(), alice.get_full_name(),
+                extra)
+        self.assertEqual(expected, str(authors))

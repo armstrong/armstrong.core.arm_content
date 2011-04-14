@@ -27,7 +27,8 @@ class Authors(models.Model):
         ret = u', '.join(names[:-2] + \
                 [(u', ' if self.extra else u' and ').join(names[-2:])])
         if self.extra:
-            ret = u"%s %s" % (ret, self.extra)
+            ret = u"%s%s%s" % (ret, ' ' if self.extra[0].isalpha() else '',
+                    self.extra)
         return ret
 
     def html(self):

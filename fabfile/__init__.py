@@ -1,5 +1,11 @@
 from ._utils import *
 
+
+@task
+def clean():
+    local('find . -name "*.py[co]" -exec rm {} \;')
+
+
 @task
 def test():
     settings = {

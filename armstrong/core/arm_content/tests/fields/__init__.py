@@ -78,11 +78,12 @@ class EmbeddedVideoTestCase(TestCase):
         self.assertEqual("Example", v.type)
 
     def test_uses_configured_backend_if_nothing_is_provided(self):
-        settings = fudge.Fake(fields.settings)
+        from ...video import backends
+        settings = fudge.Fake(backends.settings)
         backend = "armstrong.core.arm_content.tests.fields.ExampleBackend"
         settings.has_attr(ARMSTRONG_EXTERNAL_VIDEO_BACKEND=backend)
 
-        with fudge.patched_context(fields, 'settings', settings):
+        with fudge.patched_context(backends, 'settings', settings):
             random_url = "foobar-%d" % random.randint(100, 200)
             random_id = "%d" % random.randint(100, 200)
             v = EmbeddedVideo("%s:%s" % (random_url, random_id))

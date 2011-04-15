@@ -13,13 +13,9 @@ class EmbeddedVideo(object):
             backend = getattr(backend_module, backend_class)
         self.backend = backend()
         self.raw_url = url
-        self.query = None
+        self.id = None
         if url:
-            (self.url, self.query) = self.backend.parse(url)
-
-    @property
-    def id(self):
-        return self.query
+            (self.url, self.id) = self.backend.parse(url)
 
     @property
     def type(self):

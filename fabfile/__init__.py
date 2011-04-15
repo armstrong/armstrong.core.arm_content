@@ -20,7 +20,7 @@ def test():
             'armstrong.core.arm_content.tests.arm_content_support',
         ),
         'ROOT_URLCONF': 'armstrong.core.arm_content.tests.arm_content_support.urls',
-        'ARMSTRONG_EXTERNAL_VIDEO_BACKEND': 'armstrong.core.arm_content.fields.YouTubeBackend'
+        'ARMSTRONG_EXTERNAL_VIDEO_BACKEND': 'armstrong.core.arm_content.video.backends.YouTubeBackend'
     }
     with html_coverage_report():
         run_tests(settings, 'arm_content_support', 'arm_content')

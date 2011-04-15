@@ -4,8 +4,8 @@ import fudge
 from .._utils import *
 from ..arm_content_support.models import SimpleVideoModel
 
-from ... import fields
-from ...fields import ExternalVideo
+from ...video import EmbeddedVideo
+from ...video import fields
 
 
 class ExampleBackend(object):
@@ -30,10 +30,10 @@ class ExampleBackendTestCase(TestCase):
 
 
 class EmbeddedVideoFieldTestCase(TestCase):
-    def test_sets_source_to_ExternalVideo(self):
+    def test_sets_source_to_EmbeddedVideo(self):
         video = SimpleVideoModel()
         video.source = "http://www.youtube.com/watch?v=123"
-        self.assertTrue(isinstance(video.source, ExternalVideo))
+        self.assertTrue(isinstance(video.source, EmbeddedVideo))
 
     def test_stores_and_retrieves_from_field_from_database(self):
         random_id = "abcdef%d" % random.randint(100, 200)
@@ -44,9 +44,9 @@ class EmbeddedVideoFieldTestCase(TestCase):
                 SimpleVideoModel.objects.get(pk=id).source.id)
 
 
-class ExternalVideoTestCase(TestCase):
+class EmbeddedVideoTestCase(TestCase):
     def test_id_is_None_by_default(self):
-        v = ExternalVideo()
+        v = EmbeddedVideo()
         self.assertEqual(None, v.id)
 
     def test_settings_a_source_to_a_YouTube_url_stores_the_source_id(self):
@@ -61,8 +61,8 @@ class ExternalVideoTestCase(TestCase):
         video.source = "http://www.youtube.com/watch?v=%s" % random_id
         self.assertEqual("YouTube", video.source.type)
 
-    def test_can_take_an_ExternalVideo_object_as_a_type(self):
-        v = ExternalVideo("http://www.youtube.com/watch?v=abc")
+    def test_can_take_an_EmbeddedVideo_object_as_a_type(self):
+        v = EmbeddedVideo("http://www.youtube.com/watch?v=abc")
         video = SimpleVideoModel()
         video.source = v
         self.assertEqual("YouTube", video.source.type, msg="sanity check")
@@ -71,7 +71,7 @@ class ExternalVideoTestCase(TestCase):
     def test_uses_provided_backend(self):
         random_url = "foobar-%d" % random.randint(100, 200)
         random_id = "%d" % random.randint(100, 200)
-        v = ExternalVideo("%s:%s" % (random_url, random_id),
+        v = EmbeddedVideo("%s:%s" % (random_url, random_id),
                 backend=ExampleBackend)
         self.assertEqual(random_id, v.id)
         self.assertEqual(random_url, v.url)
@@ -85,6 +85,6 @@ class ExternalVideoTestCase(TestCase):
         with fudge.patched_context(fields, 'settings', settings):
             random_url = "foobar-%d" % random.randint(100, 200)
             random_id = "%d" % random.randint(100, 200)
-            v = ExternalVideo("%s:%s" % (random_url, random_id))
+            v = EmbeddedVideo("%s:%s" % (random_url, random_id))
             self.assertEqual(random_id, v.id)
             self.assertEqual(random_url, v.url)

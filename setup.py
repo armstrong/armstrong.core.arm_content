@@ -7,10 +7,16 @@ setup(
     author='Texas Tribune',
     author_email='tech@texastribune.org',
     url='http://github.com/texastribune/armstrong.core.arm_content/',
+    # TODO: generate this dynamically
     packages=[
         'armstrong',
         'armstrong.core',
         'armstrong.core.arm_content',
+        'armstrong.core.arm_content.tests',
+        'armstrong.core.arm_content.tests.fields',
+        'armstrong.core.arm_content.tests.models',
+        'armstrong.core.arm_content.video',
+        'armstrong.core.arm_content.video.backends',
     ],
 
     install_requires=[

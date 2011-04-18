@@ -23,11 +23,15 @@ def get_backend(settings=None):
         settings = default_settings
 
     backend_name = settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND
+    def to_backend(s):
+        module, backend_class = s.rsplit(".", 1)
+        backend_module = import_module(module)
+        return getattr(backend_module, backend_class)()
+
     if type(backend_name) is str:
         # TODO: Should raise an ImproperlyConfigured error if this isn't
         #       present in the settings variable.
-        module, backend_class = settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND.rsplit(".", 1)
-        backend_module = import_module(module)
-        return getattr(backend_module, backend_class)()
+        return to_backend(settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND)
     else:
-        return MultipleBackends()
+        return MultipleBackends(*[to_backend(s) for s in
+            settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND])

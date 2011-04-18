@@ -1,3 +1,4 @@
+from fudge.inspector import arg
 from .._utils import *
 
 from ...video import backends
@@ -43,6 +44,24 @@ class GetBackendTestCase(TestCase):
 
         backend = backends.get_backend(settings=settings)
         self.assertIsA(backend, backends.MultipleBackends)
+
+    def test_MultipleBackend_is_passed_configured_objects(self):
+        def is_TestableBackend(obj):
+            return isinstance(obj, TestableBackend)
+        def is_SomeOtherTestableBackend(obj):
+            return isinstance(obj, SomeOtherTestableBackend)
+
+        fake = fudge.Fake(backends.MultipleBackends)
+        fake.expects('__init__').with_args(arg.passes_test(is_TestableBackend),
+                arg.passes_test(is_SomeOtherTestableBackend))
+
+        my_backends = [self.backend_name('TestableBackend'),
+                self.backend_name('SomeOtherTestableBackend')]
+        settings = fudge.Fake()
+        settings.has_attr(ARMSTRONG_EXTERNAL_VIDEO_BACKEND=my_backends)
+
+        with fudge.patched_context(backends, 'MultipleBackends', fake):
+            backends.get_backend(settings=settings)
 
 
 class MultipleBackendsTestCase(TestCase):

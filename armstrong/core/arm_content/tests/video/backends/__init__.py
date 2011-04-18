@@ -1,6 +1,8 @@
 from fudge.inspector import arg
 from ..._utils import *
 
+from .youtube import *
+
 from ....video import backends
 
 

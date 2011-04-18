@@ -66,16 +66,46 @@ class GetBackendTestCase(TestCase):
             backends.get_backend(settings=settings)
 
 
+class NeverMatchesBackend(object):
+    def parse(self, video):
+        return None
+
+
+class AlwayMatchesBackend(object):
+    def parse(self, video):
+        video.url, video.id = video.raw_url.split("?")
+        return True
+
+
 class MultipleBackendsTestCase(TestCase):
     def test_each_backend_is_called_until_one_answers_with_non_none(self):
-        one = fudge.Fake()
-        one.expects('parse').with_args('foo/bar').returns(None)
+        backend = backends.MultipleBackends(NeverMatchesBackend(),
+                AlwayMatchesBackend())
+        video = EmbeddedVideo(backend=backend)
 
-        two = fudge.Fake()
-        expected = ("foo", "bar")
-        two.expects('parse').with_args('foo/bar').returns(expected)
+        first = "first-%d" % random.randint(100, 200)
+        second = "second-%d" % random.randint(100, 200)
+        video.raw_url = "%s?%s" % (first, second)
 
-        fudge.clear_calls()
+        self.assertTrue(backend.parse(video))
+        self.assertEqual(first, video.url)
+        self.assertEqual(second, video.id)
 
-        backend = backends.MultipleBackends(one, two)
-        self.assertEqual(expected + (two, ), backend.parse('foo/bar'))
+    def test_returns_not_True_if_no_backends_match(self):
+        backend = backends.MultipleBackends(NeverMatchesBackend())
+        video = EmbeddedVideo(backend=backend)
+        video.raw_url = "some-random-url"
+
+        self.assertFalse(backend.parse(video))
+
+    def test_sets_backend_on_EmbeddedVideo_to_the_backend_that_was_found(self):
+        backend = backends.MultipleBackends(NeverMatchesBackend(),
+                AlwayMatchesBackend())
+        video = EmbeddedVideo(backend=backend)
+
+        first = "first-%d" % random.randint(100, 200)
+        second = "second-%d" % random.randint(100, 200)
+        video.raw_url = "%s?%s" % (first, second)
+
+        backend.parse(video)
+        self.assertIsA(video.backend, AlwayMatchesBackend)

@@ -11,11 +11,11 @@ class MultipleBackends(object):
     def __init__(self, *others):
         self.others = others
 
-    def parse(self, url):
+    def parse(self, video):
         for other in self.others:
-            result = other.parse(url)
-            if result is not None:
-                return result + (other, )
+            if other.parse(video) is not None:
+                video.backend = other
+                return True
 
 
 def get_backend(settings=None):

@@ -23,8 +23,8 @@ def get_backend(settings=None):
         settings = default_settings
 
     backend_name = settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND
-    def to_backend(s):
-        module, backend_class = s.rsplit(".", 1)
+    def to_backend(a):
+        module, backend_class = a.rsplit(".", 1)
         backend_module = import_module(module)
         return getattr(backend_module, backend_class)()
 
@@ -33,5 +33,5 @@ def get_backend(settings=None):
         #       present in the settings variable.
         return to_backend(settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND)
     else:
-        return MultipleBackends(*[to_backend(s) for s in
+        return MultipleBackends(*[to_backend(a) for a in
             settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND])

@@ -8,7 +8,7 @@ class YouTubeBackendTestCase(TestCase):
         random_id = str(random.randint(100, 200))
         url = "http://youtube.com/watch?v=%s" % random_id
         backend = YouTubeBackend()
-        (url, _id, _type) = backend.parse(url)
+        (url, _id) = backend.parse(url)
         self.assertEqual("http", url.scheme)
         self.assertEqual("youtube.com", url.netloc)
 
@@ -16,5 +16,5 @@ class YouTubeBackendTestCase(TestCase):
         random_id = str(random.randint(100, 200))
         url = "http://youtube.com/watch?v=%s" % random_id
         backend = YouTubeBackend()
-        (_url, id, _type) = backend.parse(url)
+        (_url, id) = backend.parse(url)
         self.assertEqual(random_id, id)

@@ -68,14 +68,14 @@ class GetBackendTestCase(TestCase):
 
 class MultipleBackendsTestCase(TestCase):
     def test_each_backend_is_called_until_one_answers_with_non_none(self):
-        expected = ("foo", "bar", random.randint(100, 200))
         one = fudge.Fake()
         one.expects('parse').with_args('foo/bar').returns(None)
 
         two = fudge.Fake()
+        expected = ("foo", "bar")
         two.expects('parse').with_args('foo/bar').returns(expected)
 
         fudge.clear_calls()
 
         backend = backends.MultipleBackends(one, two)
-        self.assertEqual(expected, backend.parse('foo/bar'))
+        self.assertEqual(expected + (two, ), backend.parse('foo/bar'))

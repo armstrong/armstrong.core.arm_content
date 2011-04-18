@@ -11,7 +11,15 @@ class EmbeddedVideo(object):
         self.raw_url = url
         self.id = None
         if url:
-            (self.url, self.id, self.type) = self.backend.parse(url)
+            result = self.backend.parse(url)
+            if len(result) is 3:
+                self.url, self.id, _ = result
+            else:
+                self.url, self.id = result
+
+    @property
+    def type(self):
+        return self.backend.type
 
 
 class EmbeddedVideoField(models.URLField):

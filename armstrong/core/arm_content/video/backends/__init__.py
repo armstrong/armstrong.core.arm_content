@@ -15,7 +15,7 @@ class MultipleBackends(object):
         for other in self.others:
             result = other.parse(url)
             if result is not None:
-                return result
+                return result + (other, )
 
 
 def get_backend(settings=None):

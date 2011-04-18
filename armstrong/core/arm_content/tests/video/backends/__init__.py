@@ -67,12 +67,12 @@ class GetBackendTestCase(TestCase):
 
 
 class NeverMatchesBackend(object):
-    def parse(self, video):
+    def prepare(self, video):
         return None
 
 
 class AlwayMatchesBackend(object):
-    def parse(self, video):
+    def prepare(self, video):
         video.url, video.id = video.raw_url.split("?")
         return True
 
@@ -87,7 +87,7 @@ class MultipleBackendsTestCase(TestCase):
         second = "second-%d" % random.randint(100, 200)
         video.raw_url = "%s?%s" % (first, second)
 
-        self.assertTrue(backend.parse(video))
+        self.assertTrue(backend.prepare(video))
         self.assertEqual(first, video.url)
         self.assertEqual(second, video.id)
 
@@ -96,7 +96,7 @@ class MultipleBackendsTestCase(TestCase):
         video = EmbeddedVideo(backend=backend)
         video.raw_url = "some-random-url"
 
-        self.assertFalse(backend.parse(video))
+        self.assertFalse(backend.prepare(video))
 
     def test_sets_backend_on_EmbeddedVideo_to_the_backend_that_was_found(self):
         backend = backends.MultipleBackends(NeverMatchesBackend(),
@@ -107,5 +107,5 @@ class MultipleBackendsTestCase(TestCase):
         second = "second-%d" % random.randint(100, 200)
         video.raw_url = "%s?%s" % (first, second)
 
-        backend.parse(video)
+        backend.prepare(video)
         self.assertIsA(video.backend, AlwayMatchesBackend)

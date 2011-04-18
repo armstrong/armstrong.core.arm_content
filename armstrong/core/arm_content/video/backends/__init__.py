@@ -11,9 +11,9 @@ class MultipleBackends(object):
     def __init__(self, *others):
         self.others = others
 
-    def parse(self, video):
+    def prepare(self, video):
         for other in self.others:
-            if other.parse(video) is not None:
+            if other.prepare(video) is not None:
                 video.backend = other
                 return True
 

@@ -11,7 +11,7 @@ class EmbeddedVideo(object):
         self.raw_url = url
         self.id = None
         if url:
-            self.backend.parse(self)
+            self.backend.prepare(self)
 
     @property
     def type(self):

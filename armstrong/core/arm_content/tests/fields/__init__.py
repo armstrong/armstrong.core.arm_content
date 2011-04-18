@@ -11,7 +11,7 @@ from ...video import fields
 class ExampleBackend(object):
     type = "Example"
 
-    def parse(self, embed):
+    def prepare(self, embed):
         embed.url, embed.id = embed.raw_url.split(":")
 
 
@@ -27,7 +27,7 @@ class ExampleBackendTestCase(TestCase):
         backend = ExampleBackend()
         video = EmbeddedVideo("%s:%s" % (random_url, random_id), backend)
 
-        backend.parse(video)
+        backend.prepare(video)
         self.assertEqual(video.url, random_url)
         self.assertEqual(video.id, random_id)
 

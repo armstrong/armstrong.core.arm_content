@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.test import TestCase
+import fudge
 import random
 
 from .arm_content_support.models import Article, Video

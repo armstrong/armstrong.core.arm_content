@@ -12,7 +12,7 @@ class ExampleBackend(object):
     type = "Example"
 
     def parse(self, value):
-        return value.split(":")
+        return value.split(":") + [self.type, ]
 
 
 class ExampleBackendTestCase(TestCase):
@@ -24,7 +24,7 @@ class ExampleBackendTestCase(TestCase):
         random_url = "foobar.com/watch-%d" % random.randint(100, 200)
         random_id = "%d" % random.randint(100, 200)
         backend = ExampleBackend()
-        base_url, id = backend.parse("%s:%s" % (random_url, random_id))
+        base_url, id, type = backend.parse("%s:%s" % (random_url, random_id))
         self.assertEqual(base_url, random_url)
         self.assertEqual(id, random_id)
 

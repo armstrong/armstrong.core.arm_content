@@ -11,8 +11,8 @@ from ...video import fields
 class ExampleBackend(object):
     type = "Example"
 
-    def parse(self, value):
-        return value.split(":")
+    def parse(self, embed):
+        embed.url, embed.id = embed.raw_url.split(":")
 
 
 class ExampleBackendTestCase(TestCase):
@@ -21,12 +21,15 @@ class ExampleBackendTestCase(TestCase):
         self.assertEqual("Example", backend.type)
 
     def test_splits_on_colon(self):
+        # This test assumes that EmbeddedVideo works
         random_url = "foobar.com/watch-%d" % random.randint(100, 200)
         random_id = "%d" % random.randint(100, 200)
         backend = ExampleBackend()
-        base_url, id = backend.parse("%s:%s" % (random_url, random_id))
-        self.assertEqual(base_url, random_url)
-        self.assertEqual(id, random_id)
+        video = EmbeddedVideo("%s:%s" % (random_url, random_id), backend)
+
+        backend.parse(video)
+        self.assertEqual(video.url, random_url)
+        self.assertEqual(video.id, random_id)
 
 
 class EmbeddedVideoFieldTestCase(TestCase):

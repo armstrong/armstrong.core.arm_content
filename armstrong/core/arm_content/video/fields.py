@@ -11,11 +11,7 @@ class EmbeddedVideo(object):
         self.raw_url = url
         self.id = None
         if url:
-            result = self.backend.parse(url)
-            if len(result) is 3:
-                self.url, self.id, _ = result
-            else:
-                self.url, self.id = result
+            self.backend.parse(self)
 
     @property
     def type(self):

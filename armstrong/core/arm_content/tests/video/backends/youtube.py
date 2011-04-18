@@ -1,5 +1,6 @@
 from ..._utils import *
 
+from ....video import EmbeddedVideo
 from ....video.backends.youtube import YouTubeBackend
 
 
@@ -8,13 +9,15 @@ class YouTubeBackendTestCase(TestCase):
         random_id = str(random.randint(100, 200))
         url = "http://youtube.com/watch?v=%s" % random_id
         backend = YouTubeBackend()
-        (url, _id) = backend.parse(url)
-        self.assertEqual("http", url.scheme)
-        self.assertEqual("youtube.com", url.netloc)
+
+        video = EmbeddedVideo(url, backend)
+        self.assertEqual("http", video.url.scheme)
+        self.assertEqual("youtube.com", video.url.netloc)
 
     def test_returns_tuple_with_id_as_second_value(self):
         random_id = str(random.randint(100, 200))
         url = "http://youtube.com/watch?v=%s" % random_id
         backend = YouTubeBackend()
-        (_url, id) = backend.parse(url)
-        self.assertEqual(random_id, id)
+
+        video = EmbeddedVideo(url, backend)
+        self.assertEqual(random_id, video.id)

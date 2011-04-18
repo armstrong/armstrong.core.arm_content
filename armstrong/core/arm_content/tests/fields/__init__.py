@@ -72,7 +72,7 @@ class EmbeddedVideoTestCase(TestCase):
         random_url = "foobar-%d" % random.randint(100, 200)
         random_id = "%d" % random.randint(100, 200)
         v = EmbeddedVideo("%s:%s" % (random_url, random_id),
-                backend=ExampleBackend)
+                backend=ExampleBackend())
         self.assertEqual(random_id, v.id)
         self.assertEqual(random_url, v.url)
         self.assertEqual("Example", v.type)

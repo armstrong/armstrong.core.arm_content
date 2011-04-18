@@ -7,7 +7,7 @@ class EmbeddedVideo(object):
     def __init__(self, url=None, backend=None):
         if not backend:
             backend = get_backend()
-        self.backend = backend()
+        self.backend = backend
         self.raw_url = url
         self.id = None
         if url:

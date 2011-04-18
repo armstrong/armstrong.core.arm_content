@@ -1,11 +1,15 @@
 from datetime import datetime
-from django.test import TestCase
+from django.test import TestCase as DjangoTestCase
 import fudge
 import random
 
 from .arm_content_support.models import Article, Video
 from ..publication.constants import PUB_STATUSES
 
+
+class TestCase(DjangoTestCase):
+    def assertIsA(self, obj, cls, **kwargs):
+        self.assertTrue(isinstance(obj, cls), **kwargs)
 
 def create_random_article(**options):
     random_int = random.randint(1000, 9999)

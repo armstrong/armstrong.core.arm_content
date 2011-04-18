@@ -22,7 +22,7 @@ class GetBackendTestCase(TestCase):
 
         with fudge.patched_context(backends, 'default_settings', settings):
             backend = backends.get_backend()
-            self.assertEqual(backend, TestableBackend)
+            self.assertIsA(backend, TestableBackend)
 
     def test_uses_injected_settings_if_provided(self):
         backend_name = self.backend_name('SomeOtherTestableBackend')
@@ -32,7 +32,7 @@ class GetBackendTestCase(TestCase):
         fudge.clear_calls()
 
         backend = backends.get_backend(settings=settings)
-        self.assertEqual(backend, SomeOtherTestableBackend)
+        self.assertIsA(backend, SomeOtherTestableBackend)
 
     def test_returns_MultipleBackend_if_configured_with_a_list(self):
         my_backends = [self.backend_name('TestableBackend'),
@@ -42,7 +42,7 @@ class GetBackendTestCase(TestCase):
         settings.has_attr(ARMSTRONG_EXTERNAL_VIDEO_BACKEND=my_backends)
 
         backend = backends.get_backend(settings=settings)
-        self.assertEqual(backend, backends.MultipleBackends)
+        self.assertIsA(backend, backends.MultipleBackends)
 
 
 class MultipleBackendsTestCase(TestCase):

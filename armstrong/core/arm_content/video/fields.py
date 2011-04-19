@@ -17,6 +17,9 @@ class EmbeddedVideo(object):
     def type(self):
         return self.backend.type
 
+    def embed(self):
+        return self.backend.embed(self)
+
 
 class EmbeddedVideoField(models.URLField):
     __metaclass__ = models.SubfieldBase

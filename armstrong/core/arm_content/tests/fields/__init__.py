@@ -92,3 +92,16 @@ class EmbeddedVideoTestCase(TestCase):
             v = EmbeddedVideo("%s:%s" % (random_url, random_id))
             self.assertEqual(random_id, v.id)
             self.assertEqual(random_url, v.url)
+
+    def test_embed_dispatches_to_backend_and_returns_result(self):
+        random_return = random.randint(1000, 2000)
+        backend = fudge.Fake()
+        backend.provides("prepare")
+        video = EmbeddedVideo("foo/bar", backend=backend)
+        backend.expects("embed").with_args(video).returns(random_return)
+        fudge.clear_calls()
+
+        result = video.embed()
+        self.assertEqual(result, random_return)
+
+        fudge.verify()

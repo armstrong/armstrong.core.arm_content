@@ -34,3 +34,18 @@ class YouTubeBackendTestCase(TestCase):
             'src="http://www.youtube.com/embed/%s" ',
             'frameborder="0" allowfullscreen></iframe>']) % random_id
         self.assertEqual(expected, backend.embed(video))
+
+    def test_embed_width_can_be_set_with_a_kwarg(self):
+        random_width = random.randint(1000, 2000)
+        random_id = str(random.randint(100, 200))
+        url = "http://youtube.com/watch?v=%s" % random_id
+        backend = YouTubeBackend()
+
+        video = EmbeddedVideo(url, backend)
+        expected = "".join([
+            '<iframe title="YouTube video player" ',
+            'width="%d" height="390" ' % random_width,
+            'src="http://www.youtube.com/embed/%s" ',
+            'frameborder="0" allowfullscreen></iframe>']) % random_id
+        self.assertRegexpMatches(backend.embed(video, width=random_width),
+                r'width="%d"' % random_width)

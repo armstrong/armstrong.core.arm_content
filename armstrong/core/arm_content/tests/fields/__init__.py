@@ -105,3 +105,15 @@ class EmbeddedVideoTestCase(TestCase):
         self.assertEqual(result, random_return)
 
         fudge.verify()
+
+    def test_embed_dispatches_kwargs_to_backend(self):
+        kwargs = dict(
+                [("key-%d" % a, a) for a in range(random.randint(1, 10))])
+        backend = fudge.Fake()
+        backend.provides("prepare")
+        video = EmbeddedVideo("foo/bar", backend=backend)
+        backend.expects("embed").with_args(video, **kwargs)
+        fudge.clear_calls()
+
+        video.embed(**kwargs)
+        fudge.verify()

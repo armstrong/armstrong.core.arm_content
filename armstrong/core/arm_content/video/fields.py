@@ -17,8 +17,8 @@ class EmbeddedVideo(object):
     def type(self):
         return self.backend.type
 
-    def embed(self):
-        return self.backend.embed(self)
+    def embed(self, **kwargs):
+        return self.backend.embed(self, **kwargs)
 
 
 class EmbeddedVideoField(models.URLField):

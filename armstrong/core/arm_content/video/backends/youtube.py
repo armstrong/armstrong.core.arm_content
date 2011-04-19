@@ -12,6 +12,6 @@ class YouTubeBackend(object):
         # TODO: this should ultimately be a template so it can be swapped out
         return ''.join([
             '<iframe title="YouTube video player" ',
-            'width="%d" height="%d" ' % (width, height),
+            'width="%s" height="%s" ' % (width, height),
             'src="http://www.youtube.com/embed/%s" ' % embed.id,
             'frameborder="0" allowfullscreen></iframe>'])

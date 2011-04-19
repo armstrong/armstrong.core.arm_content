@@ -36,3 +36,18 @@ class VimeoBackendTestCase(TestCase):
         video = EmbeddedVideo(backend=backend)
         video.raw_url = url
         self.assertTrue(backend.prepare(video))
+
+    def test_returns_none_if_video_does_not_have_raw_url(self):
+        backend = VimeoBackend()
+        video = EmbeddedVideo(backend=backend)
+        self.assertNone(backend.prepare(video))
+
+    def test_video_is_not_modified_if_backend_fails(self):
+        backend = VimeoBackend()
+        unparseable_url = "foo.bar.foo:baz"
+        video = EmbeddedVideo(backend=backend)
+        video.raw_url = unparseable_url
+
+        self.assertDoesNotHave(video, "url", msg="sanity check")
+        backend.prepare(video)
+        self.assertDoesNotHave(video, "url")

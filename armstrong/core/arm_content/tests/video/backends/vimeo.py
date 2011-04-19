@@ -51,3 +51,19 @@ class VimeoBackendTestCase(TestCase):
         self.assertDoesNotHave(video, "url", msg="sanity check")
         backend.prepare(video)
         self.assertDoesNotHave(video, "url")
+
+    def test_embed_returns_expected_html_when_called(self):
+        random_id = str(random.randint(1000, 2000))
+        url = "http://vimeo.com/%s" % random_id
+        expected_url = ''.join([
+            'http://player.vimeo.com/video/%s' % random_id,
+            '?title=0&amp;byline=0&amp;portrait=0'])
+        expected = "".join([
+            '<iframe src="%s" ' % expected_url,
+            'width="398" height="224" frameborder="0"></iframe>'
+        ])
+
+        backend = VimeoBackend()
+        video = EmbeddedVideo(url, backend=backend)
+
+        self.assertEqual(backend.embed(video), expected)

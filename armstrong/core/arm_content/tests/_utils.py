@@ -12,6 +12,9 @@ class TestCase(DjangoTestCase):
         fudge.clear_expectations()
         fudge.clear_calls()
 
+    def assertNone(self, obj, **kwargs):
+        self.assertTrue(obj is None, **kwargs)
+
     def assertIsA(self, obj, cls, **kwargs):
         self.assertTrue(isinstance(obj, cls), **kwargs)
 

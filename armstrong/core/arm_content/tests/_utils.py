@@ -18,6 +18,9 @@ class TestCase(DjangoTestCase):
     def assertIsA(self, obj, cls, **kwargs):
         self.assertTrue(isinstance(obj, cls), **kwargs)
 
+    def assertDoesNotHave(self, obj, attr, **kwargs):
+        self.assertFalse(hasattr(obj, attr), **kwargs)
+
 def create_random_article(**options):
     random_int = random.randint(1000, 9999)
     data = {

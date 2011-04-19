@@ -1,10 +1,17 @@
 from ..._utils import *
 
 from ....video import EmbeddedVideo
+from ....video.backends import helpers
+from ....video.backends import vimeo
 from ....video.backends.vimeo import VimeoBackend
 
 
 class VimeoBackendTestCase(TestCase):
+    def generate_random_url(self):
+        random_id = random.randint(1000, 2000)
+        url = "http://vimeo.com/%d" % random.randint(1000, 2000)
+        return (random_id, url)
+
     def test_prepare_sets_url_on_provided_video(self):
         backend = VimeoBackend()
         url = "http://vimeo.com/%d" % random.randint(1000, 2000)
@@ -60,7 +67,7 @@ class VimeoBackendTestCase(TestCase):
             '?title=0&amp;byline=0&amp;portrait=0'])
         expected = "".join([
             '<iframe src="%s" ' % expected_url,
-            'width="398" height="224" frameborder="0"></iframe>'
+            'width="640" height="390" frameborder="0"></iframe>'
         ])
 
         backend = VimeoBackend()
@@ -119,3 +126,29 @@ class VimeoBackendTestCase(TestCase):
                 r'width="%s"' % random_width)
         self.assertRegexpMatches(backend.embed(video, height=random_height),
                 r'height="%s"' % random_height)
+
+    def test_height_defaults_to_configured_if_not_provided(self):
+        random_height = random.randint(1000, 2000)
+        settings = fudge.Fake()
+        settings.has_attr(ARMSTRONG_EMBED_VIDEO_HEIGHT=random_height)
+        settings.has_attr(ARMSTRONG_EMBED_VIDEO_WIDTH="does not matter")
+
+        with fudge.patched_context(helpers, 'settings', settings):
+            random_id, url = self.generate_random_url()
+            backend = VimeoBackend()
+            video = EmbeddedVideo(url, backend)
+            self.assertRegexpMatches(backend.embed(video),
+                    r'height="%s"' % random_height)
+
+    def test_width_defaults_to_configured_if_not_provided(self):
+        random_width = random.randint(1000, 2000)
+        settings = fudge.Fake()
+        settings.has_attr(ARMSTRONG_EMBED_VIDEO_WIDTH=random_width)
+        settings.has_attr(ARMSTRONG_EMBED_VIDEO_HEIGHT="does not matter")
+
+        with fudge.patched_context(helpers, 'settings', settings):
+            random_id, url = self.generate_random_url()
+            backend = VimeoBackend()
+            video = EmbeddedVideo(url, backend)
+            self.assertRegexpMatches(backend.embed(video),
+                    r'width="%s"' % random_width)

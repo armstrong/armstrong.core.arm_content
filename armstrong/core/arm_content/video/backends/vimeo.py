@@ -14,9 +14,10 @@ class VimeoBackend(object):
         embed.id = url.path.lstrip("/")
         return True
 
-    def embed(self, embed):
+    def embed(self, embed, width="398", height="224"):
         return "".join([
             '<iframe src="http://player.vimeo.com/video/%s' % embed.id,
             '?title=0&amp;byline=0&amp;portrait=0" ',
-            'width="398" height="224" frameborder="0"></iframe>'
+            'width="%s" height="%s" frameborder="0"></iframe>' % \
+                    (width, height)
         ])

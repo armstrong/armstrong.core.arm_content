@@ -49,3 +49,18 @@ class YouTubeBackendTestCase(TestCase):
             'frameborder="0" allowfullscreen></iframe>']) % random_id
         self.assertRegexpMatches(backend.embed(video, width=random_width),
                 r'width="%d"' % random_width)
+
+    def test_embed_height_can_be_set_with_a_kwarg(self):
+        random_height = random.randint(1000, 2000)
+        random_id = str(random.randint(100, 200))
+        url = "http://youtube.com/watch?v=%s" % random_id
+        backend = YouTubeBackend()
+
+        video = EmbeddedVideo(url, backend)
+        expected = "".join([
+            '<iframe title="YouTube video player" ',
+            'width="%d" height="390" ' % random_height,
+            'src="http://www.youtube.com/embed/%s" ',
+            'frameborder="0" allowfullscreen></iframe>']) % random_id
+        self.assertRegexpMatches(backend.embed(video, height=random_height),
+                r'height="%d"' % random_height)

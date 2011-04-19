@@ -5,6 +5,7 @@ from django.conf import settings as default_settings
 from django.utils.importlib import import_module
 
 from .youtube import YouTubeBackend
+from .vimeo import VimeoBackend
 
 
 class MultipleBackends(object):

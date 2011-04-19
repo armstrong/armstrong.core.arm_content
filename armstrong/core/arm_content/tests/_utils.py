@@ -8,6 +8,10 @@ from ..publication.constants import PUB_STATUSES
 
 
 class TestCase(DjangoTestCase):
+    def setUp(self):
+        fudge.clear_expectations()
+        fudge.clear_calls()
+
     def assertIsA(self, obj, cls, **kwargs):
         self.assertTrue(isinstance(obj, cls), **kwargs)
 

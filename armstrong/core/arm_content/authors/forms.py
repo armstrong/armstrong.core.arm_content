@@ -5,6 +5,8 @@ from django.template.loader import render_to_string
 
 
 class AuthorsWidget(forms.Widget):
+    choices = None
+
     def render(self, name, value, attrs=None):
         # TODO: handle when value is loaded
         staff = User.objects.filter(is_staff=True)
@@ -18,3 +20,10 @@ class AuthorsWidget(forms.Widget):
                 "extra_widget": extra_widget,
         }
         return render_to_string("armstrong/fields/authors.html", context)
+
+
+class AuthorsFormField(forms.Field):
+    def __init__(self, queryset=None, to_field_name=None, **kwargs):
+        defaults = {"widget": AuthorsWidget}
+        defaults.update(kwargs)
+        super(AuthorsFormField, self).__init__(**defaults)

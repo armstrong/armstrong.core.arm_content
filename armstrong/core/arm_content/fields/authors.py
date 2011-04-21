@@ -5,8 +5,6 @@ from django.db import models
 from django.db.models.fields.related import create_many_related_manager
 from django.db.models.fields.related import ManyRelatedObjectsDescriptor
 
-from ..authors.forms import AuthorsFormField
-
 
 # TODO: find permanent home for this code
 def user_to_link(user):
@@ -83,8 +81,3 @@ class AuthorsField(models.ManyToManyField):
     def contribute_to_class(self, cls, name):
         super(AuthorsField, self).contribute_to_class(cls, name)
         setattr(cls, self.name, AuthorsDescriptor(self))
-
-    def formfield(self, **kwargs):
-        defaults = {"form_class": AuthorsFormField}
-        defaults.update(kwargs)
-        return super(AuthorsField, self).formfield(**defaults)

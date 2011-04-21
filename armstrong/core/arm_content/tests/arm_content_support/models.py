@@ -22,6 +22,26 @@ class SimpleAuthoredModel(models.Model):
     authors = AuthorsField()
 
 
+class AuthoredModelWithContentionalOverride(models.Model):
+    authors = AuthorsField()
+    authors_override = models.CharField(max_length=100)
+
+
+class AuthoredModelWithConfiguredOverride(models.Model):
+    authors = AuthorsField(override_field_name='custom_override')
+    custom_override = models.CharField(max_length=100)
+
+
+class AuthoredModelWithContentionalExtra(models.Model):
+    authors = AuthorsField()
+    authors_extra = models.CharField(max_length=100)
+
+
+class AuthoredModelWithConfiguredExtra(models.Model):
+    authors = AuthorsField(extra_field_name='custom_extra')
+    custom_extra = models.CharField(max_length=100)
+
+
 class SimpleProfile(models.Model):
     user = models.OneToOneField(User)
 

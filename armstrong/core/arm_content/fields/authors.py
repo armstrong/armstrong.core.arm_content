@@ -36,6 +36,14 @@ class AuthorsManager(User.objects.__class__):
         extra = False
         if self.has_usable_extra():
             extra = getattr(self.instance, self.extra_field_name)
+
+        # Warning: weird logic ahead.  We need to adjust what our final join
+        # based on whether there's any ``extra`` data to append.  If there is,
+        # the final separator might be a space unless the first character is a
+        # non-alpha character (i.e., it starts with a ,)
+        #
+        # This does not allow for serial commas by default, you must provide
+        # the final comma if you want it.
         ret = u', '.join(names[:-2] + \
                 [(u', ' if extra else u' and ').join(names[-2:])])
         if extra:

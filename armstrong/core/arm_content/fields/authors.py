@@ -25,13 +25,16 @@ class AuthorsManager(User.objects.__class__):
         return hasattr(self.instance, self.override_field_name) and \
                 len(getattr(self.instance, self.override_field_name)) > 0
 
+    def has_usable_extra(self):
+        return hasattr(self.instance, self.extra_field_name)
+
     def __unicode__(self, formatter=user_to_name):
         if self.has_usable_override():
             return getattr(self.instance, self.override_field_name)
 
         names = [formatter(a) for a in self.all()]
         extra = False
-        if hasattr(self.instance, self.extra_field_name):
+        if self.has_usable_extra():
             extra = getattr(self.instance, self.extra_field_name)
         ret = u', '.join(names[:-2] + \
                 [(u', ' if extra else u' and ').join(names[-2:])])

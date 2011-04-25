@@ -51,6 +51,17 @@ class AuthorsFieldTestCase(TestCase):
 
         self.assertEqual(str(article.authors), override)
 
+    def test_override_is_ignored_if_empty(self):
+        empty_override = ""
+        bob, alice = generate_random_staff_users()
+
+        article = random_authored_model(AuthoredModelWithContentionalOverride,
+                bob, alice)
+        article.authors_override = empty_override
+
+        expected = "%s and %s" % (bob.get_full_name(), alice.get_full_name())
+        self.assertEqual(str(article.authors), expected)
+
     def test_override_can_be_configured(self):
         # TODO: dynamically generate this model and use a random name
         override = "This is a random override %d" % random.randint(1000, 2000)

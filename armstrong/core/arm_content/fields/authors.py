@@ -21,8 +21,12 @@ def user_to_name(user):
 
 
 class AuthorsManager(User.objects.__class__):
+    def has_usable_override(self):
+        return hasattr(self.instance, self.override_field_name) and \
+                len(getattr(self.instance, self.override_field_name)) > 0
+
     def __unicode__(self, formatter=user_to_name):
-        if hasattr(self.instance, self.override_field_name):
+        if self.has_usable_override():
             return getattr(self.instance, self.override_field_name)
 
         names = [formatter(a) for a in self.all()]

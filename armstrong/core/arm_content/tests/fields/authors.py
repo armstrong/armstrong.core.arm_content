@@ -13,6 +13,13 @@ from ...fields import authors
 
 
 class AuthorsFieldTestCase(TestCase):
+    def test_authors_can_have_one_author(self):
+        [bob, ] = generate_random_staff_users(n=1)
+        article = SimpleAuthoredModel.objects.create()
+        article.authors.add(bob)
+
+        self.assertEqual(bob.get_full_name(), str(article.authors))
+
     def test_authors_fields_are_contain_all_users_when_cast_to_string(self):
         bob, alice = generate_random_staff_users()
         article = random_authored_model(SimpleAuthoredModel, bob, alice)

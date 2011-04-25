@@ -12,17 +12,6 @@ from .._utils import *
 from ...fields import authors
 
 
-def add_authors_to(model, *authors):
-    for author in authors:
-        model.authors.add(author)
-
-
-def random_authored_model(klass, *authors):
-    article = klass.objects.create()
-    add_authors_to(article, *authors)
-    return article
-
-
 class AuthorsFieldTestCase(TestCase):
     def test_authors_fields_are_contain_all_users_when_cast_to_string(self):
         bob, alice = generate_random_staff_users()

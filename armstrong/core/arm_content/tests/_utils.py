@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase
+import fudge
 import random
 
 from .arm_content_support.models import Article, Video
@@ -68,3 +69,12 @@ def add_profile_to(profile_class, *users):
     for user in users:
         profile = profile_class.objects.create(user=user)
         user._profile_cache = profile
+
+def add_authors_to(model, *authors):
+    for author in authors:
+        model.authors.add(author)
+
+def random_authored_model(klass, *authors):
+    article = klass.objects.create()
+    add_authors_to(article, *authors)
+    return article

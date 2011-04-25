@@ -4,6 +4,7 @@ from polymorphic import PolymorphicModel
 
 from ...publication.models import PublicationMixin
 from ...fields import AuthorsField
+from ... import mixins
 
 
 class BaseContent(PolymorphicModel, PublicationMixin):
@@ -20,6 +21,9 @@ class Video(BaseContent):
 
 class SimpleAuthoredModel(models.Model):
     authors = AuthorsField()
+
+class SimpleMixedinAuthorModel(mixins.AuthorsMixin, models.Model):
+    pass
 
 
 class AuthoredModelWithContentionalOverride(models.Model):

@@ -2,7 +2,6 @@ from ._utils import TestCase, create_random_article, create_random_video
 from .arm_content_support.models import BaseContent, Article, Video
 from .admin import *
 from .fields import *
-from .models import *
 
 
 class BaseContentTestCase(TestCase):

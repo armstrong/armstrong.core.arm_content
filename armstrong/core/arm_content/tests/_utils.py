@@ -4,7 +4,6 @@ from django.test import TestCase
 import random
 
 from .arm_content_support.models import Article, Video
-from ..models import Authors
 from ..publication.constants import PUB_STATUSES
 
 
@@ -69,10 +68,3 @@ def add_profile_to(profile_class, *users):
     for user in users:
         profile = profile_class.objects.create(user=user)
         user._profile_cache = profile
-
-
-def generate_authors_with_two_users():
-    authors = Authors.objects.create()
-    bob, alice = generate_random_users()
-    add_n_users_to_authors(authors, bob, alice)
-    return authors, bob, alice

@@ -9,8 +9,7 @@ from ..arm_content_support.models import SimpleAuthoredModel
 from ..arm_content_support.models import SimpleProfile
 from .._utils import *
 
-from ...models import Authors
-from ... import models
+from ...fields import authors
 
 
 def add_authors_to(model, *authors):
@@ -104,9 +103,9 @@ class AuthorsFieldTestCase(TestCase):
         expected = "%s and %s" % (bob.get_full_name(), alice.get_full_name())
         article = random_authored_model(SimpleAuthoredModel, bob, alice)
 
-        settings = fudge.Fake(models.settings)
+        settings = fudge.Fake()
         settings.has_attr(AUTH_PROFILE_MODULE=None)
-        with fudge.patched_context(models, 'settings', settings):
+        with fudge.patched_context(authors, 'settings', settings):
             self.assertEqual(article.authors.html(), expected)
 
     def test_html_returns_string_with_html_links(self):

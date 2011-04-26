@@ -4,8 +4,7 @@ import fudge
 from .._utils import *
 from ..arm_content_support.models import SimpleVideoModel
 
-from ...video import EmbeddedVideo
-from ...video import fields
+from ...fields.video import EmbeddedVideo
 
 
 class ExampleBackend(object):

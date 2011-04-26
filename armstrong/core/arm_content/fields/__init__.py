@@ -1,3 +1,3 @@
 from .authors import AuthorsField
 
-from ..video import EmbeddedVideoField
+from .video import EmbeddedVideoField

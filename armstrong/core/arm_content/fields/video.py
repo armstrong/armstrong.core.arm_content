@@ -1,6 +1,6 @@
 from django.db import models
 
-from .backends import get_backend
+from ..video.backends import get_backend
 
 
 class EmbeddedVideo(object):

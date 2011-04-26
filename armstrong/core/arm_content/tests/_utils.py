@@ -13,6 +13,11 @@ class TestCase(DjangoTestCase):
         fudge.clear_expectations()
         fudge.clear_calls()
 
+    def assertModelHasField(self, model, field_name, field_class):
+        self.assertTrue(hasattr(model, field_name))
+        field = model._meta.get_field_by_name(field_name)[0]
+        self.assertTrue(isinstance(field, field_class))
+
     def assertNone(self, obj, **kwargs):
         self.assertTrue(obj is None, **kwargs)
 

@@ -37,15 +37,18 @@ class AuthorsManager(User.objects.__class__):
         if self.has_usable_extra():
             extra = getattr(self.instance, self.extra_field_name)
 
-        # Warning: weird logic ahead.  We need to adjust what our final join
-        # based on whether there's any ``extra`` data to append.  If there is,
-        # the final separator might be a space unless the first character is a
-        # non-alpha character (i.e., it starts with a ,)
+        # Warning: weird logic ahead.  It's assumed that ``extra`` has the
+        # final conjunction, so we have to join everything by commas.  If
+        # there's no ``extra``, we must join the final elements by ``" and "``.
         #
-        # This does not allow for serial commas by default, you must provide
-        # the final comma if you want it.
+        # TODO: Make this use a template for rendering so its easier to
+        # international later on.
         ret = u', '.join(names[:-2] + \
                 [(u', ' if extra else u' and ').join(names[-2:])])
+
+        # This adds a space if ``extra`` starts with a letter.  This assumes
+        # that anything other than a letter (generally, a comma) should be put
+        # directly against the byline.
         if extra:
             space = ' ' if extra[0].isalpha() else ''
             ret = u"%s%s%s" % (ret, space, extra)

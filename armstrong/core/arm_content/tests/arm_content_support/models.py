@@ -24,6 +24,10 @@ class SimpleVideoModel(models.Model):
     source = EmbeddedVideoField()
 
 
+class SimpleMixedinVideoModel(mixins.EmbeddedVideoMixin, models.Model):
+    pass
+
+
 class SimpleAuthoredModel(models.Model):
     authors = AuthorsField()
 

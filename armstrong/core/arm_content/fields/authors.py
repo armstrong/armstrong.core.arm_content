@@ -99,3 +99,14 @@ class AuthorsField(models.ManyToManyField):
     def contribute_to_class(self, cls, name):
         super(AuthorsField, self).contribute_to_class(cls, name)
         setattr(cls, self.name, AuthorsDescriptor(self))
+
+    def south_field_triple(self):
+        from south.modelsinspector import introspector
+        field_class = "%s.%s" % (self.__class__.__module__,
+                self.__class__.__name__)
+        args, kwargs = introspector(self)
+        kwargs.update({
+            'override_field_name': self.override_field_name,
+            'extra_field_name': self.extra_field_name,
+        })
+        return (field_class, args, kwargs)

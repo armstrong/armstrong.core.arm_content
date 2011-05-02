@@ -36,3 +36,10 @@ class EmbeddedVideoField(models.URLField):
             return value
 
         return EmbeddedVideo(value)
+
+    def formfield(self, **kwargs):
+        defaults = {
+            "label": "Embedded Video URL",
+        }
+        defaults.update(**kwargs)
+        return super(EmbeddedVideoField, self).formfield(**defaults)

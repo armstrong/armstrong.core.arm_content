@@ -5,6 +5,7 @@ from .._utils import *
 from ..arm_content_support.models import SimpleVideoModel
 
 from ...fields.video import EmbeddedVideo
+from ... import fields
 
 
 class ExampleBackend(object):
@@ -44,6 +45,16 @@ class EmbeddedVideoFieldTestCase(TestCase):
         id = video.pk
         self.assertEqual(random_id,
                 SimpleVideoModel.objects.get(pk=id).source.id)
+
+    def test_field_has_basic_label_by_default(self):
+        field = fields.EmbeddedVideoField()
+        self.assertEqual(field.formfield().label, u"Embedded Video URL")
+
+    def test_field_can_have_custom_label_if_kwarg_provided(self):
+        field = fields.EmbeddedVideoField()
+        random_label = "Some random label: %d" % random.randint(100, 200)
+        actual_field = field.formfield(label=random_label).label
+        self.assertEqual(actual_field, random_label)
 
 
 class EmbeddedVideoTestCase(TestCase):

@@ -43,3 +43,10 @@ class EmbeddedVideoField(models.URLField):
         }
         defaults.update(**kwargs)
         return super(EmbeddedVideoField, self).formfield(**defaults)
+
+    def south_field_triple(self):
+        from south.modelsinspector import introspector
+        field_class = "%s.%s" % (self.__class__.__module__,
+                self.__class__.__name__)
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)

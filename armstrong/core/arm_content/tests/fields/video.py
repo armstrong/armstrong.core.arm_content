@@ -1,6 +1,11 @@
 from django.db import models
 import fudge
 
+try:
+    import south
+except ImportError:
+    south = False
+
 from .._utils import *
 from ..arm_content_support.models import SimpleVideoModel
 
@@ -55,6 +60,17 @@ class EmbeddedVideoFieldTestCase(TestCase):
         random_label = "Some random label: %d" % random.randint(100, 200)
         actual_field = field.formfield(label=random_label).label
         self.assertEqual(actual_field, random_label)
+
+    @unittest.skipIf(south is False, "south not installed")
+    def test_returns_expected_south_triple(self):
+        field = fields.EmbeddedVideoField()
+
+        expected = (
+            "%s.%s" % (field.__class__.__module__, field.__class__.__name__),
+            [],
+            {'max_length': '255',}
+        )
+        self.assertEqual(field.south_field_triple(), expected)
 
 
 class EmbeddedVideoTestCase(TestCase):

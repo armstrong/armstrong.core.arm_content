@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase as DjangoTestCase
 import fudge
 import random
+import unittest
 
 from .arm_content_support.models import Article, Video
 from ..publication.constants import PUB_STATUSES
@@ -13,10 +14,11 @@ class TestCase(DjangoTestCase):
         fudge.clear_expectations()
         fudge.clear_calls()
 
-    def assertModelHasField(self, model, field_name, field_class):
+    def assertModelHasField(self, model, field_name, field_class=None):
         self.assertTrue(hasattr(model, field_name))
         field = model._meta.get_field_by_name(field_name)[0]
-        self.assertTrue(isinstance(field, field_class))
+        if field_class is not None:
+            self.assertTrue(isinstance(field, field_class))
 
     def assertNone(self, obj, **kwargs):
         self.assertTrue(obj is None, **kwargs)

@@ -1,5 +1,11 @@
 # coding=utf-8
+from django.contrib.auth.models import User
+from django.db import models
 import fudge
+try:
+    import south
+except ImportError:
+    south = False
 
 from ..arm_content_support.models import AuthoredModelWithConfiguredOverride
 from ..arm_content_support.models import AuthoredModelWithContentionalOverride
@@ -149,3 +155,29 @@ class AuthorsFieldTestCase(TestCase):
         expected = "%s, %s%s" % (bob.get_full_name(), alice.get_full_name(),
                 extra)
         self.assertEqual(str(article.authors), expected)
+
+    @unittest.skipIf(south is False, "south not installed")
+    def test_provides_south_field_triple(self):
+        field = authors.AuthorsField()
+        expected = (
+            "%s.%s" % (field.__class__.__module__, field.__class__.__name__),
+            [],
+            {
+                "to": "orm['auth.User']",
+                "override_field_name": "'authors_override'",
+                "extra_field_name": "'authors_extra'",
+                "symmetrical": "False",
+            }
+        )
+        self.assertEqual(field.south_field_triple(), expected)
+
+    def test_defaults_to_being_related_to_base_user(self):
+        field = authors.AuthorsField()
+        self.assertEqual(field.rel.to, User)
+
+    def test_can_relate_to_custom_user(self):
+        class MyUser(models.Model):
+            pass
+
+        field = authors.AuthorsField(to=MyUser)
+        self.assertEqual(field.rel.to, MyUser)

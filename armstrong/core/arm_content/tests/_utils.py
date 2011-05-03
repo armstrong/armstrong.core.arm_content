@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 import fudge
 import random
+import unittest
 
 from .arm_content_support.models import Article, Video
 from ..publication.constants import PUB_STATUSES

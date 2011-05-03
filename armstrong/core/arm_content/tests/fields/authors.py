@@ -162,8 +162,8 @@ class AuthorsFieldTestCase(TestCase):
             [],
             {
                 "to": "orm['auth.User']",
-                "override_field_name": "authors_override",
-                "extra_field_name": "authors_extra",
+                "override_field_name": "'authors_override'",
+                "extra_field_name": "'authors_extra'",
                 "symmetrical": "False",
             }
         )

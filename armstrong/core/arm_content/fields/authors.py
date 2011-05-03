@@ -106,7 +106,7 @@ class AuthorsField(models.ManyToManyField):
                 self.__class__.__name__)
         args, kwargs = introspector(self)
         kwargs.update({
-            'override_field_name': self.override_field_name,
-            'extra_field_name': self.extra_field_name,
+            'override_field_name': "'%s'" % self.override_field_name,
+            'extra_field_name': "'%s'" % self.extra_field_name,
         })
         return (field_class, args, kwargs)

@@ -1,4 +1,6 @@
 # coding=utf-8
+from django.contrib.auth.models import User
+from django.db import models
 import fudge
 try:
     import south
@@ -168,3 +170,14 @@ class AuthorsFieldTestCase(TestCase):
             }
         )
         self.assertEqual(field.south_field_triple(), expected)
+
+    def test_defaults_to_being_related_to_base_user(self):
+        field = authors.AuthorsField()
+        self.assertEqual(field.rel.to, User)
+
+    def test_can_relate_to_custom_user(self):
+        class MyUser(models.Model):
+            pass
+
+        field = authors.AuthorsField(to=MyUser)
+        self.assertEqual(field.rel.to, MyUser)

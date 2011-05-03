@@ -90,11 +90,13 @@ class AuthorsDescriptor(object):
 
 
 class AuthorsField(models.ManyToManyField):
-    def __init__(self, override_field_name='authors_override',
+    def __init__(self, to=None, override_field_name='authors_override',
             extra_field_name='authors_extra', **kwargs):
+        if not to:
+            to = User
         self.override_field_name = override_field_name
         self.extra_field_name = extra_field_name
-        super(AuthorsField, self).__init__(User, **kwargs)
+        super(AuthorsField, self).__init__(to=to, **kwargs)
 
     def contribute_to_class(self, cls, name):
         super(AuthorsField, self).contribute_to_class(cls, name)

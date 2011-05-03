@@ -90,12 +90,25 @@ class AuthorsDescriptor(object):
 
 
 class AuthorsField(models.ManyToManyField):
-    def __init__(self, override_field_name='authors_override',
+    def __init__(self, to=None, override_field_name='authors_override',
             extra_field_name='authors_extra', **kwargs):
+        if not to:
+            to = User
         self.override_field_name = override_field_name
         self.extra_field_name = extra_field_name
-        super(AuthorsField, self).__init__(User, **kwargs)
+        super(AuthorsField, self).__init__(to=to, **kwargs)
 
     def contribute_to_class(self, cls, name):
         super(AuthorsField, self).contribute_to_class(cls, name)
         setattr(cls, self.name, AuthorsDescriptor(self))
+
+    def south_field_triple(self):
+        from south.modelsinspector import introspector
+        field_class = "%s.%s" % (self.__class__.__module__,
+                self.__class__.__name__)
+        args, kwargs = introspector(self)
+        kwargs.update({
+            'override_field_name': "'%s'" % self.override_field_name,
+            'extra_field_name': "'%s'" % self.extra_field_name,
+        })
+        return (field_class, args, kwargs)

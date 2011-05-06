@@ -36,7 +36,7 @@ class YouTubeBackendTestCase(TestCase):
         video = EmbeddedVideo(url, backend)
         expected = "".join([
             '<iframe title="YouTube video player" ',
-            'width="640" height="390" ' ,
+            'width="640" height="390" ',
             'src="http://www.youtube.com/embed/%s" ',
             'frameborder="0" allowfullscreen></iframe>']) % random_id
         self.assertEqual(expected, backend.embed(video))

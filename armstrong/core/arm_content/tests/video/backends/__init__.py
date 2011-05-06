@@ -49,8 +49,10 @@ class GetBackendTestCase(TestCase):
         self.assertIsA(backend, backends.MultipleBackends)
 
     def test_MultipleBackend_is_passed_configured_objects(self):
+
         def is_TestableBackend(obj):
             return isinstance(obj, TestableBackend)
+
         def is_SomeOtherTestableBackend(obj):
             return isinstance(obj, SomeOtherTestableBackend)
 

@@ -8,7 +8,6 @@ from .youtube import YouTubeBackend
 from .vimeo import VimeoBackend
 
 
-
 class MultipleBackends(object):
     def __init__(self, *others):
         self.others = others
@@ -25,6 +24,7 @@ def get_backend(settings=None):
         settings = default_settings
 
     backend_name = settings.ARMSTRONG_EXTERNAL_VIDEO_BACKEND
+
     def to_backend(a):
         module, backend_class = a.rsplit(".", 1)
         backend_module = import_module(module)

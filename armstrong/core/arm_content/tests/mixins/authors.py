@@ -72,7 +72,6 @@ class AuthorsMixinTestCase(TestCase):
         self.assertEqual(1, str(article.authors).count(' and '),
                 msg="sanity check")
 
-
     def test_html_returns_plain_list_if_not_configured_with_profiles(self):
         bob, alice = generate_random_staff_users()
         expected = "%s and %s" % (bob.get_full_name(), alice.get_full_name())

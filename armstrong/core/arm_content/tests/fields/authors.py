@@ -69,7 +69,7 @@ class AuthorsFieldTestCase(TestCase):
         override = "This is a random override %d" % random.randint(1000, 2000)
         bob, alice = generate_random_staff_users()
 
-        article = random_authored_model( AuthoredModelWithConfiguredOverride,
+        article = random_authored_model(AuthoredModelWithConfiguredOverride,
                 bob, alice)
         add_authors_to(article, bob, alice)
         article.custom_override = override
@@ -109,7 +109,6 @@ class AuthorsFieldTestCase(TestCase):
         self.assertEqual(r, str(article.authors).count(','))
         self.assertEqual(1, str(article.authors).count(' and '),
                 msg="sanity check")
-
 
     def test_html_returns_plain_list_if_not_configured_with_profiles(self):
         bob, alice = generate_random_staff_users()

@@ -4,6 +4,7 @@ from polymorphic import PolymorphicModel
 
 from ...publication.models import PublicationMixin
 from ...fields import AuthorsField
+from ...fields import EmbeddedVideoField
 from ... import mixins
 
 
@@ -19,8 +20,17 @@ class Video(BaseContent):
     youtube_id = models.CharField(max_length=30)
 
 
+class SimpleVideoModel(models.Model):
+    source = EmbeddedVideoField()
+
+
+class SimpleMixedinVideoModel(mixins.EmbeddedVideoMixin, models.Model):
+    pass
+
+
 class SimpleAuthoredModel(models.Model):
     authors = AuthorsField()
+
 
 class SimpleMixedinAuthorModel(mixins.AuthorsMixin, models.Model):
     pass

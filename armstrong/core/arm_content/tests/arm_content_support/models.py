@@ -6,10 +6,24 @@ from ...publication.models import PublicationMixin
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
+from ...models import ContentBase
 
 
+# for backwards compatibility -- should be removed
 class BaseContent(PolymorphicModel, PublicationMixin):
     title = models.CharField(max_length=255)
+
+
+class ConcreteContent(ContentBase):
+    pass
+
+
+class ConcreteArticle(ConcreteContent):
+    pass
+
+
+class ConcreteCommentary(ConcreteContent):
+    pass
 
 
 class Article(BaseContent):

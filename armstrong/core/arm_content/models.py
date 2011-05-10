@@ -19,7 +19,7 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
     concrete implementation of this if you want to use it without defining your
     own base Content model.
 
-    .. _armstrong.apps.content: http://github.com/armstrongs/armstrong.apps.content
+    .. _armstrong.apps.content: http://github.com/armstrongcms/armstrong.apps.content
     """
 
     title = models.CharField(max_length=255)

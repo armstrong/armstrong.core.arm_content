@@ -6,7 +6,7 @@ import random
 import unittest
 
 from .arm_content_support.models import Article, Video
-from ..publication.constants import PUB_STATUSES
+from ..mixins.publication import PUB_STATUSES
 
 
 class TestCase(DjangoTestCase):

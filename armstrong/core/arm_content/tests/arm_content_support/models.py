@@ -2,10 +2,10 @@ from django.contrib.auth.models import User
 from django.db import models
 from polymorphic import PolymorphicModel
 
-from ...publication.models import PublicationMixin
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
+from ...mixins import PublicationMixin
 
 
 class BaseContent(PolymorphicModel, PublicationMixin):

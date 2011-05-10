@@ -180,3 +180,16 @@ class AuthorsFieldTestCase(TestCase):
 
         field = authors.AuthorsField(to=MyUser)
         self.assertEqual(field.rel.to, MyUser)
+
+
+class AuthorsDescriptorTestCase(TestCase):
+    def test_does_not_choke_on_empty_instance(self):
+        try:
+            authors_field = SimpleAuthoredModel.authors
+            self.assertTrue(True, "Was able to look at authors on the model")
+        except AttributeError, e:
+            self.fail("Should not have raised an exception: %s" % e)
+
+    def test_returns_descriptor_when_retrieved_off_of_model(self):
+        authors_field = SimpleAuthoredModel.authors
+        self.assertTrue(isinstance(authors_field, authors.AuthorsDescriptor))

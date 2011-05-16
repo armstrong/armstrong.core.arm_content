@@ -3,6 +3,8 @@ from django.db.models.query import QuerySet
 from model_utils.managers import InheritanceManager
 from taggit.managers import TaggableManager
 
+from armstrong.core.arm_sections.models import Section
+
 from . import mixins
 
 
@@ -25,7 +27,12 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
     title = models.CharField(max_length=255)
     summary = models.TextField()
 
+    primary_section = models.ForeignKey(Section, null=True)
+    sections = models.ManyToManyField(Section, null=True,
+            related_name="alternates")
+
     tags = TaggableManager()
+
     objects = InheritanceManager()
 
     # TODO: add required primary section

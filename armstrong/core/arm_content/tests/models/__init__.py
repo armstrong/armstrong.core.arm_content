@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from taggit.managers import TaggableManager
 
+from armstrong.core.arm_sections.models import Section
 from ..arm_content_support.models import ConcreteArticle
 from ..arm_content_support.models import ConcreteCommentary
 from ..arm_content_support.models import ConcreteContent
@@ -32,6 +33,15 @@ class ContentBaseTestCase(TestCase):
         model = self.model.objects.create(pub_date=now(),
                 pub_status="Published")
         self.assertModelHasField(model, "tags", TaggableManager)
+
+    def test_has_primary_section(self):
+        model = self.model()
+        self.assertRelatedTo(model, "primary_section", Section)
+
+    def test_has_sections(self):
+        model = self.model.objects.create(pub_date=now(),
+                pub_status="Published")
+        self.assertRelatedTo(model, "sections", Section, many=True)
 
 
 class ConcreteContentBaseTestCase(TestCase):

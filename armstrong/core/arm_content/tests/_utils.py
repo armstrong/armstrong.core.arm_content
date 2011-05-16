@@ -2,6 +2,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.management.color import no_style
 from django.db import connection
+from django.db import models
 from django.test import TestCase as DjangoTestCase
 import fudge
 import random
@@ -69,11 +70,27 @@ class TestCase(DjangoTestCase):
         fudge.clear_expectations()
         fudge.clear_calls()
 
+    def assertRelatedTo(self, model, field_name, related_model, many=False):
+        if many is False:
+            through = models.ForeignKey
+        else:
+            through = models.ManyToManyField
+
+        # sanity check
+        self.assertModelHasField(model, field_name, through)
+
+        field = model._meta.get_field_by_name(field_name)[0]
+        self.assertEqual(field.rel.to, related_model)
+
     def assertModelHasField(self, model, field_name, field_class=None):
-        self.assertTrue(hasattr(model, field_name))
+        msg = "%s does not have a field named %s" % (model.__class__.__name__,
+                field_name)
+        self.assertTrue(hasattr(model, field_name), msg=msg)
         field = model._meta.get_field_by_name(field_name)[0]
         if field_class is not None:
-            self.assertTrue(isinstance(field, field_class))
+            msg = "%s.%s is not a %s" % (model.__class__.__name__, field_name,
+                    field_class.__class__.__name__)
+            self.assertTrue(isinstance(field, field_class), msg=msg)
 
     def assertNone(self, obj, **kwargs):
         self.assertTrue(obj is None, **kwargs)

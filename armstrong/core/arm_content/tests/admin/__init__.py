@@ -1,6 +1,8 @@
 from .._utils import *
 from django.core.urlresolvers import reverse
 
+from .fieldsets import *
+
 
 class AuthorsAdminTest(TestCase):
     fixtures = ['admin.json', ]

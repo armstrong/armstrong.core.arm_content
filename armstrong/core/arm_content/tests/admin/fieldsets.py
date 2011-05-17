@@ -3,16 +3,16 @@ from .._utils import *
 from ...admin import fieldsets
 
 class FieldSetFactoryTestCase(TestCase):
-    fieldset_factory = None
+    fieldset_name = None
 
     @property
     def is_not_runnable(self):
-        return self.fieldset_factory is None
+        return self.fieldset_name is None
 
     def setUp(self):
         if self.is_not_runnable:
             return
-        self.fieldset = getattr(fieldsets, self.fieldset_factory)()
+        self.fieldset = getattr(fieldsets, self.fieldset_name)
 
     def test_expected_title(self):
         if self.is_not_runnable:
@@ -29,12 +29,12 @@ class FieldSetFactoryTestCase(TestCase):
 
 
 class PublicationFieldSet(FieldSetFactoryTestCase):
-    fieldset_factory = 'publication'
+    fieldset_name = 'PUBLICATION'
     expected_title = "Publication Information"
     expected_fields = ("pub_date", "pub_status", "sites", )
 
 
 class AuthorsFieldSetTestCase(FieldSetFactoryTestCase):
-    fieldset_factory = 'authors'
+    fieldset_name = 'AUTHORS'
     expected_title = "Author Information"
     expected_fields = ('authors', 'authors_override', 'authors_extra' )

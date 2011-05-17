@@ -1,6 +1,6 @@
 from ..._utils import *
 
-from ....video import EmbeddedVideo
+from ....fields.video import EmbeddedVideo
 from ....video.backends import helpers
 from ....video.backends import vimeo
 from ....video.backends.vimeo import VimeoBackend

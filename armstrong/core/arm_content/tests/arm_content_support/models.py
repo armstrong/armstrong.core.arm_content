@@ -1,14 +1,15 @@
 from django.contrib.auth.models import User
 from django.db import models
+
 from polymorphic import PolymorphicModel
+import sorl.thumbnail
 
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
-from ...mixins import PublicationMixin
 
 
-class BaseContent(PolymorphicModel, PublicationMixin):
+class BaseContent(PolymorphicModel, mixins.PublicationMixin):
     title = models.CharField(max_length=255)
 
 
@@ -61,3 +62,8 @@ class SimpleProfile(models.Model):
 
     def get_absolute_url(self):
         return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')
+
+
+if hasattr(mixins, 'SorlImageMixin'):
+    class SorlImage(mixins.SorlImageMixin, models.Model):
+        image = sorl.thumbnail.ImageField(upload_to='images/')

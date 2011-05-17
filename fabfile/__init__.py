@@ -12,6 +12,7 @@ settings = {
         'armstrong.core.arm_content.tests.arm_content_support',
         'south',
         'lettuce.django',
+        'sorl.thumbnail',
     ),
     'AUTH_PROFILE_MODULE': 'arm_content_support.SimpleProfile',
     'ROOT_URLCONF': 'armstrong.core.arm_content.tests.arm_content_support.urls',

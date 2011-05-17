@@ -4,6 +4,7 @@
 -e git://github.com/armstrongcms/armstrong.dev#egg=armstrong.dev
 coverage
 fudge
+lettuce
 
 # django_polymorphic is what we'll recommend for creating a parent model with
 # common fields for querying across the child content types. Our tests include

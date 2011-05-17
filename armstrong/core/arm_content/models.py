@@ -26,6 +26,7 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
 
     title = models.CharField(max_length=255)
     summary = models.TextField()
+    slug = models.SlugField()
 
     primary_section = models.ForeignKey(Section, null=True)
     sections = models.ManyToManyField(Section, null=True, blank=True,

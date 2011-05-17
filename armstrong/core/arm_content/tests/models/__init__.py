@@ -27,6 +27,9 @@ class ContentBaseTestCase(TestCase):
     def test_has_summary(self):
         self.assertModelHasField(self.model(), "summary", models.TextField)
 
+    def test_has_slug(self):
+        self.assertModelHasField(self.model(), "slug", models.SlugField)
+
     def test_has_tags(self):
         # Must create a full model here so we have a pk for tags to be
         # associated with

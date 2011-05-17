@@ -1,9 +1,9 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.test import TestCase as DjangoTestCase
+from django.utils import unittest
 import fudge
 import random
-import unittest
 
 from .arm_content_support.models import Article, Video
 from ..mixins.publication import PUB_STATUSES

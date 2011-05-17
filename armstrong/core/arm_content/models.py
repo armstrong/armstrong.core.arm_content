@@ -28,7 +28,7 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
     summary = models.TextField()
 
     primary_section = models.ForeignKey(Section, null=True)
-    sections = models.ManyToManyField(Section, null=True,
+    sections = models.ManyToManyField(Section, null=True, blank=True,
             related_name="alternates")
 
     tags = TaggableManager()

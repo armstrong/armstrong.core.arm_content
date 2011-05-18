@@ -1,5 +1,8 @@
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.core.management.color import no_style
+from django.db import connection
+from django.db import models
 from django.test import TestCase as DjangoTestCase
 from django.utils import unittest
 import fudge
@@ -9,16 +12,85 @@ from .arm_content_support.models import Article, Video
 from ..mixins.publication import PUB_STATUSES
 
 
+def create_concrete_table(func=None, model=None):
+    style = no_style()
+    seen_models = connection.introspection.installed_models(
+            connection.introspection.table_names())
+
+    def actual_create(model):
+        sql, _references = connection.creation.sql_create_model(model, style,
+                seen_models)
+        cursor = connection.cursor()
+        for statement in sql:
+            cursor.execute(statement)
+
+    if func:
+        def inner(self, *args, **kwargs):
+            func(self, *args, **kwargs)
+            actual_create(self.model)
+        return inner
+    elif model:
+        actual_create(model)
+
+
+def destroy_concrete_table(func=None, model=None):
+    style = no_style()
+    # Assume that there are no references to destroy, these are supposed to be
+    # simple models
+    references = {}
+
+    def actual_destroy(model):
+        sql = connection.creation.sql_destroy_model(model, references, style)
+        cursor = connection.cursor()
+        for statement in sql:
+            cursor.execute(statement)
+
+    if func:
+        def inner(self, *args, **kwargs):
+            func(self, *args, **kwargs)
+            actual_destroy(self.model)
+        return inner
+    elif model:
+        actual_destroy(model)
+
+
+# TODO: pull into a common dev package so all armstrong code can use it
+def concrete(klass):
+    attrs = {'__module__': concrete.__module__, }
+    while True:
+        num = random.randint(1, 10000)
+        if num not in concrete.already_used:
+            break
+    return type("Concrete%s%d" % (klass.__name__, num), (klass, ), attrs)
+concrete.already_used = []
+
+
 class TestCase(DjangoTestCase):
     def setUp(self):
         fudge.clear_expectations()
         fudge.clear_calls()
 
+    def assertRelatedTo(self, model, field_name, related_model, many=False):
+        if many is False:
+            through = models.ForeignKey
+        else:
+            through = models.ManyToManyField
+
+        # sanity check
+        self.assertModelHasField(model, field_name, through)
+
+        field = model._meta.get_field_by_name(field_name)[0]
+        self.assertEqual(field.rel.to, related_model)
+
     def assertModelHasField(self, model, field_name, field_class=None):
-        self.assertTrue(hasattr(model, field_name))
+        msg = "%s does not have a field named %s" % (model.__class__.__name__,
+                field_name)
+        self.assertTrue(hasattr(model, field_name), msg=msg)
         field = model._meta.get_field_by_name(field_name)[0]
         if field_class is not None:
-            self.assertTrue(isinstance(field, field_class))
+            msg = "%s.%s is not a %s" % (model.__class__.__name__, field_name,
+                    field_class.__class__.__name__)
+            self.assertTrue(isinstance(field, field_class), msg=msg)
 
     def assertNone(self, obj, **kwargs):
         self.assertTrue(obj is None, **kwargs)

@@ -66,6 +66,9 @@ class AuthorsDescriptor(object):
         self.field = m2m_field
 
     def __get__(self, instance, instance_type=None):
+        if not instance:
+            return self
+
         RelatedManager = create_many_related_manager(AuthorsManager,
                 self.field.rel)
         core_filters = {

@@ -3,6 +3,7 @@ from .arm_content_support.models import BaseContent, Article, Video
 from .admin import *
 from .fields import *
 from .mixins import *
+from .models import *
 from .video import *
 
 

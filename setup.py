@@ -30,7 +30,10 @@ setup(
     # TODO: generate this dynamically
     packages=packages,
     install_requires=[
-        'distribute',
+        'Django==1.3',
+        'django-model-utils==0.6.0',
+        'django-reversion==1.4',
+        'django-taggit==0.9.3',
     ],
 
     classifiers=[

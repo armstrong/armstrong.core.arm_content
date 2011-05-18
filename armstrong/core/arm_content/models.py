@@ -3,6 +3,7 @@ from django.db.models.query import QuerySet
 from model_utils.managers import InheritanceManager
 from taggit.managers import TaggableManager
 
+from armstrong.core.arm_sections.managers import SectionSlugManager
 from armstrong.core.arm_sections.models import Section
 
 from . import mixins
@@ -33,6 +34,7 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
             related_name="alternates")
 
     tags = TaggableManager()
+    with_section = SectionSlugManager()
 
     objects = InheritanceManager()
 

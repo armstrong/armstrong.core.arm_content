@@ -8,6 +8,7 @@ from ..arm_content_support.models import ConcreteArticle
 from ..arm_content_support.models import ConcreteCommentary
 from ..arm_content_support.models import ConcreteContent
 from ...models import ContentBase
+from ...models import Section
 
 now = datetime.datetime.now
 
@@ -75,3 +76,33 @@ class ConcreteContentBaseTestCase(TestCase):
             [alt_one, alt_two] = subclass_queryset.all()
             self.assertEqual(alt_one.__class__, one.__class__)
             self.assertEqual(alt_two.__class__, two.__class__)
+
+    def test_can_grab_by_full_slug(self):
+        title = "Random Title %d" % random.randint(100, 200)
+        slug = "random-%d" % random.randint(100, 200)
+        article_slug = "some-random-article-slug-%d" % random.randint(100, 200)
+        section = Section.objects.create(title="Random", slug=slug)
+        self.some_model.objects.create(title=title, pub_date=now(),
+                slug=article_slug, pub_status="Published",
+                primary_section=section)
+
+        article = self.some_model.with_section.get_by_slug("%s/%s" % (slug,
+            article_slug))
+
+        self.assertEqual(article.title, title)
+
+    def test_can_grab_by_full_slug_if_in_nested_section(self):
+        title = "Random Title %d" % random.randint(100, 200)
+        slug = "random-%d" % random.randint(100, 200)
+        article_slug = "some-random-article-slug-%d" % random.randint(100, 200)
+        section = Section.objects.create(title="Random", slug=slug)
+        child = Section.objects.create(title="Random Child", slug=slug,
+                parent=section)
+        self.some_model.objects.create(title=title, pub_date=now(),
+                slug=article_slug, pub_status="Published",
+                primary_section=child)
+
+        article = self.some_model.with_section.get_by_slug("%s%s" %
+                (child.full_slug, article_slug))
+
+        self.assertEqual(article.title, title)

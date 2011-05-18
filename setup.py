@@ -49,6 +49,7 @@ setup(
         'django-model-utils==0.6.0',
         'django-reversion==1.4',
         'django-taggit==0.9.3',
+        'armstrong.core.arm_sections>=0.1',
     ],
 
     classifiers=[

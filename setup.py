@@ -37,7 +37,7 @@ def build_package(dirpath, dirnames, filenames):
 
 setup(
     name='armstrong.core.arm_content',
-    version='0.1',
+    version='0.2',
     description='A library for building news sites with multiple content types',
     author='Bay Citizen & Texas Tribune',
     author_email='dev@texastribune.org',

@@ -3,3 +3,5 @@
 *.swp
 coverage/*
 build/*
+MANIFEST
+dist/

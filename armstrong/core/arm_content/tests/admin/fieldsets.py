@@ -2,6 +2,7 @@ from .._utils import *
 
 from ...admin import fieldsets
 
+
 class FieldSetFactoryTestCase(TestCase):
     fieldset_name = None
 
@@ -37,4 +38,4 @@ class PublicationFieldSet(FieldSetFactoryTestCase):
 class AuthorsFieldSetTestCase(FieldSetFactoryTestCase):
     fieldset_name = 'AUTHORS'
     expected_title = "Author Information"
-    expected_fields = ('authors', 'authors_override', 'authors_extra' )
+    expected_fields = ('authors', 'authors_override', 'authors_extra', )

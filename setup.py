@@ -24,10 +24,9 @@ setup(
     name='armstrong.core.arm_content',
     version='0.1',
     description='A library for building news sites with multiple content types',
-    author='Texas Tribune',
-    author_email='tech@texastribune.org',
-    url='http://github.com/texastribune/armstrong.core.arm_content/',
-    # TODO: generate this dynamically
+    author='Bay Citizen & Texas Tribune',
+    author_email='dev@texastribune.org',
+    url='http://github.com/armstrong/armstrong.core.arm_content/',
     packages=packages,
     install_requires=[
         'Django==1.3',

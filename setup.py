@@ -40,7 +40,7 @@ setup(
     version='0.2.1',
     description='A library for building news sites with multiple content types',
     author='Bay Citizen & Texas Tribune',
-    author_email='dev@texastribune.org',
+    author_email='dev@armstrongcms.org',
     url='http://github.com/armstrong/armstrong.core.arm_content/',
     packages=packages,
     package_data={"armstrong": data_files},

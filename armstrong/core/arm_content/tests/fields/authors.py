@@ -193,3 +193,18 @@ class AuthorsDescriptorTestCase(TestCase):
     def test_returns_descriptor_when_retrieved_off_of_model(self):
         authors_field = SimpleAuthoredModel.authors
         self.assertTrue(isinstance(authors_field, authors.AuthorsDescriptor))
+
+    def test_can_accept_being_set_to_a_list(self):
+        article = SimpleAuthoredModel.objects.create()
+        staff = generate_random_staff_users(n=2)
+        article.authors = staff
+        self.assertTrue(type(article.authors) is not list)
+
+    def test_has_the_same_users_after_being_set_to_list(self):
+        article = SimpleAuthoredModel.objects.create()
+        staff = generate_random_staff_users(n=2)
+        article.authors = staff
+
+        self.assertEqual(article.authors.all().count(), len(staff))
+        for author in article.authors.all():
+            self.assertTrue(author in staff)

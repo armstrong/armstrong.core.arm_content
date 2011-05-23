@@ -91,6 +91,18 @@ class AuthorsDescriptor(object):
 
         return manager
 
+    def __set__(self, instance, value):
+        if instance is None:
+            raise AttributeError("Manager must be accessed via instance")
+
+        if not self.field.rel.through._meta.auto_created:
+            opts = self.field.rel.through._meta
+            raise AttributeError("Cannot set values on a ManyToManyField which specifies an intermediary model. Use %s.%s's Manager instead." % (opts.app_label, opts.object_name))
+
+        manager = self.__get__(instance)
+        manager.clear()
+        manager.add(*value)
+
 
 class AuthorsField(models.ManyToManyField):
     def __init__(self, to=None, override_field_name='authors_override',

@@ -40,7 +40,7 @@ class AudioFile(FieldFile):
         perhaps should do more complex and diffrent things
         like transcode via zencoder
         """
-        pass
+        return 1
 
     def _get_format(self):
         """
@@ -56,14 +56,14 @@ class AudioFile(FieldFile):
         """
         pass
 
-    def _get_bitrate():
+    def _get_bitrate(self):
         """
         get the bit rate 
         """
         pass
 
-    def _get_metadata_dict():
+    def _get_metadata_dict(self):
         """
         get the all metadata as a dictionary 
         """
-        pass
+        return {'artist':'jack black',}

@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from polymorphic import PolymorphicModel
 
+from ...fields import AudioFileField
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
@@ -49,7 +50,6 @@ class SimpleAuthoredModel(models.Model):
 class SimpleMixedinAuthorModel(mixins.AuthorsMixin, models.Model):
     pass
 
-
 class AuthoredModelWithContentionalOverride(models.Model):
     authors = AuthorsField()
     authors_override = models.CharField(max_length=100)
@@ -75,3 +75,6 @@ class SimpleProfile(models.Model):
 
     def get_absolute_url(self):
         return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')
+
+class AudioModel(model.Model):
+    audio_file=AudioFileField

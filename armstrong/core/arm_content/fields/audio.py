@@ -1,7 +1,9 @@
 from django.db.models.fields import FileField, FieldFile
 from django.core.files import File
-from amrstrong.core.arm_content.widgets import AudioFileWidget
 
+import mutagen
+
+from amrstrong.core.arm_content.widgets import AudioFileWidget
 class AudioField(FileField):
     attr_class=AudioFile
     def __init__(self, verbose_name=None, name=None, **kwargs):
@@ -33,6 +35,7 @@ class AudioFile(FieldFile):
     
     def __init__(self, *args, **kwargs):
         super(AudioFile,self).__init__(self, *args, **kwargs)
+        mutelib=__import__('mutagen.')
 
     def _transcode(self, toformat):
         """
@@ -40,30 +43,32 @@ class AudioFile(FieldFile):
         perhaps should do more complex and diffrent things
         like transcode via zencoder
         """
-        return 1
+        raise NotImplementedError
 
-    def _get_format(self):
+    @property
+    def format(self):
         """
         get the encoding of the file 
         """
-        if not hasattr(self, 'audioformat'):
-            pass
-        return self.audioformat
+        raise NotImplementedError
 
-    def _get_playtime(self):
+    @property
+    def playtime(self):
         """
         get the playtime of the file 
         """
-        pass
+        raise NotImplementedError
 
-    def _get_bitrate(self):
+    @property
+    def bitrate(self):
         """
         get the bit rate 
         """
-        pass
+        raise NotImplementedError
 
-    def _get_metadata_dict(self):
-        """
+    @property
+    def metadata_dict(self):
+        """`
         get the all metadata as a dictionary 
         """
-        return {'artist':'jack black',}
+        raise NotImplementedError

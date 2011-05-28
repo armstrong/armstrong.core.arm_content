@@ -1,6 +1,12 @@
+from django.utils.html import escape, conditional_escape
+
 from django.forms.widgets import ClearableFileInput
 
 class AudioFileWidget(ClearableFileInput):
+
+    class Media:
+        js = ('jplayer.js' ,)
+    
     template_player = """
         <div id="%(playerdivid)" class="jp-jplayer"></div>
 
@@ -20,7 +26,7 @@ class AudioFileWidget(ClearableFileInput):
         """
 
     def jplayer_format(self):
-        if( value audioformat)
+        if( value.format):
             pass
 
     def player_id(self, name):
@@ -29,13 +35,8 @@ class AudioFileWidget(ClearableFileInput):
     def render(self,name, value, attrs):
         parrent_output=super(AudioFileWidget, selfi).render(name, value, attrs)
 
-        data={ 'playerdivid' : conditional_escape(self.player_id(name))),
-               'format':conditional_escape(value.audioformat),
+        data={ 'playerdivid' : conditional_escape(self.player_id(name)),
+               'format' : conditional_escape(value.audioformat),
                'url': conditional_escape(value.url),
-
             }
-        return mark_safe(parrent_output + (template_player % data)
-
-    class Media:
-        js = ('jplayer.js' ,)
-
+        return mark_safe(parrent_output + (template_player % data))

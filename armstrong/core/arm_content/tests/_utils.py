@@ -1,14 +1,17 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.management.color import no_style
+from django.core.files.uploadedfile import UploadedFile
 from django.db import connection
 from django.db import models
 from django.test import TestCase as DjangoTestCase
 from django.utils import unittest
+
+
 import fudge
 import random
 
-from .arm_content_support.models import Article, Video
+from .arm_content_support.models import Article, Video, AudioModel
 from ..mixins.publication import PUB_STATUSES
 
 
@@ -177,3 +180,11 @@ def random_authored_model(klass, *authors):
     article = klass.objects.create()
     add_authors_to(article, *authors)
     return article
+
+
+def load_audio_file(filename):
+    f= open('./armstrong/core/arm_content/tests/arm_content_support/static/audio/' + filename,"rw+")
+    uf=UploadedFile(file=f)
+    a = AudioModel(audio_file=uf)
+    a.save()
+    return a

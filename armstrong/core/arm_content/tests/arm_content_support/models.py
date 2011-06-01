@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from polymorphic import PolymorphicModel
 
-from ...fields import AudioFileField
+from ...fields import AudioField
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
@@ -76,5 +76,5 @@ class SimpleProfile(models.Model):
     def get_absolute_url(self):
         return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')
 
-class AudioModel(model.Model):
-    audio_file=AudioFileField
+class AudioModel(models.Model):
+    audio_file=AudioField(upload_to='audio')

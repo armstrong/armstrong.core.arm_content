@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.management.color import no_style
-from django.core.files.uploadedfile import UploadedFile
+from django.core.files import File
 from django.db import connection
 from django.db import models
 from django.test import TestCase as DjangoTestCase
@@ -183,8 +183,8 @@ def random_authored_model(klass, *authors):
 
 
 def load_audio_file(filename):
-    f= open('./armstrong/core/arm_content/tests/arm_content_support/static/audio/' + filename,"rw+")
-    uf=UploadedFile(file=f)
-    a = AudioModel(audio_file=uf)
-    a.save()
-    return a
+    f= open('./armstrong/core/arm_content/tests/arm_content_support/static/audio/' + filename,"rb+")
+    uf=File(file=f)
+    am = AudioModel(audio_file=uf)
+    am.save()
+    return am

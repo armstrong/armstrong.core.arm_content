@@ -1,8 +1,5 @@
 from django.db.models import signals
-
 from django.db.models.fields.files import FileField, FieldFile, FileDescriptor
-
-from  mutagen import File as MutagenFile
 
 from armstrong.core.arm_content.fields.widgets import AudioFileWidget
 
@@ -49,12 +46,14 @@ class AudioFile(FieldFile):
 
     @property
     def metadata(self):
-        """`
+        """
         get the all metadata as a dictionary 
         """
+        from  mutagen import File as MutagenFile
         if not hasattr(self,'_metadata'):
             self._metadata=MutagenFile(self, easy=True)
         return self._metadata
+
 
 class AudioFileDescriptor(FileDescriptor):
     """
@@ -72,9 +71,6 @@ class AudioField(FileField):
     attr_class=AudioFile
     descriptor_class=AudioFileDescriptor
 
-    def __init__(self, verbose_name=None, name=None, **kwargs):
-        self.metadata=dict()
-        FileField.__init__(self, verbose_name, name, **kwargs)
     
     def contribute_to_class(self, cls, name):
         super(AudioField, self).contribute_to_class( cls, name)

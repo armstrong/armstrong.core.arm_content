@@ -16,13 +16,6 @@ class AudioFieldMetadataTestCase(TestCase):
             return self.skipTest('parrent class')
         self.audiofile = load_audio_file(self.audio_metadata['filename'])
 
-#    def test_format_handling(self):
-#        """
-#        figure out which audio format a file is 
-#
-#        """
-#        self.assertEqual(self.audiofile.audio_file.format, self.audio_metadata['format'])
-
     def test_audiofield_default_widget(self):
         """
         test that the correct widget is displayed in 
@@ -35,6 +28,9 @@ class AudioFieldMetadataTestCase(TestCase):
         """
         confirm that the extracted metadata matches the expected values 
         """
+        print self.audio_metadata
+        print 'vs'
+        print self.audiofile.audio_file.metadata
         for key in self.audio_metadata.keys():
             self.assertEqual(self.audio_metadata[key], self.audiofile.audio_file.metadata[key])
 
@@ -43,9 +39,8 @@ class Mp3Test(AudioFieldMetadataTestCase):
     """
     tests the audio fiels support for mp3's
     """
-    audio_metadata=dict(
-        filename = 'test.mp3',
-        audio_format = 'mp3',
-        artist='nodus',
-        playtime='0:10')
+    filename='test.mp3'
+
+
+    audio_metadata={'album': [u'Quod Libet Test Data'], 'title': [u'Silence'], 'artist': [u'piman'], 'genre': [u'Darkwave'], 'date': [u'2004'], 'tracknumber': [u'2']}
 

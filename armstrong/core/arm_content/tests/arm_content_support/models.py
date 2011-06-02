@@ -76,5 +76,6 @@ class SimpleProfile(models.Model):
     def get_absolute_url(self):
         return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')
 
+
 class AudioModel(models.Model):
     audio_file=AudioField(upload_to='audio')

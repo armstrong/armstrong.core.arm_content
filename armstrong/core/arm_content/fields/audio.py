@@ -70,7 +70,6 @@ class AudioFileDescriptor(FileDescriptor):
 class AudioField(FileField):
     attr_class=AudioFile
     descriptor_class=AudioFileDescriptor
-
     
     def contribute_to_class(self, cls, name):
         super(AudioField, self).contribute_to_class( cls, name)

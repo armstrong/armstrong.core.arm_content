@@ -40,7 +40,12 @@ class Mp3Test(AudioFieldMetadataTestCase):
     tests the audio fiels support for mp3's
     """
     filename='test.mp3'
-
-
-    audio_metadata={'album': [u'Quod Libet Test Data'], 'title': [u'Silence'], 'artist': [u'piman'], 'genre': [u'Darkwave'], 'date': [u'2004'], 'tracknumber': [u'2']}
+    playtime='4'
+    audio_metadata={'album': [u'Quod Libet Test Data'],
+                    'title': [u'Silence'], 
+                    'artist': [u'piman'],
+                    'genre': [u'Darkwave'], 
+                    'date': [u'2004'],
+                    'tracknumber': [u'2']
+                    }
 

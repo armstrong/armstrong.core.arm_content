@@ -34,7 +34,7 @@ class AudioFieldMetadataTestCase(TestCase):
 
 class Mp3Test(AudioFieldMetadataTestCase):
     """
-    tests the audio fiels support for mp3's
+    tests the audio fields support for mp3's
     """
     filename='test.mp3'
     playtime='4'
@@ -48,7 +48,7 @@ class Mp3Test(AudioFieldMetadataTestCase):
 
 class OggTest(AudioFieldMetadataTestCase):
     """
-    tests the audio fiels support for ogg's
+    tests the audio fields support for ogg's
     """
     filename='test.ogg'
     playtime='264'
@@ -57,6 +57,6 @@ class OggTest(AudioFieldMetadataTestCase):
                     'artist': [u'Kenny Beltrey'],
                     'date': [u'2002'],
                     'tracknumber': [u'2'],
-                    'comment': [u'http://www.kahvi.org',
+                    'comment': [u'http://www.kahvi.org'],
                     }
 

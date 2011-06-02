@@ -82,9 +82,10 @@ class AudioField(FileField):
         """
         may not need to exist, we shall see
         """
-        metadata={'test':'test'}
-        setattr(instance, 'metadata', metadata)
-        self.metadata=metadata
+        pass
+        #metadata={'test':'test'}
+        #setattr(instance, 'metadata', metadata)
+        #self.metadata=metadata
 
     def formfield(self, **kwargs):
         defaults = {'widget': AudioFileWidget}

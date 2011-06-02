@@ -14,7 +14,7 @@ class AudioFieldMetadataTestCase(TestCase):
     def setUp(self):
         if type(self) is AudioFieldMetadataTestCase:
             return self.skipTest('parrent class')
-        self.audiofile = load_audio_file(self.audio_metadata['filename'])
+        self.audiofile = load_audio_file(self.filename)
 
     def test_audiofield_default_widget(self):
         """
@@ -28,9 +28,6 @@ class AudioFieldMetadataTestCase(TestCase):
         """
         confirm that the extracted metadata matches the expected values 
         """
-        print self.audio_metadata
-        print 'vs'
-        print self.audiofile.audio_file.metadata
         for key in self.audio_metadata.keys():
             self.assertEqual(self.audio_metadata[key], self.audiofile.audio_file.metadata[key])
 
@@ -47,5 +44,19 @@ class Mp3Test(AudioFieldMetadataTestCase):
                     'genre': [u'Darkwave'], 
                     'date': [u'2004'],
                     'tracknumber': [u'2']
+                    }
+
+class OggTest(AudioFieldMetadataTestCase):
+    """
+    tests the audio fiels support for ogg's
+    """
+    filename='test.ogg'
+    playtime='264'
+    audio_metadata={'album': [u'Favorite Things'],
+                    'title': [u'Hydrate - Kenny Beltrey'], 
+                    'artist': [u'Kenny Beltrey'],
+                    'date': [u'2002'],
+                    'tracknumber': [u'2'],
+                    'comment': [u'http://www.kahvi.org',
                     }
 

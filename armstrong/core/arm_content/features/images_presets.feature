@@ -9,7 +9,7 @@ Feature: Preset image settings
       | small   | 50    | 50     | 50%  |
       | sidebar | 300   |        | 50%  |
     When I ask for each preset thumbnail for the image
-    Then each URL refers to an image with the appropriate settings
+    Then each thumbnail has the specified settings
 
   Examples:
     | path              |
@@ -19,10 +19,39 @@ Feature: Preset image settings
     | cute-kitten.jpeg  |
 
     
-Feature: Preset defaults
-  In order to simplify setting commonly used options
-  I want to be able to specify default options that presets inherit unless overridden
+  Scenario Outline: Basic defaults
+    Given I have an Image that refers to <path>
+    And I have a default preset quality of 100
+    And I have the following thumbnail presets:
+      | name    | width | height | crop |
+      | small   | 50    | 50     | 50%  |
+      | sidebar | 300   |        | 50%  |
+    When I ask for each preset thumbnail for the image
+    Then each thumbnail has the specified settings
+    And each thumbnail has a quality of 100
 
-  Scenario: Basic defaults
+  Examples:
+    | path              |
+    | a.png             |
+    | test.jpg          |
+    | animated_meme.gif |
+    | cute-kitten.jpeg  |
 
-  Scenario: Override a default
+  Scenario Outline: Override a default
+    Given I have an Image that refers to <path>
+    And I have a default preset quality of 100
+    And I have the following thumbnail presets:
+      | name              | width | height | crop | quality |
+      | small             | 50    | 50     | 50%  |         |
+      | small_low_quality | 50    | 50     | 50%  | 25      |
+      | sidebar           | 300   |        | 50%  |         |
+    When I ask for each preset thumbnail for the image
+    Then each thumbnail has the specified settings
+    And the thumbnails without specified quality settings have a quality of 100
+
+  Examples:
+    | path              |
+    | a.png             |
+    | test.jpg          |
+    | animated_meme.gif |
+    | cute-kitten.jpeg  |

@@ -4,6 +4,7 @@ from .admin import *
 from .fields import *
 from .mixins import *
 from .models import *
+from .utils import *
 from .video import *
 
 

@@ -3,6 +3,8 @@ from django.db.models.fields.files import FileField, FieldFile, FileDescriptor
 
 from armstrong.core.arm_content.fields.widgets import AudioFileWidget
 
+from django.conf import settings
+
 
 class AudioFile(FieldFile):
     """
@@ -22,6 +24,14 @@ class AudioFile(FieldFile):
         like transcode via zencoder
         """
         raise NotImplementedError
+
+    def render(self,*args, **kwargs):
+        if('armstrong.apps.audio' in settings.INSTALLED_APPS):
+            from armstrong.apps.audio import widget
+            return widget.render(self, args, kwargs)
+
+        else:
+            return "<a href='%s'> %s </a>" % (self.url, self.name)
 
     @property
     def filetype(self):

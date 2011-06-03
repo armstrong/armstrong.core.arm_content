@@ -5,8 +5,8 @@ from django.db import models
 from ..arm_content_support.models import AudioModel
 from ..arm_content_support.forms import AudioModelForm
 from ..arm_content_support.models import SimpleProfile
-from .._utils import *
 
+from .._utils import *
 from ...fields import AudioField
 from ...fields.widgets.audio import AudioFileWidget 
 
@@ -23,7 +23,11 @@ class AudioFieldMetadataTestCase(TestCase):
         """
         form=AudioModelForm()
         self.assertTrue(type(form.fields['audio_file'].widget) is AudioFileWidget)
-   
+        form2=AudioModelForm(initial={"audio_file":self.audiofile.audio_file})
+        self.assertTrue(self.audiofile.audio_file.url in form2.as_ul()  )
+
+        
+     
     def test_audiofield_metadata(self):
         """
         confirm that the extracted metadata matches the expected values 
@@ -59,4 +63,3 @@ class OggTest(AudioFieldMetadataTestCase):
                     'tracknumber': [u'2'],
                     'comment': [u'http://www.kahvi.org'],
                     }
-

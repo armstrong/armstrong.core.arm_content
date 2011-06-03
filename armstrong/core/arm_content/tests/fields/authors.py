@@ -180,3 +180,31 @@ class AuthorsFieldTestCase(TestCase):
 
         field = authors.AuthorsField(to=MyUser)
         self.assertEqual(field.rel.to, MyUser)
+
+
+class AuthorsDescriptorTestCase(TestCase):
+    def test_does_not_choke_on_empty_instance(self):
+        try:
+            authors_field = SimpleAuthoredModel.authors
+            self.assertTrue(True, "Was able to look at authors on the model")
+        except AttributeError, e:
+            self.fail("Should not have raised an exception: %s" % e)
+
+    def test_returns_descriptor_when_retrieved_off_of_model(self):
+        authors_field = SimpleAuthoredModel.authors
+        self.assertTrue(isinstance(authors_field, authors.AuthorsDescriptor))
+
+    def test_can_accept_being_set_to_a_list(self):
+        article = SimpleAuthoredModel.objects.create()
+        staff = generate_random_staff_users(n=2)
+        article.authors = staff
+        self.assertTrue(type(article.authors) is not list)
+
+    def test_has_the_same_users_after_being_set_to_list(self):
+        article = SimpleAuthoredModel.objects.create()
+        staff = generate_random_staff_users(n=2)
+        article.authors = staff
+
+        self.assertEqual(article.authors.all().count(), len(staff))
+        for author in article.authors.all():
+            self.assertTrue(author in staff)

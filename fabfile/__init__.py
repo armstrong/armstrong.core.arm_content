@@ -12,6 +12,7 @@ settings = {
         'django.contrib.sessions',
         'armstrong.core.arm_content',
         'armstrong.core.arm_content.tests.arm_content_support',
+        'armstrong.core.arm_sections',
         'south',
         'lettuce.django',
         'sorl.thumbnail',

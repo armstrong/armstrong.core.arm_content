@@ -66,6 +66,9 @@ class AuthorsDescriptor(object):
         self.field = m2m_field
 
     def __get__(self, instance, instance_type=None):
+        if not instance:
+            return self
+
         RelatedManager = create_many_related_manager(AuthorsManager,
                 self.field.rel)
         core_filters = {
@@ -87,6 +90,18 @@ class AuthorsDescriptor(object):
         manager.extra_field_name = self.field.extra_field_name
 
         return manager
+
+    def __set__(self, instance, value):
+        if instance is None:
+            raise AttributeError("Manager must be accessed via instance")
+
+        if not self.field.rel.through._meta.auto_created:
+            opts = self.field.rel.through._meta
+            raise AttributeError("Cannot set values on a ManyToManyField which specifies an intermediary model. Use %s.%s's Manager instead." % (opts.app_label, opts.object_name))
+
+        manager = self.__get__(instance)
+        manager.clear()
+        manager.add(*value)
 
 
 class AuthorsField(models.ManyToManyField):

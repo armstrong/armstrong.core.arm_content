@@ -183,6 +183,7 @@ def random_authored_model(klass, *authors):
 
 
 def load_audio_file(filename):
+    #todo: there needs to be a better way to get the filename
     f= open('./armstrong/core/arm_content/tests/arm_content_support/static/audio/' + filename,"rb+")
     uf=File(file=f)
     am = AudioModel(audio_file=uf)

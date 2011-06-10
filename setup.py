@@ -19,14 +19,16 @@ def convert_to_str(d):
     This is required because setup() does not like unicode in
     the values it is supplied.
     """
+    d2 = {}
     for k, v in d.items():
+        k = str(k)
         if type(v) in [list, tuple]:
-            d[k] = [str(a) for a in v]
+            d2[k] = [str(a) for a in v]
         elif type(v) is dict:
-            d[k] = convert_to_str(v)
+            d2[k] = convert_to_str(v)
         else:
-            d[k] = str(v)
-    return d
+            d2[k] = str(v)
+    return d2
 
 info = convert_to_str(info)
 NAMESPACE_PACKAGES = []

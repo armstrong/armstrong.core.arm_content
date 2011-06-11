@@ -81,7 +81,7 @@ def build_package(dirpath, dirnames, filenames):
 setup_kwargs = {
     "author": "Bay Citizen & Texas Tribune",
     "author_email": "dev@armstrongcms.org",
-    "url": "http://github.com/armstrongcms/%s/" % info["name"],
+    "url": "http://github.com/armstrong/%s/" % info["name"],
     "packages": packages,
     "package_data": {info["name"]: data_files, },
     "namespace_packages": NAMESPACE_PACKAGES,

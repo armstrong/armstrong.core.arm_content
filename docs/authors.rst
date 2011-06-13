@@ -133,3 +133,24 @@ the ``override_field_name`` keyward argument like this::
     class MyArticle(models.Model):
         authors = AuthorsField(override_field_name="custom_override")
         custom_override = models.CharField(max_length=100)
+
+
+AuthorsMixin Usage
+------------------
+Armstrong uses mixins for grouping several fields together into a common,
+reusable object.  The ``AuthorsMixin`` allows you to add the default behavior
+of an authored model in Armstrong to your model.  You can mix it into your
+models like this::
+
+    from armstrong.core.arm_content.mixins import AuthorsMixin
+    from django.db import models
+
+    class MyArticle(AuthorsMixin, models.Model):
+        # Your fields here...
+
+Using this adds the ``authors``, ``authors_extra``, and ``authors_override``
+fields to your model.
+
+.. important::
+    Note parent object order.  You *must* declare the ``models.Model`` class as
+    the last class in the list of parent classes.

@@ -6,6 +6,12 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   models
+
+   authors
+   publications
+   videos
+
 
 Indices and tables
 ==================

@@ -154,3 +154,34 @@ fields to your model.
 .. important::
     Note parent object order.  You *must* declare the ``models.Model`` class as
     the last class in the list of parent classes.
+
+
+Admin Helpers
+-------------
+To keep things consistent inside Armstrong, we use the same fieldsets
+throughout the admin.  Use the ``armstrong.core.arm_content.fieldsets.AUTHORS``
+variable to add the default author's fieldset to your models.
+
+Your ``ModelAdmin`` should look similar to this::
+
+    from armstrong.core.arm_content import fieldsets
+    from django.contrib import admin
+
+    class MyArticleAdmin(admin.ModelAdmin):
+        fieldsets = (
+            # your main fields here like this:
+            (None, {
+                "fields": ("title", "body", )
+            }),
+
+            fieldsets.AUTHORS,
+        )
+
+This is the same as adding the following to your ``fieldsets`` tuple::
+
+    ('Author Information', {
+        'fields': ('authors', 'authors_override', 'authors_extra'),
+    })
+
+.. warning::
+    This is not currently internationalized

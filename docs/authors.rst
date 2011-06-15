@@ -39,7 +39,7 @@ casting the field to a string.
     articles.authors.add(bob)
     articles.authors.add(alice)
     print "%s" % articles.authors
-    # outputs "Bob Example, and Alice Example"
+    # outputs "Bob Example and Alice Example"
 
 You can create an HTML representation of your model by printing the ``.html``
 attribute on the ``authors`` field like this::

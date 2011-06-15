@@ -12,6 +12,9 @@ Contents
    publications
    videos
 
+TODOs
+=====
+.. todolist::
 
 Indices and tables
 ==================

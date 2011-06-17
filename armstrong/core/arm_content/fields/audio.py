@@ -38,7 +38,14 @@ class AudioFile(FieldFile):
         """
         get the encoding of the file 
         """
-        raise NotImplementedError
+        if not hasattr(self,'_filetype'):
+            if hasattr(self.metadata, 'mime'):
+                import pdb;pdb.set_trace()
+                self._filetype=self.metadata.mime[0].replace('audio/','')
+            else:
+                self._filetype=self.name.split('.')[-1]
+
+        return self._filetype
 
     @property
     def playtime(self):
@@ -59,9 +66,12 @@ class AudioFile(FieldFile):
         """
         get the all metadata as a dictionary 
         """
-        from  mutagen import File as MutagenFile
         if not hasattr(self,'_metadata'):
-            self._metadata=MutagenFile(self, easy=True)
+            try:
+                from  mutagen import File as MutagenFile
+                self._metadata=MutagenFile(self, easy=True)
+            except ImportError:
+                self._metadata = dict()
         return self._metadata
 
 

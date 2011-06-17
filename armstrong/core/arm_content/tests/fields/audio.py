@@ -26,6 +26,11 @@ class AudioFieldMetadataTestCase(TestCase):
         form2=AudioModelForm(initial={"audio_file":self.audiofile.audio_file})
         self.assertTrue(self.audiofile.audio_file.url in form2.as_ul()  )
 
+    def test_audiofield_filetype(self):
+        """
+        test that the file type returned by the file field is correct
+        """
+        self.assertEqual(self.audiofile.audio_file.filetype, self.filetype)
         
      
     def test_audiofield_metadata(self):
@@ -41,6 +46,7 @@ class Mp3Test(AudioFieldMetadataTestCase):
     tests the audio fields support for mp3's
     """
     filename='test.mp3'
+    filetype='mp3'
     playtime='4'
     audio_metadata={'album': [u'Quod Libet Test Data'],
                     'title': [u'Silence'], 
@@ -55,6 +61,7 @@ class OggTest(AudioFieldMetadataTestCase):
     tests the audio fields support for ogg's
     """
     filename='test.ogg'
+    filetype='ogg'
     playtime='264'
     audio_metadata={'album': [u'Favorite Things'],
                     'title': [u'Hydrate - Kenny Beltrey'], 

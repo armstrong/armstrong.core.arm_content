@@ -10,6 +10,7 @@ from armstrong.core.arm_content.tests.arm_content_support.models import SorlImag
 
 def get_thumbnail_mock(file_, dimensions, **kwargs):
     thumbnail = deepcopy(file_)
+    thumbnail.storage = file_.storage  # This doesn't copy over for some reason.
     thumbnail._kwargs = kwargs
     thumbnail._kwargs['dimensions'] = dimensions
     return thumbnail
@@ -73,3 +74,12 @@ def and_the_thumbnails_without_specified_quality_settings_have_a_quality_of_100(
         thumbnail = world.thumbnails[preset_label]
         if 'quality' not in preset:
             assert thumbnail._kwargs['quality'] == 100
+
+@step(u'When I render its (\w+) thumbnail')
+def when_i_render_its_thumbnail(step, preset_label):
+    world.rendered = world.image.render_visual(preset_label, presets=world.presets,
+        defaults=world.defaults)
+
+@step(u'Then I see an IMG tag')
+def then_i_see_an_img_tag(step):
+    assert world.rendered.startswith('<img')

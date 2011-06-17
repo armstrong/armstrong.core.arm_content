@@ -5,9 +5,12 @@ Feature: Images can render themselves
 
   Scenario Outline: Render a thumbnail
     Given I have an Image that refers to <path>
-    When I render its thumbnail
+    And I have the following thumbnail presets:
+      | name    | width | height | crop |
+      | small   | 50    | 50     | 50%  |
+      | sidebar | 300   |        | 50%  |
+    When I render its small thumbnail
     Then I see an IMG tag
-    And I see a tag with a src attribute that ends with <path>
 
   Examples:
     | path              |

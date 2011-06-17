@@ -21,6 +21,10 @@ settings = {
     'ROOT_URLCONF': 'armstrong.core.arm_content.tests.arm_content_support.urls',
     'ARMSTRONG_EXTERNAL_VIDEO_BACKEND': 'armstrong.core.arm_content.video.backends.YouTubeBackend',
     'MEDIA_URL': '/media/',
+    'ARMSTRONG_PRESETS': {
+        'small_square': {'width': 75, 'height': 75, 'crop': '50%'},
+        'qvga': {'width': 320, 'height': 240},
+    },
 }
 
 full_name = "armstrong.core.arm_content"

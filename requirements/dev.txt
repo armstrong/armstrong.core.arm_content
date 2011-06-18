@@ -1,3 +1,5 @@
+-r ./base.txt
+
 -e git://github.com/domain51/d51.django.virtualenv.base#egg=d51.django.virtualenv.base
 -e git://github.com/domain51/d51.django.virtualenv.test_runner#egg=d51.django.virtualenv.test_runner
 -e git://github.com/tswicegood/fabric#egg=fabric
@@ -11,5 +13,4 @@ lettuce
 # that use case.
 -e git://github.com/bconstantin/django_polymorphic.git@2c47db8fcc284a92d2c9769ba503603fbea92660#egg=django_polymorphic
 
-PIL
-sorl-thumbnail
+-r ./sorl.txt

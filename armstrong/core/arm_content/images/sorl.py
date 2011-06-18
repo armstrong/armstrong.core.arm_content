@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+from sorl.thumbnail import get_thumbnail
+
 from . import presets as presets_utils
 
 
@@ -18,19 +20,13 @@ def get_preset_args(preset_label, presets=None, defaults=None):
     args['dimensions'] = dimensions(width, height)
     return args
 
-try:
-    from sorl.thumbnail import get_thumbnail
+def get_preset_thumbnail(file_, preset_label, presets=None, defaults=None):
+    '''A thin wrapper around sorl's get_thumbnail that allows for presets.
 
-    def get_preset_thumbnail(file_, preset_label, presets=None, defaults=None):
-        '''A thin wrapper around sorl's get_thumbnail that allows for presets.
+    Given an ImageFile (e.g. from an ImageField) and the label of a preset,
+    return the ImageFile that represents the thumbnail with the settings
+    specified in the preset.'''
 
-        Given an ImageFile (e.g. from an ImageField) and the label of a preset,
-        return the ImageFile that represents the thumbnail with the settings
-        specified in the preset.'''
-
-        args = get_preset_args(preset_label, presets, defaults)
-        dimensions = args.pop('dimensions')
-        return get_thumbnail(file_, dimensions, **args)
-
-except ImportError:
-    pass
+    args = get_preset_args(preset_label, presets, defaults)
+    dimensions = args.pop('dimensions')
+    return get_thumbnail(file_, dimensions, **args)

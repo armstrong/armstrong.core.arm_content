@@ -2,13 +2,15 @@ from copy import deepcopy
 
 from django.conf import settings
 import fudge
+import fudge.patcher
 from lettuce import *
+from sorl.thumbnail.base import ThumbnailBackend
 
 from armstrong.core.arm_content.utils.sorl import get_preset_thumbnail, dimensions
 from armstrong.core.arm_content.tests.arm_content_support.models import SorlImage
 
 
-def get_thumbnail_mock(file_, dimensions, **kwargs):
+def get_thumbnail_mock(self, file_, dimensions, **kwargs):
     thumbnail = deepcopy(file_)
     thumbnail.storage = file_.storage  # This doesn't copy over for some reason.
     thumbnail._kwargs = kwargs
@@ -36,9 +38,8 @@ def and_i_have_the_following_thumbnail_presets(step):
         world.presets[name] = hash
 
 @step(u'When I ask for each preset thumbnail for the image')
-@fudge.patch('sorl.thumbnail.base.ThumbnailBackend')
-def when_i_ask_for_each_preset_thumbnail_for_the_image(step, fake_backend):
-    fake_backend.is_callable().returns_fake().provides('get_thumbnail').calls(get_thumbnail_mock)
+@fudge.patcher.with_patched_object(ThumbnailBackend, 'get_thumbnail', get_thumbnail_mock)
+def when_i_ask_for_each_preset_thumbnail_for_the_image(step):
     world.thumbnails = dict(
         (preset, get_preset_thumbnail(world.image.image, preset,
             presets=world.presets, defaults=world.defaults))
@@ -76,6 +77,7 @@ def and_the_thumbnails_without_specified_quality_settings_have_a_quality_of_100(
             assert thumbnail._kwargs['quality'] == 100
 
 @step(u'When I render its (\w+) thumbnail')
+@fudge.patcher.with_patched_object(ThumbnailBackend, 'get_thumbnail', get_thumbnail_mock)
 def when_i_render_its_thumbnail(step, preset_label):
     world.rendered = world.image.render_visual(preset_label, presets=world.presets,
         defaults=world.defaults)

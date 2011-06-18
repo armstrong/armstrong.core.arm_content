@@ -1,7 +1,7 @@
 from .base import BaseImageMixin
 
 try:
-    from ...utils.sorl import get_preset_thumbnail
+    from ...images.sorl import get_preset_thumbnail
 
     class SorlImageMixin(BaseImageMixin):
         visual_field_name = 'image'

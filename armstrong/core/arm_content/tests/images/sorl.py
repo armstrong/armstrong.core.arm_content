@@ -1,7 +1,7 @@
 from django.conf import settings
 
 from .._utils import *
-from ...utils.sorl import get_preset_args
+from ...images.sorl import get_preset_args
 
 
 class PresetTestCase(TestCase):

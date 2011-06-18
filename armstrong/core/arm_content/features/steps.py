@@ -6,7 +6,7 @@ import fudge.patcher
 from lettuce import *
 from sorl.thumbnail.base import ThumbnailBackend
 
-from armstrong.core.arm_content.utils.sorl import get_preset_thumbnail, dimensions
+from armstrong.core.arm_content.images.sorl import get_preset_thumbnail, dimensions
 from armstrong.core.arm_content.tests.arm_content_support.models import SorlImage
 
 

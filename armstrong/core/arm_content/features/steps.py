@@ -45,6 +45,16 @@ def when_i_ask_for_each_preset_thumbnail_for_the_image(step):
             presets=world.presets, defaults=world.defaults))
         for preset in world.presets)
 
+@step(u'When I ask for the (.*) thumbnail for the image')
+@fudge.patcher.with_patched_object(ThumbnailBackend, 'get_thumbnail', get_thumbnail_mock)
+def when_i_ask_for_a_preset_thumbnail_for_the_image(step, preset_label):
+    world.thumbnail = get_preset_thumbnail(world.image.image, preset_label,
+        presets=world.presets, defaults=world.defaults)
+
+@step(u'Then the returned thumbnail is the original image')
+def then_the_returned_thumbnail_is_the_original_image(step):
+    assert world.thumbnail.name == world.image.image.name
+
 @step(u'Then each thumbnail has the specified settings')
 def then_each_thumbnail_has_the_specified_settings(step):
     for preset_label, preset in world.presets.items():

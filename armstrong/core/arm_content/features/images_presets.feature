@@ -55,3 +55,19 @@ Feature: Preset image settings
     | test.jpg          |
     | animated_meme.gif |
     | cute-kitten.jpeg  |
+
+  Scenario Outline: Fetch the original image
+    Given I have an Image that refers to <path>
+    And I have the following thumbnail presets:
+      | name    | width | height | crop |
+      | small   | 50    | 50     | 50%  |
+      | sidebar | 300   |        | 50%  |
+    When I ask for the original thumbnail for the image
+    Then the returned thumbnail is the original image
+
+  Examples:
+    | path              |
+    | a.png             |
+    | test.jpg          |
+    | animated_meme.gif |
+    | cute-kitten.jpeg  |

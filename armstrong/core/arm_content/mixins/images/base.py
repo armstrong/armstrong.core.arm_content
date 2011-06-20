@@ -5,3 +5,6 @@ class BaseImageMixin(object):
 
     def render_visual(self, preset_label, presets=None, defaults=None, *args, **kwargs):
         raise NotImplementedError()
+
+    def get_visual_thumbnail_url(self, preset_label, presets=None, defaults=None, *args, **kwargs):
+        raise NotImplementedError()

@@ -10,7 +10,7 @@ class SorlImageMixin(BaseImageMixin):
             presets, defaults, *args, **kwargs)
 
     def get_visual_thumbnail_url(self, preset_label, presets=None, defaults=None, *args, **kwargs):
-            image_file = getattr(self, self.visual_field_name)
-            thumbnail_file = get_preset_thumbnail(image_file, preset_label,
-                presets, defaults)
-            return thumbnail_file.url
+        image_file = getattr(self, self.visual_field_name)
+        thumbnail_file = get_preset_thumbnail(image_file, preset_label,
+            presets, defaults)
+        return thumbnail_file.url

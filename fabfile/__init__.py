@@ -8,6 +8,7 @@ settings = {
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
+        'armstrong.apps.content',
         'armstrong.core.arm_content',
         'armstrong.core.arm_content.tests.arm_content_support',
         'armstrong.core.arm_sections',

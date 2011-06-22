@@ -20,3 +20,4 @@ settings = {
 
 main_app = "arm_content"
 tested_apps = ("arm_content_support", "arm_content", )
+pip_install_first = True

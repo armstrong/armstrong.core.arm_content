@@ -8,6 +8,7 @@ settings = {
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
+        'armstrong.apps.content',
         'armstrong.core.arm_content',
         'armstrong.core.arm_content.tests.arm_content_support',
         'armstrong.core.arm_sections',
@@ -20,3 +21,4 @@ settings = {
 
 main_app = "arm_content"
 tested_apps = ("arm_content_support", "arm_content", )
+pip_install_first = True

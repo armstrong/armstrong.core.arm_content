@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from polymorphic import PolymorphicModel
 
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
@@ -9,13 +8,7 @@ from ...mixins import PublicationMixin
 from ...models import ContentBase
 
 
-# for backwards compatibility -- should be removed
-class BaseContent(PolymorphicModel, PublicationMixin):
-    title = models.CharField(max_length=255)
-
-
-class ConcreteContent(ContentBase):
-    pass
+from armstrong.apps.content.models import Content as ConcreteContent
 
 
 class ConcreteArticle(ConcreteContent):
@@ -25,13 +18,6 @@ class ConcreteArticle(ConcreteContent):
 class ConcreteCommentary(ConcreteContent):
     pass
 
-
-class Article(BaseContent):
-    body = models.TextField()
-
-
-class Video(BaseContent):
-    youtube_id = models.CharField(max_length=30)
 
 
 class SimpleVideoModel(models.Model):

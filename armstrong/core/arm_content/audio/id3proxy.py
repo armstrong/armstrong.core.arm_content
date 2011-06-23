@@ -8,7 +8,7 @@ class Id3readerBackend:
 
     @poperty
     def filetype(self):
-        if self.file.name.lower().rfind('.mp3') == len(self.file.name)-3):
+        if self.file.name.lower().rfind('.mp3') == len(self.file.name)-3:
             return 'mp3'
         else:
             return 'unsupported'

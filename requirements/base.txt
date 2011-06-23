@@ -3,5 +3,5 @@ south
 django-taggit>=0.9.3
 django-model-utils==0.6.0
 django-reversion==1.4
--e git://github.com/armstrongcms/armstrong.core.arm_sections.git#egg=armstrong.core.arm_sections
--e git://github.com/Jbonnett/Mutagen-flo.git#egg=mutagen
+-e git://github.com/armstrong/armstrong.core.arm_sections.git#egg=armstrong.core.arm_sections
+-e git://github.com/armstrong/armstrong.utils.backends.git#egg=armstrong.utils.backends

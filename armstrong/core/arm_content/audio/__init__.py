@@ -2,21 +2,24 @@
 import pkg_resources
 pkg_resources.declare_namespace(__name__)
 
-from django.conf import settings as default_settings
-from django.utils.importlib import import_module
-from django.core.exceptions import ImproperlyConfigured
+AUDIO_BACKEND_SETTING='ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND'
 
-def get_backend(settings=None,setting_name='ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND'):
-    if not settings:
-        settings = default_settings
-    try:
-        backend_name = getattr(settings, setting_name)
-    except AttributeError:
-        raise ImproperlyConfigured
+class AudioBackend(object): 
+    def __init__(self, file):
+        self.file
 
-    def to_backend(a):
-        module, backend_class = a.rsplit(".", 1)
-        backend_module = import_module(module)
-        return getattr(backend_module, backend_class)()
+    @property
+    def filetype(self):
+        raise NotImplementedError
+
+    @property
+    def metadata(self):
+        raise NotImplementedError
     
-    return to_backend(settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND)
+    @property
+    def playtime(self):
+        raise NotImplementedError
+
+    @property
+    def bitrate(self):
+        raise NotImplementedError

@@ -1,3 +1,4 @@
+from copy import copy
 from django.db import models
 import fudge
 
@@ -11,6 +12,7 @@ from ..arm_content_support.models import SimpleVideoModel
 
 from ...fields.video import EmbeddedVideo
 from ... import fields
+from ...video import backends
 
 
 class ExampleBackend(object):
@@ -74,6 +76,14 @@ class EmbeddedVideoFieldTestCase(TestCase):
 
 
 class EmbeddedVideoTestCase(TestCase):
+    def setUp(self):
+        fudge.clear_calls()
+        fudge.clear_expectations()
+        self.orig_backend_settings = copy(backends.backend.settings)
+
+    def tearDown(self):
+        backends.backend.settings = copy(self.orig_backend_settings)
+
     def test_id_is_None_by_default(self):
         v = EmbeddedVideo()
         self.assertEqual(None, v.id)
@@ -107,17 +117,16 @@ class EmbeddedVideoTestCase(TestCase):
         self.assertEqual("Example", v.type)
 
     def test_uses_configured_backend_if_nothing_is_provided(self):
-        from ...video import backends
         settings = fudge.Fake()
         backend = "armstrong.core.arm_content.tests.fields.ExampleBackend"
         settings.has_attr(ARMSTRONG_EXTERNAL_VIDEO_BACKEND=backend)
+        backends.backend.settings = settings
 
-        with fudge.patched_context(backends, 'default_settings', settings):
-            random_url = "foobar-%d" % random.randint(100, 200)
-            random_id = "%d" % random.randint(100, 200)
-            v = EmbeddedVideo("%s:%s" % (random_url, random_id))
-            self.assertEqual(random_id, v.id)
-            self.assertEqual(random_url, v.url)
+        random_url = "foobar-%d" % random.randint(100, 200)
+        random_id = "%d" % random.randint(100, 200)
+        v = EmbeddedVideo("%s:%s" % (random_url, random_id))
+        self.assertEqual(random_id, v.id)
+        self.assertEqual(random_url, v.url)
 
     def test_embed_dispatches_to_backend_and_returns_result(self):
         random_return = random.randint(1000, 2000)

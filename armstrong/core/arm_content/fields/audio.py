@@ -2,6 +2,7 @@ from django.db.models import signals
 from django.db.models.fields.files import FileField, FieldFile, FileDescriptor
 
 from armstrong.core.arm_content.fields.widgets import AudioFileWidget
+from armstrong.utils.backends import get_backend
 
 from django.conf import settings
 
@@ -16,6 +17,10 @@ class AudioFile(FieldFile):
         super(AudioFile,self).__init__( *args, **kwargs)
         if 'metadata' in kwargs:
             self._metadata= kwargs['metadata']
+        backendKlass=get_backend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND')
+        #get a instance of said class with the file set
+        self.backend=backendKlass(self.file)
+
 
     def _transcode(self, toformat):
         """
@@ -29,7 +34,6 @@ class AudioFile(FieldFile):
         if('armstrong.apps.audio' in settings.INSTALLED_APPS):
             from armstrong.apps.audio import widget
             return widget.render(self, args, kwargs)
-
         else:
             return "<a href='%s'> %s </a>" % (self.url, self.name)
 
@@ -39,12 +43,7 @@ class AudioFile(FieldFile):
         get the encoding of the file 
         """
         if not hasattr(self,'_filetype'):
-            if hasattr(self.metadata, 'mime'):
-                import pdb;pdb.set_trace()
-                self._filetype=self.metadata.mime[0].replace('audio/','')
-            else:
-                self._filetype=self.name.split('.')[-1]
-
+            self._filetype = backend.filetype
         return self._filetype
 
     @property
@@ -52,14 +51,18 @@ class AudioFile(FieldFile):
         """
         get the playtime of the file 
         """
-        raise NotImplementedError
+        if not hasattr(self,'_playtime'):
+            self._playtime = backend.playtime
+        return self._playtime
 
     @property
     def bitrate(self):
         """
         get the bit rate 
         """
-        raise NotImplementedError
+        if not hasattr(self,'_bitrate'):
+            self._bitrate = backend.filetype
+        return self._bitrate
 
     @property
     def metadata(self):
@@ -67,11 +70,7 @@ class AudioFile(FieldFile):
         get the all metadata as a dictionary 
         """
         if not hasattr(self,'_metadata'):
-            try:
-                from  mutagen import File as MutagenFile
-                self._metadata=MutagenFile(self, easy=True)
-            except ImportError:
-                self._metadata = dict()
+            self._metadata= backend.metadata        
         return self._metadata
 
 

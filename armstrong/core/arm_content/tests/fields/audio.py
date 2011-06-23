@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 
 from ..arm_content_support.models import AudioModel
 from ..arm_content_support.forms import AudioModelForm
@@ -32,7 +33,6 @@ class AudioFieldMetadataTestCase(TestCase):
         """
         self.assertEqual(self.audiofile.audio_file.filetype, self.filetype)
         
-     
     def test_audiofield_metadata(self):
         """
         confirm that the extracted metadata matches the expected values 
@@ -41,7 +41,7 @@ class AudioFieldMetadataTestCase(TestCase):
             self.assertEqual(self.audio_metadata[key], self.audiofile.audio_file.metadata[key])
 
 
-class Mp3Test(AudioFieldMetadataTestCase):
+class MutagenMp3Test(AudioFieldMetadataTestCase):
     """
     tests the audio fields support for mp3's
     """
@@ -56,7 +56,7 @@ class Mp3Test(AudioFieldMetadataTestCase):
                     'tracknumber': [u'2']
                     }
 
-class OggTest(AudioFieldMetadataTestCase):
+class MutagenOggTest(AudioFieldMetadataTestCase):
     """
     tests the audio fields support for ogg's
     """
@@ -70,3 +70,15 @@ class OggTest(AudioFieldMetadataTestCase):
                     'tracknumber': [u'2'],
                     'comment': [u'http://www.kahvi.org'],
                     }
+
+class Id3readerTest(Mp3Test):
+    """
+    test id3reader by temporarrily overriding the settings 
+    """
+    def setUp(self):
+        self.org_backend=settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND
+        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = 'armstrong.core.arm_content.audio.backends.MutagenBackend'
+        super(self, Id3readerTest).setUp(self)
+
+    def tearDown(self):
+        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = self.org_backend

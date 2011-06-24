@@ -4,3 +4,8 @@ django-taggit>=0.9.3
 django-model-utils==0.6.0
 django-reversion==1.4
 armstrong.core.arm_sections>=0.1.2
+armstrong.utils.backends>=0.1.0
+
+# We have to install it this way because the latest releast of mptt doesn't
+# have what we need to use.
+-e git://github.com/django-mptt/django-mptt.git#egg=mptt

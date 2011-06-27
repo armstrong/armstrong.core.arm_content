@@ -2,7 +2,7 @@ from django.db.models import signals
 from django.db.models.fields.files import FileField, FieldFile, FileDescriptor
 
 from armstrong.core.arm_content.fields.widgets import AudioFileWidget
-from armstrong.utils.backends import get_backend
+from armstrong.utils.backends import GenericBackend 
 
 from django.conf import settings
 
@@ -17,9 +17,9 @@ class AudioFile(FieldFile):
         super(AudioFile,self).__init__( *args, **kwargs)
         if 'metadata' in kwargs:
             self._metadata= kwargs['metadata']
-        backendKlass=get_backend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND')
+        backendKlass=GenericBackend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND').get_backend()
         #get a instance of said class with the file set
-        self.backend=backendKlass(self.file)
+        self.backend=backendKlass
 
 
     def _transcode(self, toformat):
@@ -43,7 +43,7 @@ class AudioFile(FieldFile):
         get the encoding of the file 
         """
         if not hasattr(self,'_filetype'):
-            self._filetype = backend.filetype
+            self._filetype = self.backend.filetype(self.file)
         return self._filetype
 
     @property
@@ -52,7 +52,7 @@ class AudioFile(FieldFile):
         get the playtime of the file 
         """
         if not hasattr(self,'_playtime'):
-            self._playtime = backend.playtime
+            self._playtime = self.backend.playtime(self.file)
         return self._playtime
 
     @property
@@ -61,7 +61,7 @@ class AudioFile(FieldFile):
         get the bit rate 
         """
         if not hasattr(self,'_bitrate'):
-            self._bitrate = backend.filetype
+            self._bitrate = self.backend.bitrate(self.file)
         return self._bitrate
 
     @property
@@ -70,7 +70,7 @@ class AudioFile(FieldFile):
         get the all metadata as a dictionary 
         """
         if not hasattr(self,'_metadata'):
-            self._metadata= backend.metadata        
+            self._metadata= self.backend.metadata(self.file)
         return self._metadata
 
 

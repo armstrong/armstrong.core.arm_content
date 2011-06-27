@@ -1,8 +1,11 @@
 """ Read ID3 tags from a file.
     Ned Batchelder, http://nedbatchelder.com/code/modules/id3reader.html
+    with changes by joshua bonnett, 
+    jbonnett@baycitizen.org
+    See Ned Batchelder for details of his license. 
 """
 
-__version__ = '1.53.20070415'    # History at the end of the file.
+__version__ = '1.53.20110727'    # History at the end of the file.
 
 # ID3 specs: http://www.id3.org/develop.html
 
@@ -16,10 +19,10 @@ _encodings = ['iso8859-1', 'utf-16', 'utf-16be', 'utf-8']
 # version of ID3 the file contains.
 _simpleDataMapping = {
     'album':        ('TALB', 'TAL', 'v1album', 'TOAL'),
-    'performer':    ('TPE1', 'TP1', 'v1performer', 'TOPE'),
+    'artist':    ('TPE1', 'TP1', 'v1performer', 'TOPE'),
     'title':        ('TIT2', 'TT2', 'v1title'),
-    'track':        ('TRCK', 'TRK', 'v1track'),
-    'year':         ('TYER', 'TYE', 'v1year'),
+    'tracknumber':        ('TRCK', 'TRK', 'v1track'),
+    'date':         ('TYER', 'TYE', 'v1year'),
     'genre':        ('TCON', 'TCO', 'v1genre'),
     'comment':      ('COMM', 'COM', 'v1comment'),
 }
@@ -533,6 +536,12 @@ class Reader:
         frame.rawData = self._readBytes(cbData, 'rev3data')
 
         return frame
+    
+    def __getitem__(self, id):
+        '''
+        act like a dictionary
+        '''
+        return self.getValue(id)
 
     def getValue(self, id):
         """ Return the value for an ID3 tag id, or for a
@@ -543,10 +552,12 @@ class Reader:
             if hasattr(self.frames[id], 'value'):
                 return self.frames[id].value
         if _simpleDataMapping.has_key(id):
+            returned=[]
             for id2 in _simpleDataMapping[id]:
                 v = self.getValue(id2)
                 if v:
-                    return v
+                    returned.append(v)
+            return returned
         return None
 
     def getRawData(self, id):

@@ -71,6 +71,13 @@ class MutagenMp3Test(AudioFieldMetadataTestCase):
                     'date': u'2004',
                     'tracknumber': u'2'
                     }
+    def setUp(self):
+        self.org_backend=settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND
+        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = 'armstrong.apps.audio.backends.mutagen.MutagenBackend'
+        super(MutagenMp3Test, self).setUp()
+
+    def tearDown(self):
+        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = self.org_backend
 
 class MutagenOggTest(AudioFieldMetadataTestCase):
     """
@@ -86,6 +93,14 @@ class MutagenOggTest(AudioFieldMetadataTestCase):
                     'tracknumber': u'2',
                     'comment': u'http://www.kahvi.org',
                     }
+                    
+    def setUp(self):
+        self.org_backend=settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND
+        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = 'armstrong.apps.audio.backends.mutagen.MutagenBackend'
+        super(MutagenOggTest, self).setUp()
+
+    def tearDown(self):
+        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = self.org_backend                  
 
 class Id3readerTest(MutagenMp3Test):
     """

@@ -107,16 +107,13 @@ class AudioField(FileField):
         update the metadata  IF a file has been set
         instance == the model 
 
-
         """
         if hasattr(instance.audio_file, "file"):
             for key in instance.audio_file.metadata.keys():
                 if hasattr(instance, key) and  getattr(instance, key):
                         pass
-                         
-                elif instance.audio_file.metadata[key]:
+                elif hasattr(instance, key) and instance.audio_file.metadata[key]:
                     setattr(instance, key, instance.audio_file.metadata[key])
-
 
     def formfield(self, **kwargs):
         defaults = {'widget': AudioFileWidget}

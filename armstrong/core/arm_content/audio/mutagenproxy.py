@@ -23,9 +23,13 @@ class MutagenBackend(AudioBackend):
         except ImportError:
             msg = "Unable to find 'mutagen' backend, " \
                 "please make sure it is installed or "\
-                "via pip install -e git://github.com/Jbonnett/Mutagen-flo.git#egg=mutagen"\
+                "via pip install -e git://github.com/Jbonnett/Mutagen-flo.git#egg=mutagen "\
                 "use the id3reader backend"
             raise ImproperlyConfigured(msg)
 
     def metadata(self, file):
-        return dict(self.load(file))
+        mute= dict(self.load(file))
+        result=dict()
+        for key in mute.keys():
+            result[key]=','.join(mute[key])
+        return result

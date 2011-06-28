@@ -556,8 +556,7 @@ class Reader:
             for id2 in _simpleDataMapping[id]:
                 v = self.getValue(id2)
                 if v:
-                    returned.append(v)
-            return returned
+                    return v
         return None
 
     def getRawData(self, id):

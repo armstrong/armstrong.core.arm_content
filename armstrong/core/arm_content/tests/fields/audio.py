@@ -41,12 +41,13 @@ class AudioFieldMetadataTestCase(TestCase):
         for key in self.audio_metadata.keys():
             self.assertEqual(self.audio_metadata[key], self.audio_model.audio_file.metadata[key])
     
-    def test_audio_model_filling(self):
-        for key in self.audio_metadata.keys():
-            self.assertEqual(self.audio_metadata[key], getattr(self.audio_model,key))
-
 
     def test_audio_model_overriding(self):
+            '''test the audio model field pre population'''
+            self.override_audio_model.save()
+            unoverridden=OverrideAudioModel.objects.get(pk=self.override_audio_model.pk)
+            
+            self.assertEqual(self.audio_metadata['artist'], unoverridden.artist)
             self.override_audio_model.artist='qr'
             self.override_audio_model.save()
             overridden=OverrideAudioModel.objects.get(pk=self.override_audio_model.pk)
@@ -63,12 +64,12 @@ class MutagenMp3Test(AudioFieldMetadataTestCase):
     filename='test.mp3'
     filetype='mp3'
     playtime='4'
-    audio_metadata={'album': [u'Quod Libet Test Data'],
-                    'title': [u'Silence'], 
-                    'artist': [u'piman'],
-                    'genre': [u'Darkwave'], 
-                    'date': [u'2004'],
-                    'tracknumber': [u'2']
+    audio_metadata={'album': u'Quod Libet Test Data',
+                    'title': u'Silence', 
+                    'artist': u'piman',
+                    'genre': u'Darkwave', 
+                    'date': u'2004',
+                    'tracknumber': u'2'
                     }
 
 class MutagenOggTest(AudioFieldMetadataTestCase):
@@ -78,12 +79,12 @@ class MutagenOggTest(AudioFieldMetadataTestCase):
     filename='test.ogg'
     filetype='oga'
     playtime='264'
-    audio_metadata={'album': [u'Favorite Things'],
-                    'title': [u'Hydrate - Kenny Beltrey'], 
-                    'artist': [u'Kenny Beltrey'],
-                    'date': [u'2002'],
-                    'tracknumber': [u'2'],
-                    'comment': [u'http://www.kahvi.org'],
+    audio_metadata={'album': u'Favorite Things',
+                    'title': u'Hydrate - Kenny Beltrey', 
+                    'artist': u'Kenny Beltrey',
+                    'date': u'2002',
+                    'tracknumber': u'2',
+                    'comment': u'http://www.kahvi.org',
                     }
 
 class Id3readerTest(MutagenMp3Test):

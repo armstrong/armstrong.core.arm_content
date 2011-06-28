@@ -590,6 +590,9 @@ class Reader:
         for feat in feats:
             print "Feature %-12s: %d" % (feat, _features[feat])
 
+    def keys(self):
+        return _simpleDataMapping.keys()
+
 if __name__ == '__main__':
     if len(sys.argv) < 2 or '-?' in sys.argv:
         print "Give me a filename"

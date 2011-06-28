@@ -2,14 +2,15 @@ from django.core.exceptions import ImproperlyConfigured
 
 from armstrong.core.arm_content.audio import AudioBackend 
 
-ft_translations={
-    'vorbis':'ogg',
+FT_TRANSLATIONS={
+    'vorbis':'oga',
+    
     }
 class MutagenBackend(AudioBackend):
     def filetype(self, file):
         
         ftype=self.load(file).mime[0].replace('audio/','')
-        return ft_translations[ftype] if ftype in ft_translations.keys() else ftype
+        return FT_TRANSLATIONS[ftype] if ftype in FT_TRANSLATIONS.keys() else ftype
 
 
     def load(self, file):

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 
-from ..arm_content_support.models import AudioModel
+from ..arm_content_support.models import AudioModel, OverrideAudioModel
 from ..arm_content_support.forms import AudioModelForm
 from ..arm_content_support.models import SimpleProfile
 
@@ -15,7 +15,8 @@ class AudioFieldMetadataTestCase(TestCase):
     def setUp(self):
         if type(self) is AudioFieldMetadataTestCase:
             return self.skipTest('parrent class')
-        self.audiofile = load_audio_file(self.filename)
+        self.audio_model = load_audio_model(self.filename)
+        self.override_audio_model = load_audio_model(self.filename, model=OverrideAudioModel)
 
     def test_audiofield_default_widget(self):
         """
@@ -24,21 +25,35 @@ class AudioFieldMetadataTestCase(TestCase):
         """
         form=AudioModelForm()
         self.assertTrue(type(form.fields['audio_file'].widget) is AudioFileWidget)
-        form2=AudioModelForm(initial={"audio_file":self.audiofile.audio_file})
-        self.assertTrue(self.audiofile.audio_file.url in form2.as_ul()  )
+        form2=AudioModelForm(initial={"audio_file":self.audio_model.audio_file})
+        self.assertTrue(self.audio_model.audio_file.url in form2.as_ul()  )
 
     def test_audiofield_filetype(self):
         """
         test that the file type returned by the file field is correct
         """
-        self.assertEqual(self.audiofile.audio_file.filetype, self.filetype)
+        self.assertEqual(self.audio_model.audio_file.filetype, self.filetype)
         
     def test_audiofield_metadata(self):
         """
         confirm that the extracted metadata matches the expected values 
         """
         for key in self.audio_metadata.keys():
-            self.assertEqual(self.audio_metadata[key], self.audiofile.audio_file.metadata[key])
+            self.assertEqual(self.audio_metadata[key], self.audio_model.audio_file.metadata[key])
+    
+    def test_audio_model_filling(self):
+        for key in self.audio_metadata.keys():
+            self.assertEqual(self.audio_metadata[key], getattr(self.audio_model,key))
+
+
+    def test_audio_model_overriding(self):
+            self.override_audio_model.artist='qr'
+            self.override_audio_model.save()
+            overridden=OverrideAudioModel.objects.get(pk=self.override_audio_model.pk)
+
+            self.assertEqual('qr', overridden.artist)
+        
+        
 
 
 class MutagenMp3Test(AudioFieldMetadataTestCase):
@@ -61,7 +76,7 @@ class MutagenOggTest(AudioFieldMetadataTestCase):
     tests the audio fields support for ogg's
     """
     filename='test.ogg'
-    filetype='ogg'
+    filetype='oga'
     playtime='264'
     audio_metadata={'album': [u'Favorite Things'],
                     'title': [u'Hydrate - Kenny Beltrey'], 
@@ -82,3 +97,4 @@ class Id3readerTest(MutagenMp3Test):
 
     def tearDown(self):
         settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = self.org_backend
+

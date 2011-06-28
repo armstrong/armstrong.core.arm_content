@@ -182,10 +182,10 @@ def random_authored_model(klass, *authors):
     return article
 
 
-def load_audio_file(filename):
+def load_audio_model(filename, model=AudioModel):
     #todo: there needs to be a better way to get the filename
     f= open('./armstrong/core/arm_content/tests/arm_content_support/static/audio/' + filename,"rb+")
     uf=File(file=f)
-    am = AudioModel(audio_file=uf)
+    am = model(audio_file=uf)
     am.save()
     return am

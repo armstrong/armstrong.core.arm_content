@@ -35,7 +35,12 @@ class AudioFile(FieldFile):
             from armstrong.apps.audio import widget
             return widget.render(self, args, kwargs)
         else:
-            return "<a href='%s'> %s </a>" % (self.url, self.name)
+            html=[ "<a href='%s'> %s </a>" % (self.url, self.name),
+                   "<ul>"]
+            for key in self.metadata.keys():
+                html.append("<li> %s : %s</li>" %(key,self.metadata[key]))
+            html.append("</ul>")
+            return ''.join(html)
 
     @property
     def filetype(self):
@@ -92,19 +97,26 @@ class AudioField(FileField):
     
     def contribute_to_class(self, cls, name):
         super(AudioField, self).contribute_to_class( cls, name)
-        # Attach update_playtime_field so that dimension fields declared
+        # Attach update_metadata so that dimension fields declared
         # after their corresponding image field don't stay cleared by
         # Model.__init__, see bug #11196.
         signals.post_init.connect(self.update_metadata, sender=cls)
 
     def update_metadata(self, instance, force=False, *args, **kwargs):
         """
-        may not need to exist, we shall see
+        update the metadata  IF a file has been set
+        instance == the model 
+
+
         """
-        pass
-        #metadata={'test':'test'}
-        #setattr(instance, 'metadata', metadata)
-        #self.metadata=metadata
+        if hasattr(instance.audio_file, "file"):
+            for key in instance.audio_file.metadata.keys():
+                if hasattr(instance, key) and  getattr(instance, key):
+                        pass
+                         
+                elif instance.audio_file.metadata[key]:
+                    setattr(instance, key, instance.audio_file.metadata[key])
+
 
     def formfield(self, **kwargs):
         defaults = {'widget': AudioFileWidget}

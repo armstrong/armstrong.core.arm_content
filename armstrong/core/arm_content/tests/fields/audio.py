@@ -57,9 +57,9 @@ class AudioFieldMetadataTestCase(TestCase):
         
 
 
-class MutagenMp3Test(AudioFieldMetadataTestCase):
+class Id3readerTest(AudioFieldMetadataTestCase):
     """
-    tests the audio fields support for mp3's
+    test id3reader by temporarrily overriding the settings 
     """
     filename='test.mp3'
     filetype='mp3'
@@ -71,41 +71,6 @@ class MutagenMp3Test(AudioFieldMetadataTestCase):
                     'date': u'2004',
                     'tracknumber': u'2'
                     }
-    def setUp(self):
-        self.org_backend=settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND
-        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = 'armstrong.apps.audio.backends.mutagen.MutagenBackend'
-        super(MutagenMp3Test, self).setUp()
-
-    def tearDown(self):
-        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = self.org_backend
-
-class MutagenOggTest(AudioFieldMetadataTestCase):
-    """
-    tests the audio fields support for ogg's
-    """
-    filename='test.ogg'
-    filetype='oga'
-    playtime='264'
-    audio_metadata={'album': u'Favorite Things',
-                    'title': u'Hydrate - Kenny Beltrey', 
-                    'artist': u'Kenny Beltrey',
-                    'date': u'2002',
-                    'tracknumber': u'2',
-                    'comment': u'http://www.kahvi.org',
-                    }
-                    
-    def setUp(self):
-        self.org_backend=settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND
-        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = 'armstrong.apps.audio.backends.mutagen.MutagenBackend'
-        super(MutagenOggTest, self).setUp()
-
-    def tearDown(self):
-        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = self.org_backend                  
-
-class Id3readerTest(MutagenMp3Test):
-    """
-    test id3reader by temporarrily overriding the settings 
-    """
     def setUp(self):
         self.org_backend=settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND
         settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = 'armstrong.core.arm_content.audio.Id3readerBackend'

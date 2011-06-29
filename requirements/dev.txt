@@ -6,3 +6,5 @@ coverage
 fudge
 armstrong.apps.content
 armstrong.dev>=1.2.0
+-e git://github.com/tswicegood/lettuce.git@fix-port-issues#egg=lettuce
+-r ./sorl.txt

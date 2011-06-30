@@ -3,3 +3,4 @@ from .models import *
 
 
 admin.site.register(SimpleAuthoredModel)
+admin.site.register(SorlImage)

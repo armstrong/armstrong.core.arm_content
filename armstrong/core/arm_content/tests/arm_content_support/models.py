@@ -1,15 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+import sorl.thumbnail
+
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
-from ...mixins import PublicationMixin
+from ...mixins.images.sorl import SorlImageMixin
 from ...models import ContentBase
 
 
 from armstrong.apps.content.models import Content as ConcreteContent
-
 
 class ConcreteArticle(ConcreteContent):
     pass
@@ -61,3 +62,7 @@ class SimpleProfile(models.Model):
 
     def get_absolute_url(self):
         return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')
+
+
+class SorlImage(SorlImageMixin, models.Model):
+    image = sorl.thumbnail.ImageField(upload_to='images/')

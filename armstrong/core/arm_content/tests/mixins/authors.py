@@ -5,6 +5,8 @@ from .._utils import *
 from ..arm_content_support.models import SimpleMixedinAuthorModel
 from ..arm_content_support.models import SimpleProfile
 
+from ..arm_content_support.forms import SimpleMixedinAuthorForm
+
 from ...fields import AuthorsField
 from ...fields import authors
 
@@ -116,3 +118,8 @@ class AuthorsMixinTestCase(TestCase):
         expected = "%s, %s%s" % (bob.get_full_name(), alice.get_full_name(),
                 extra)
         self.assertEqual(str(article.authors), expected)
+
+    def test_mixed_fields_optional(self):
+        fake_request_POST = {}
+        form = SimpleMixedinAuthorForm(fake_request_POST)
+        self.assertTrue(form.is_valid())

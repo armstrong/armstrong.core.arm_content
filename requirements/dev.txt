@@ -1,8 +1,3 @@
 -r ./base.txt
--e git://github.com/domain51/d51.django.virtualenv.base#egg=d51.django.virtualenv.base
--e git://github.com/domain51/d51.django.virtualenv.test_runner#egg=d51.django.virtualenv.test_runner
--e git://github.com/tswicegood/fabric#egg=fabric
-coverage
-fudge
 armstrong.apps.content
-armstrong.dev>=1.2.0
+armstrong.dev>=1.3.0

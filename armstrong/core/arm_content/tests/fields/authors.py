@@ -166,8 +166,7 @@ class AuthorsFieldTestCase(TestCase):
                 "override_field_name": "'authors_override'",
                 "extra_field_name": "'authors_extra'",
                 "symmetrical": "False",
-            }
-        )
+            })
         self.assertEqual(field.south_field_triple(), expected)
 
     def test_defaults_to_being_related_to_base_user(self):

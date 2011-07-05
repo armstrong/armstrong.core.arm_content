@@ -70,7 +70,7 @@ class EmbeddedVideoFieldTestCase(TestCase):
         expected = (
             "%s.%s" % (field.__class__.__module__, field.__class__.__name__),
             [],
-            {'max_length': '255', }
+            {'max_length': '255'}
         )
         self.assertEqual(field.south_field_triple(), expected)
 

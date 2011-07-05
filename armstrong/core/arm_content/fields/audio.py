@@ -2,7 +2,7 @@ from django.db.models import signals
 from django.db.models.fields.files import FileField, FieldFile, FileDescriptor
 
 from armstrong.core.arm_content.fields.widgets import AudioFileWidget
-from armstrong.utils.backends import GenericBackend 
+from armstrong.utils.backends import GenericBackend
 
 from django.conf import settings
 
@@ -12,70 +12,71 @@ class AudioFile(FieldFile):
     A mixin for use alongside django.core.files.base.File, which provides
     additional features for dealing with audio files.
     """
-    
-    def __init__(self, *args, **kwargs):
-        super(AudioFile,self).__init__( *args, **kwargs)
-        if 'metadata' in kwargs:
-            self._metadata= kwargs['metadata']
-        backendKlass=GenericBackend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND').get_backend()
-        #get a instance of said class with the file set
-        self.backend=backendKlass
 
+    def __init__(self, *args, **kwargs):
+        super(AudioFile, self).__init__(*args, **kwargs)
+        if 'metadata' in kwargs:
+            self._metadata = kwargs['metadata']
+        backendKlass = \
+            GenericBackend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND')\
+            .get_backend()
+        #get a instance of said class with the file set
+        self.backend = backendKlass
 
     def _transcode(self, toformat):
         """
-        returns a transcoded file 
+        returns a transcoded file
         perhaps should do more complex and diffrent things
         like transcode via zencoder
         """
         raise NotImplementedError
 
-    def render(self,*args, **kwargs):
+    def render(self, *args, **kwargs):
         if('armstrong.apps.audio' in settings.INSTALLED_APPS):
             from armstrong.apps.audio import widget
             return widget.render(self, args, kwargs)
         else:
-            html=[ "<a href='%s'> %s </a>" % (self.url, self.name),
+            html = ["<a href='%s'> %s </a>" % (self.url, self.name),
                    "<ul>"]
             for key in self.metadata.keys():
-                html.append("<li> %s : %s</li>" %(key,self.metadata[key]))
+                html.append("<li> %s : %s</li>" % (key, self.metadata[key]))
             html.append("</ul>")
             return ''.join(html)
 
     @property
     def filetype(self):
         """
-        get the encoding of the file 
+        get the encoding of the file
         """
-        if not hasattr(self,'_filetype'):
+        if not hasattr(self, '_filetype'):
             self._filetype = self.backend.filetype(self.file)
         return self._filetype
 
     @property
     def playtime(self):
         """
-        get the playtime of the file 
+        get the playtime of the file
         """
-        if not hasattr(self,'_playtime'):
+        if not hasattr(self, '_playtime'):
             self._playtime = self.backend.playtime(self.file)
         return self._playtime
 
     @property
     def bitrate(self):
         """
-        get the bit rate 
+        get the bit rate
         """
-        if not hasattr(self,'_bitrate'):
+        if not hasattr(self, '_bitrate'):
             self._bitrate = self.backend.bitrate(self.file)
         return self._bitrate
 
     @property
     def metadata(self):
         """
-        get the all metadata as a dictionary 
+        get the all metadata as a dictionary
         """
-        if not hasattr(self,'_metadata'):
-            self._metadata= self.backend.metadata(self.file)
+        if not hasattr(self, '_metadata'):
+            self._metadata = self.backend.metadata(self.file)
         return self._metadata
 
 
@@ -92,11 +93,11 @@ class AudioFileDescriptor(FileDescriptor):
 
 
 class AudioField(FileField):
-    attr_class=AudioFile
-    descriptor_class=AudioFileDescriptor
-    
+    attr_class = AudioFile
+    descriptor_class = AudioFileDescriptor
+
     def contribute_to_class(self, cls, name):
-        super(AudioField, self).contribute_to_class( cls, name)
+        super(AudioField, self).contribute_to_class(cls, name)
         # Attach update_metadata so that dimension fields declared
         # after their corresponding image field don't stay cleared by
         # Model.__init__, see bug #11196.
@@ -105,7 +106,7 @@ class AudioField(FileField):
     def update_metadata(self, instance, force=False, *args, **kwargs):
         """
         update the metadata  IF a file has been set
-        instance == the model 
+        instance == the model
 
         """
         if hasattr(instance.audio_file, "file"):

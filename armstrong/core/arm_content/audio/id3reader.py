@@ -1,15 +1,16 @@
 """ Read ID3 tags from a file.
     Ned Batchelder, http://nedbatchelder.com/code/modules/id3reader.html
-    with changes by joshua bonnett, 
-    jbonnett@baycitizen.org
-    See Ned Batchelder for details of his license. 
+    with changes by joshua bonnett < jbonnett@baycitizen.org >
+    See Ned Batchelder for details of his license.
 """
 
 __version__ = '1.53.20110727'    # History at the end of the file.
 
 # ID3 specs: http://www.id3.org/develop.html
 
-import struct, sys, zlib
+import struct
+import sys
+import zlib
 
 # These are the text encodings, indexed by the first byte of a text value.
 _encodings = ['iso8859-1', 'utf-16', 'utf-16be', 'utf-8']
@@ -31,19 +32,24 @@ _simpleDataMapping = {
 try:
     True, False
 except NameError:
-    True, False = 1==1, 1==0
+    True, False = 1 == 1, 1 == 0
 
 # Tracing
 _t = False
+
+
 def _trace(msg):
     print msg
 
 # Coverage
 _c = False
 _features = {}
+
+
 def _coverage(feat):
     #if _t: _trace('feature '+feat)
-    _features[feat] = _features.setdefault(feat, 0)+1
+    _features[feat] = _features.setdefault(feat, 0) + 1
+
 
 def _safestr(s):
     """ Get a good string for printing, that won't throw exceptions,
@@ -52,45 +58,51 @@ def _safestr(s):
     try:
         return unicode(s).encode(sys.getdefaultencoding())
     except UnicodeError:
-        return '?: '+repr(s)
+        return '?: ' + repr(s)
 
 # Can I just say that I think the whole concept of genres is bogus,
 # since they are so subjective?  And the idea of letting someone else pick
 # one of these things and then have it affect the categorization of my music
 # is extra bogus.  And the list itself is absurd. Polsk Punk?
 _genres = [
-    # 0-19
-    'Blues', 'Classic Rock', 'Country', 'Dance', 'Disco', 'Funk', 'Grunge', 'Hip - Hop', 'Jazz', 'Metal',
-    'New Age', 'Oldies', 'Other', 'Pop', 'R&B', 'Rap', 'Reggae', 'Rock', 'Techno', 'Industrial',
-    # 20-39
-    'Alternative', 'Ska', 'Death Metal', 'Pranks', 'Soundtrack', 'Euro - Techno', 'Ambient', 'Trip - Hop', 'Vocal', 'Jazz + Funk',
-    'Fusion', 'Trance', 'Classical', 'Instrumental', 'Acid', 'House', 'Game', 'Sound Clip', 'Gospel', 'Noise',
-    # 40-59
-    'Alt Rock', 'Bass', 'Soul', 'Punk', 'Space', 'Meditative', 'Instrumental Pop', 'Instrumental Rock', 'Ethnic', 'Gothic',
-    'Darkwave', 'Techno - Industrial', 'Electronic', 'Pop - Folk', 'Eurodance', 'Dream', 'Southern Rock', 'Comedy', 'Cult', 'Gangsta Rap',
-    # 60-79
-    'Top 40', 'Christian Rap', 'Pop / Funk', 'Jungle', 'Native American', 'Cabaret', 'New Wave', 'Psychedelic', 'Rave', 'Showtunes',
-    'Trailer', 'Lo - Fi', 'Tribal', 'Acid Punk', 'Acid Jazz', 'Polka', 'Retro', 'Musical', 'Rock & Roll', 'Hard Rock',
-    # 80-99
-    'Folk', 'Folk / Rock', 'National Folk', 'Swing', 'Fast - Fusion', 'Bebob', 'Latin', 'Revival', 'Celtic', 'Bluegrass',
-    'Avantgarde', 'Gothic Rock', 'Progressive Rock', 'Psychedelic Rock', 'Symphonic Rock', 'Slow Rock', 'Big Band', 'Chorus', 'Easy Listening', 'Acoustic',
-    # 100-119
-    'Humour', 'Speech', 'Chanson', 'Opera', 'Chamber Music', 'Sonata', 'Symphony', 'Booty Bass', 'Primus', 'Porn Groove',
-    'Satire', 'Slow Jam', 'Club', 'Tango', 'Samba', 'Folklore', 'Ballad', 'Power Ballad', 'Rhythmic Soul', 'Freestyle',
-    # 120-139
-    'Duet', 'Punk Rock', 'Drum Solo', 'A Cappella', 'Euro - House', 'Dance Hall', 'Goa', 'Drum & Bass', 'Club - House', 'Hardcore',
-    'Terror', 'Indie', 'BritPop', 'Negerpunk', 'Polsk Punk', 'Beat', 'Christian Gangsta Rap', 'Heavy Metal', 'Black Metal', 'Crossover',
-    # 140-147
-    'Contemporary Christian', 'Christian Rock', 'Merengue', 'Salsa', 'Thrash Metal', 'Anime', 'JPop', 'Synthpop'
-    ]
+    'Blues', 'Classic Rock', 'Country', 'Dance', 'Disco', 'Funk', 'Grunge',
+    'Hip - Hop', 'Jazz', 'Metal', 'New Age', 'Oldies', 'Other', 'Pop', 'R&B',
+    'Rap', 'Reggae', 'Rock', 'Techno', 'Industrial', 'Alternative', 'Ska',
+    'Death Metal', 'Pranks', 'Soundtrack', 'Euro - Techno', 'Ambient',
+    'Trip - Hop', 'Vocal', 'Jazz + Funk', 'Fusion', 'Trance', 'Classical',
+    'Instrumental', 'Acid', 'House', 'Game', 'Sound Clip', 'Gospel', 'Noise',
+    'Alt Rock', 'Bass', 'Soul', 'Punk', 'Space', 'Meditative', 'Instrumental Pop',
+    'Instrumental Rock', 'Ethnic', 'Gothic', 'Darkwave', 'Techno - Industrial',
+    'Electronic', 'Pop - Folk', 'Eurodance', 'Dream', 'Southern Rock', 'Comedy',
+    'Cult', 'Gangsta Rap', 'Top 40', 'Christian Rap', 'Pop / Funk', 'Jungle',
+    'Native American', 'Cabaret', 'New Wave', 'Psychedelic', 'Rave', 'Showtunes',
+    'Trailer', 'Lo - Fi', 'Tribal', 'Acid Punk', 'Acid Jazz', 'Polka', 'Retro',
+    'Musical', 'Rock & Roll', 'Hard Rock', 'Folk', 'Folk / Rock', 'National Folk',
+    'Swing', 'Fast - Fusion', 'Bebob', 'Latin', 'Revival', 'Celtic', 'Bluegrass',
+    'Avantgarde', 'Gothic Rock', 'Progressive Rock', 'Psychedelic Rock',
+    'Symphonic Rock', 'Slow Rock', 'Big Band', 'Chorus', 'Easy Listening',
+    'Acoustic', 'Humour', 'Speech', 'Chanson', 'Opera', 'Chamber Music',
+    'Sonata', 'Symphony', 'Booty Bass', 'Primus', 'Porn Groove', 'Satire',
+    'Slow Jam', 'Club', 'Tango', 'Samba', 'Folklore', 'Ballad', 'Power Ballad',
+    'Rhythmic Soul', 'Freestyle', 'Duet', 'Punk Rock', 'Drum Solo', 'A Cappella',
+    'Euro - House', 'Dance Hall', 'Goa', 'Drum & Bass', 'Club - House', 'Hardcore',
+    'Terror', 'Indie', 'BritPop', 'Negerpunk', 'Polsk Punk', 'Beat',
+    'Christian Gangsta Rap', 'Heavy Metal', 'Black Metal', 'Crossover',
+    'Contemporary Christian', 'Christian Rock', 'Merengue', 'Salsa', 'Thrash Metal',
+    'Anime', 'JPop', 'Synthpop',
+]
+
 
 class Id3Error(Exception):
-    """ An exception caused by id3reader properly handling a bad ID3 tag.
+    """
+    An exception caused by id3reader properly handling a bad ID3 tag.
     """
     pass
 
+
 class _Header:
-    """ Represent the ID3 header in a tag.
+    """
+     Represent the ID3 header in a tag.
     """
     def __init__(self):
         self.majorVersion = 0
@@ -104,8 +116,10 @@ class _Header:
     def __str__(self):
         return str(self.__dict__)
 
+
 class _Frame:
-    """ Represent an ID3 frame in a tag.
+    """
+    Represent an ID3 frame in a tag.
     """
     def __init__(self):
         self.id = ''
@@ -126,7 +140,8 @@ class _Frame:
         return str(self.__dict__)
 
     def _interpret(self):
-        """ Examine self.rawData and create a self.value from it.
+        """
+        Examine self.rawData and create a self.value from it.
         """
         if len(self.rawData) == 0:
             # This is counter to the spec, but seems harmless enough.
@@ -165,9 +180,8 @@ class _Frame:
                 self.rawData = zlib.decompress(self.rawData[5:])
             else:
                 #if _c: _coverage('badcdm!')
-                raise Id3Error, 'Unknown CDM compression: %02x' % self.rawData[0]
-            #@TODO: re-interpret the decompressed frame.
-
+                raise Id3Error('Unknown CDM compression: %02x' % self.rawData[0])
+                #@TODO: re-interpret the decompressed frame.
         elif self.id in _simpleDataMapping['comment']:
             # comment field
 
@@ -194,6 +208,7 @@ class _Frame:
                     s = s[:-1]
 
             self.value = s
+
 
 class Reader:
     """ An ID3 reader.
@@ -229,14 +244,15 @@ class Reader:
         #if _t: _trace("ask %d (%s)" % (num,desc))
         if num > self.bytesLeft:
             #if _c: _coverage('long!')
-            raise Id3Error, 'Long read (%s): (%d > %d)' % (desc, num, self.bytesLeft)
+            raise Id3Error('Long read (%s): (%d > %d)' % (desc, num, self.bytesLeft))
         bytes = self.file.read(num)
         self.bytesLeft -= num
 
         if len(bytes) < num:
-            #if _t: _trace("short read with %d left, %d total" % (self.bytesLeft, self.header.size))
+            #if _t: _trace("short read with %d left, %d total" %
+            #                 (self.bytesLeft, self.header.size))
             #if _c: _coverage('short!')
-            raise Id3Error, 'Short read (%s): (%d < %d)' % (desc, len(bytes), num)
+            raise Id3Error('Short read (%s): (%d < %d)' % (desc, len(bytes), num))
 
         if self.header.bUnsynchronized:
             nUnsync = 0
@@ -249,7 +265,7 @@ class Reader:
                 #if _c: _coverage('unsyncbyte')
                 nUnsync += 1
                 # This is a stuffed byte to remove
-                bytes = bytes[:i+1] + bytes[i+2:]
+                bytes = bytes[:i + 1] + bytes[i + 2:]
                 # Have to read one more byte from the file to adjust
                 bytes += self.file.read(1)
                 self.bytesLeft -= 1
@@ -265,15 +281,15 @@ class Reader:
     def _getSyncSafeInt(self, bytes):
         assert len(bytes) == 4
         if type(bytes) == type(''):
-            bytes = [ ord(c) for c in bytes ]
+            bytes = [ord(c) for c in bytes]
         return (bytes[0] << 21) + (bytes[1] << 14) + (bytes[2] << 7) + bytes[3]
 
     def _getInteger(self, bytes):
-        i = 0;
+        i = 0
         if type(bytes) == type(''):
-            bytes = [ ord(c) for c in bytes ]
+            bytes = [ord(c) for c in bytes]
         for b in bytes:
-            i = i*256+b
+            i = i * 256 + b
         return i
 
     def _addV1Frame(self, id, rawData):
@@ -331,7 +347,7 @@ class Reader:
             self._readFrame = self._readFrame_rev4
         else:
             #if _c: _coverage('badmajor!')
-            raise Id3Error, "Unsupported major version: %d" % self.header.majorVersion
+            raise Id3Error("Unsupported major version: %d" % self.header.majorVersion)
 
         # Interpret the flags
         self._interpretFlags()
@@ -393,7 +409,7 @@ class Reader:
         """
         # We don't interpret this yet, just eat the bytes.
         size = self._getSyncSafeInt(self._readBytes(4, 'rev4ehlen'))
-        self._readBytes(size-4, 'rev4ehdata')
+        self._readBytes(size - 4, 'rev4ehdata')
 
     def _readId3v1(self):
         """ Read the ID3v1 tag.
@@ -458,11 +474,11 @@ class Reader:
         """
         if self.bytesLeft < 10:
             return None
-        id = self._readBytes(4,'rev3id')
+        id = self._readBytes(4, 'rev3id')
         if len(id) < 4 or not self._isValidId(id):
             self._unreadBytes(len(id))
             return None
-        hstuff = struct.unpack('!BBBBh', self._readBytes(6,'rev3head'))
+        hstuff = struct.unpack('!BBBBh', self._readBytes(6, 'rev3head'))
         frame = _Frame()
         frame.id = id
         frame.size = self._getInteger(hstuff[0:4])
@@ -496,11 +512,11 @@ class Reader:
         """
         if self.bytesLeft < 10:
             return None
-        id = self._readBytes(4,'rev4id')
+        id = self._readBytes(4, 'rev4id')
         if len(id) < 4 or not self._isValidId(id):
             self._unreadBytes(len(id))
             return None
-        hstuff = struct.unpack('!BBBBh', self._readBytes(6,'rev4head'))
+        hstuff = struct.unpack('!BBBBh', self._readBytes(6, 'rev4head'))
         frame = _Frame()
         frame.id = id
         frame.size = self._getSyncSafeInt(hstuff[0:4])
@@ -536,7 +552,7 @@ class Reader:
         frame.rawData = self._readBytes(cbData, 'rev3data')
 
         return frame
-    
+
     def __getitem__(self, id):
         '''
         act like a dictionary
@@ -548,11 +564,11 @@ class Reader:
             convenience label ('title', 'performer', ...),
             or return None if there is no such value.
         """
-        if self.frames.has_key(id):
+        if id in self.frames:
             if hasattr(self.frames[id], 'value'):
                 return self.frames[id].value
-        if _simpleDataMapping.has_key(id):
-            returned=[]
+        if id in _simpleDataMapping:
+            returned = []
             for id2 in _simpleDataMapping[id]:
                 v = self.getValue(id2)
                 if v:
@@ -560,7 +576,7 @@ class Reader:
         return None
 
     def getRawData(self, id):
-        if self.frames.has_key(id):
+        if id in self.frames:
             return self.frames[id].rawData
         return None
 
@@ -591,6 +607,7 @@ class Reader:
 
     def keys(self):
         return _simpleDataMapping.keys()
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2 or '-?' in sys.argv:

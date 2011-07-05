@@ -13,13 +13,13 @@ from ...models import ContentBase
 
 from armstrong.apps.content.models import Content as ConcreteContent
 
+
 class ConcreteArticle(ConcreteContent):
     pass
 
 
 class ConcreteCommentary(ConcreteContent):
     pass
-
 
 
 class SimpleVideoModel(models.Model):
@@ -66,12 +66,12 @@ class SimpleProfile(models.Model):
 
 
 class AudioModel(models.Model):
-    audio_file=AudioField(upload_to='audio')
+    audio_file = AudioField(upload_to = 'audio')
 
 
 class OverrideAudioModel(models.Model):
-    audio_file=AudioField(upload_to='audio')
-    artist=models.CharField(max_length=100,blank=True, null=True)
+    audio_file = AudioField(upload_to='audio')
+    artist = models.CharField(max_length=100, blank=True, null=True)
 
 
 class SorlImage(SorlImageMixin, models.Model):

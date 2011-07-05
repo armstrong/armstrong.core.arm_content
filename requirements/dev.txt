@@ -1,11 +1,5 @@
--e git://github.com/domain51/d51.django.virtualenv.base#egg=d51.django.virtualenv.base
--e git://github.com/domain51/d51.django.virtualenv.test_runner#egg=d51.django.virtualenv.test_runner
--e git://github.com/tswicegood/fabric#egg=fabric
--e git://github.com/armstrong/armstrong.dev#egg=armstrong.dev
-coverage
-fudge
-
-# django_polymorphic is what we'll recommend for creating a parent model with
-# common fields for querying across the child content types. Our tests include
-# that use case.
--e git://github.com/bconstantin/django_polymorphic.git@2c47db8fcc284a92d2c9769ba503603fbea92660#egg=django_polymorphic
+-r ./base.txt
+armstrong.apps.content
+armstrong.dev>=1.3.0
+-e git://github.com/tswicegood/lettuce.git@fix-port-issues#egg=lettuce
+-r ./sorl.txt

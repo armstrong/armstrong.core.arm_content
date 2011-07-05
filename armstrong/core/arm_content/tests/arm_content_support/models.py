@@ -1,23 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
-from polymorphic import PolymorphicModel
+
+import sorl.thumbnail
 
 from ...fields import AudioField
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
-from ...mixins import PublicationMixin
+from ...mixins.images.sorl import SorlImageMixin
 from ...models import ContentBase
 
 
-# for backwards compatibility -- should be removed
-class BaseContent(PolymorphicModel, PublicationMixin):
-    title = models.CharField(max_length=255)
-
-
-class ConcreteContent(ContentBase):
-    pass
-
+from armstrong.apps.content.models import Content as ConcreteContent
 
 class ConcreteArticle(ConcreteContent):
     pass
@@ -26,13 +20,6 @@ class ConcreteArticle(ConcreteContent):
 class ConcreteCommentary(ConcreteContent):
     pass
 
-
-class Article(BaseContent):
-    body = models.TextField()
-
-
-class Video(BaseContent):
-    youtube_id = models.CharField(max_length=30)
 
 
 class SimpleVideoModel(models.Model):
@@ -49,6 +36,7 @@ class SimpleAuthoredModel(models.Model):
 
 class SimpleMixedinAuthorModel(mixins.AuthorsMixin, models.Model):
     pass
+
 
 class AuthoredModelWithContentionalOverride(models.Model):
     authors = AuthorsField()
@@ -80,6 +68,11 @@ class SimpleProfile(models.Model):
 class AudioModel(models.Model):
     audio_file=AudioField(upload_to='audio')
 
+
 class OverrideAudioModel(models.Model):
     audio_file=AudioField(upload_to='audio')
     artist=models.CharField(max_length=100,blank=True, null=True)
+
+
+class SorlImage(SorlImageMixin, models.Model):
+    image = sorl.thumbnail.ImageField(upload_to='images/')

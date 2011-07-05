@@ -5,7 +5,7 @@ from ....video.backends import helpers
 from ....video.backends.youtube import YouTubeBackend
 
 
-class YouTubeBackendTestCase(TestCase):
+class YouTubeBackendTestCase(ArmContentTestCase):
     def generate_random_url(self):
         random_id = str(random.randint(100, 200))
         url = "http://youtube.com/watch?v=%s" % random_id

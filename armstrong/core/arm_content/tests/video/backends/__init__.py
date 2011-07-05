@@ -17,7 +17,7 @@ class SomeOtherTestableBackend(object):
     pass
 
 
-class GetBackendTestCase(TestCase):
+class GetBackendTestCase(ArmContentTestCase):
     def backend_name(self, name):
         return "%s.%s" % (self.__module__, name)
 

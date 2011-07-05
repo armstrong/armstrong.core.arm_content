@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import unittest
 import fudge
 try:
     import south
@@ -18,7 +19,7 @@ from .._utils import *
 from ...fields import authors
 
 
-class AuthorsFieldTestCase(TestCase):
+class AuthorsFieldTestCase(ArmContentTestCase):
     def test_authors_can_have_one_author(self):
         [bob, ] = generate_random_staff_users(n=1)
         article = SimpleAuthoredModel.objects.create()
@@ -182,7 +183,7 @@ class AuthorsFieldTestCase(TestCase):
         self.assertEqual(field.rel.to, MyUser)
 
 
-class AuthorsDescriptorTestCase(TestCase):
+class AuthorsDescriptorTestCase(ArmContentTestCase):
     def test_does_not_choke_on_empty_instance(self):
         try:
             authors_field = SimpleAuthoredModel.authors

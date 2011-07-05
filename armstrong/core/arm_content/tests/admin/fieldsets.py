@@ -3,7 +3,7 @@ from .._utils import *
 from ...admin import fieldsets
 
 
-class FieldSetFactoryTestCase(TestCase):
+class FieldSetFactoryTestCase(ArmContentTestCase):
     fieldset_name = None
 
     @property

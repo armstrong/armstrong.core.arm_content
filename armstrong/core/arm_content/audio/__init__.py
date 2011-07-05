@@ -17,5 +17,3 @@ class AudioBackend:
         raise NotImplementedError
 
 from id3proxy import Id3readerBackend
-from mutagenproxy import MutagenBackend
-

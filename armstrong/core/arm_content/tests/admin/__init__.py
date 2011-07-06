@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from .fieldsets import *
 
 
-class AuthorsAdminTest(TestCase):
+class AuthorsAdminTest(ArmContentTestCase):
     fixtures = ['admin.json', ]
 
     def test_authors_fields_are_listed_as_such(self):

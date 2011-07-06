@@ -13,7 +13,7 @@ from ...models import Section
 now = datetime.datetime.now
 
 
-class ContentBaseTestCase(TestCase):
+class ContentBaseTestCase(ArmContentTestCase):
     @create_concrete_table
     def setUp(self):
         self.model = concrete(ContentBase)
@@ -48,7 +48,7 @@ class ContentBaseTestCase(TestCase):
         self.assertRelatedTo(model, "sections", Section, many=True)
 
 
-class ConcreteContentBaseTestCase(TestCase):
+class ConcreteContentBaseTestCase(ArmContentTestCase):
     def setUp(self):
         self.some_model = ConcreteArticle
         self.another_model = ConcreteCommentary

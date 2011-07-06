@@ -1,6 +1,7 @@
 from copy import copy
 from django.db import models
 import fudge
+from django.utils import unittest
 
 try:
     import south
@@ -22,7 +23,7 @@ class ExampleBackend(object):
         embed.url, embed.id = embed.raw_url.split(":")
 
 
-class ExampleBackendTestCase(TestCase):
+class ExampleBackendTestCase(ArmContentTestCase):
     def test_type_of_Example(self):
         backend = ExampleBackend()
         self.assertEqual("Example", backend.type)
@@ -39,7 +40,7 @@ class ExampleBackendTestCase(TestCase):
         self.assertEqual(video.id, random_id)
 
 
-class EmbeddedVideoFieldTestCase(TestCase):
+class EmbeddedVideoFieldTestCase(ArmContentTestCase):
     def test_sets_source_to_EmbeddedVideo(self):
         video = SimpleVideoModel()
         video.source = "http://www.youtube.com/watch?v=123"
@@ -75,7 +76,7 @@ class EmbeddedVideoFieldTestCase(TestCase):
         self.assertEqual(field.south_field_triple(), expected)
 
 
-class EmbeddedVideoTestCase(TestCase):
+class EmbeddedVideoTestCase(ArmContentTestCase):
     def setUp(self):
         fudge.clear_calls()
         fudge.clear_expectations()

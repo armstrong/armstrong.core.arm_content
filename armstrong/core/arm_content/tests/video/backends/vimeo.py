@@ -6,7 +6,7 @@ from ....video.backends import vimeo
 from ....video.backends.vimeo import VimeoBackend
 
 
-class VimeoBackendTestCase(TestCase):
+class VimeoBackendTestCase(ArmContentTestCase):
     def generate_random_url(self):
         random_id = random.randint(1000, 2000)
         url = "http://vimeo.com/%d" % random.randint(1000, 2000)

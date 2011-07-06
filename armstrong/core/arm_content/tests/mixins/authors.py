@@ -11,7 +11,7 @@ from ...fields import AuthorsField
 from ...fields import authors
 
 
-class AuthorsMixinTestCase(TestCase):
+class AuthorsMixinTestCase(ArmContentTestCase):
     def test_models_mixed_in_with_AuthorsMixin_have_an_authors_field(self):
         model = SimpleMixedinAuthorModel.objects.create()
         self.assertModelHasField(model, "authors", AuthorsField)

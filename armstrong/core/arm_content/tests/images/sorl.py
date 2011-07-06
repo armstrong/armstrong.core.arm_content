@@ -4,7 +4,7 @@ from .._utils import *
 from ...images.sorl import get_preset_args
 
 
-class PresetTestCase(TestCase):
+class PresetTestCase(ArmContentTestCase):
 
     def setUp(self):
         if hasattr(settings, 'ARMSTRONG_PRESETS'):

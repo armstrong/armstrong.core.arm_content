@@ -17,11 +17,10 @@ class AudioFile(FieldFile):
         super(AudioFile, self).__init__(*args, **kwargs)
         if 'metadata' in kwargs:
             self._metadata = kwargs['metadata']
-        backendKlass = \
+        self.backend = \
             GenericBackend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND')\
             .get_backend()
-        #get a instance of said class with the file set
-        self.backend = backendKlass
+        
 
     def _transcode(self, toformat):
         """
@@ -89,7 +88,7 @@ class AudioFileDescriptor(FileDescriptor):
         previous_file = instance.__dict__.get(self.field.name)
         super(AudioFileDescriptor, self).__set__(instance, value)
         if previous_file is not None:
-            self.field.update_metadata(instance, force=True)
+            self.field.update_metadata(instance, )
 
 
 class AudioField(FileField):
@@ -103,7 +102,7 @@ class AudioField(FileField):
         # Model.__init__, see bug #11196.
         signals.post_init.connect(self.update_metadata, sender=cls)
 
-    def update_metadata(self, instance, force=False, *args, **kwargs):
+    def update_metadata(self, instance, *args, **kwargs):
         """
         update the metadata  IF a file has been set
         instance == the model

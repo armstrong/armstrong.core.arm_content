@@ -12,7 +12,7 @@ from ...fields import AudioField
 from ...fields.widgets.audio import AudioFileWidget
 
 
-class AudioFieldMetadataTestCase(TestCase):
+class AudioFieldMetadataTestCase(ArmContentTestCase):
     def setUp(self):
         if type(self) is AudioFieldMetadataTestCase:
             return self.skipTest('parrent class')

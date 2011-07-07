@@ -11,6 +11,7 @@ Contents
    authors
    publications
    videos
+   audio
 
 TODOs
 =====

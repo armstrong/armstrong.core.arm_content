@@ -1,0 +1,28 @@
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+ 
+
+
+<div id="%(playerdivid)" class="jp-jplayer"></div>
+    <script type="text/javascript">
+    //<![CDATA[
+    if (!window.jQuery){
+            document.write('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" />')
+    }
+
+    if (!window.jQuery.jPlayer){
+        document.write('<script type="text/javascript" src="{{STATIC_PREFIX}}/js/jplayer.js" />')
+    }
+    $(document).ready(function(){
+        $("#jquery_jplayer_1").jPlayer({
+            ready: function () {
+                $(this).jPlayer("setMedia", {
+                    {{filetype}}: "{{url}}"
+                },
+            swfPath: "../js",
+            supplied: "{{filetype}}"
+            }).jPlayer("load");   
+        });
+    });
+    //]]>
+

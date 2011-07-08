@@ -1,10 +1,13 @@
 from django.db.models import signals
 from django.db.models.fields.files import FileField, FieldFile, FileDescriptor
+from django.forms.fields import FileField as FileFormField
+from django.template.loader import get_template
+from django.template import Context
+from django.conf import settings
+
 
 from armstrong.core.arm_content.fields.widgets import AudioFileWidget
 from armstrong.utils.backends import GenericBackend
-
-from django.conf import settings
 
 
 class AudioFile(FieldFile):
@@ -31,16 +34,10 @@ class AudioFile(FieldFile):
         raise NotImplementedError
 
     def render(self, *args, **kwargs):
-        if('armstrong.apps.audio' in settings.INSTALLED_APPS):
-            from armstrong.apps.audio import widget
-            return widget.render(self, args, kwargs)
-        else:
-            html = ["<a href='%s'> %s </a>" % (self.url, self.name),
-                   "<ul>"]
-            for key in self.metadata.keys():
-                html.append("<li> %s : %s</li>" % (key, self.metadata[key]))
-            html.append("</ul>")
-            return ''.join(html)
+        audio_player_template=get_template('audio/player.html')
+        return audio_player_template.render(Context({'url':self.url,
+                                            'filetype':self.filetype,
+                                            'playerdivid': "div_id_fileno_"+str(self.fileno())}))
 
     @property
     def filetype(self):
@@ -90,6 +87,8 @@ class AudioFileDescriptor(FileDescriptor):
         if previous_file is not None:
             self.field.update_metadata(instance, )
 
+class AudioFormField(FileFormField):
+    widget = AudioFileWidget
 
 class AudioField(FileField):
     attr_class = AudioFile
@@ -101,6 +100,14 @@ class AudioField(FileField):
         # after their corresponding image field don't stay cleared by
         # Model.__init__, see bug #11196.
         signals.post_init.connect(self.update_metadata, sender=cls)
+
+    def formfield(self, **kwargs):
+        # This is a fairly standard way to set up some defaults
+        # while letting the caller override them.
+        defaults = {'form_class': AudioFormField}
+        defaults.update(kwargs)
+        return super(FileField, self).formfield(**defaults)
+
 
     def update_metadata(self, instance, *args, **kwargs):
         """
@@ -115,7 +122,3 @@ class AudioField(FileField):
                 elif hasattr(instance, key) and instance.audio_file.metadata[key]:
                     setattr(instance, key, instance.audio_file.metadata[key])
 
-    def formfield(self, **kwargs):
-        defaults = {'widget': AudioFileWidget}
-        defaults.update(kwargs)
-        return super(AudioField, self).formfield(**defaults)

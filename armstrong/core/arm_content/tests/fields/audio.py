@@ -29,9 +29,12 @@ class AudioFieldMetadataTestCase(ArmContentTestCase):
         self.assertTrue(
             type(form.fields['audio_file'].widget) is
             AudioFileWidget)
+        import pdb;pdb.set_trace()
         form2 = AudioModelForm(initial={
                                "audio_file": self.audio_model.audio_file})
         self.assertTrue(self.audio_model.audio_file.url in form2.as_ul())
+        self.assertTrue("jplayer.js" in form2.as_ul())
+                
 
     def test_audiofield_filetype(self):
         """

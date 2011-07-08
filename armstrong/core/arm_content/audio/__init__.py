@@ -18,4 +18,3 @@ class AudioBackend:
     def bitrate(self, file):
         raise NotImplementedError
 
-from id3proxy import Id3readerBackend

@@ -77,11 +77,3 @@ class Id3readerTest(AudioFieldMetadataTestCase):
                      'date': u'2004',
                      'tracknumber': u'2'}
 
-    def setUp(self):
-        self.org_backend = settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND
-        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND =\
-                'armstrong.core.arm_content.audio.Id3readerBackend'
-        super(Id3readerTest, self).setUp()
-
-    def tearDown(self):
-        settings.ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND = self.org_backend

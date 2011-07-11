@@ -96,6 +96,15 @@ class AudioField(FileField):
     attr_class = AudioFile
     descriptor_class = AudioFileDescriptor
 
+    def __init__(self, *args, **kwargs):
+        self.overrides = {}
+        for key in kwargs.keys():
+            if '_field_name' in key:
+                self.overrides[key] = kwargs[key]
+                del(kwargs[key])
+        return super(AudioField, self).__init__(self, *args, **kwargs)
+
+
     def contribute_to_class(self, cls, name):
         super(AudioField, self).contribute_to_class(cls, name)
         # Attach update_metadata so that dimension fields declared
@@ -117,10 +126,15 @@ class AudioField(FileField):
         instance == the model
 
         """
-        if hasattr(instance.audio_file, "file"):
-            for key in instance.audio_file.metadata.keys():
-                if hasattr(instance, key) and  getattr(instance, key):
+        audio_file = getattr(instance, self.name)
+        if hasattr(audio_file, "file"):
+            for key in audio_file.metadata.keys():
+                if key + '_field_name' in self.overrides:
+                    field_name = self.overrides[key + '_field_name']
+                else:
+                    field_name = key
+                if hasattr(instance, field_name) and getattr(instance, field_name):
                         pass
-                elif hasattr(instance, key) and instance.audio_file.metadata[key]:
-                    setattr(instance, key, instance.audio_file.metadata[key])
+                elif hasattr(instance, field_name) and audio_file.metadata[key]:
+                    setattr(instance, field_name, audio_file.metadata[key])
 

@@ -18,8 +18,10 @@ class AudioFile(FieldFile):
 
     def __init__(self, *args, **kwargs):
         super(AudioFile, self).__init__(*args, **kwargs)
-        if 'metadata' in kwargs:
-            self._metadata = kwargs['metadata']
+        #allows the override of anything that follows the _attrname caching pattern
+        for attr in dir(self):
+            if attr in kwargs:
+                setattr( self, '_'+attr, kwargs[attr])
         self.backend = \
             GenericBackend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND')\
             .get_backend()

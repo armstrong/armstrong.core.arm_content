@@ -21,11 +21,10 @@ class AudioFile(FieldFile):
         #allows the override of anything that follows the _attrname caching pattern
         for attr in dir(self):
             if attr in kwargs:
-                setattr( self, '_'+attr, kwargs[attr])
+                setattr(self, '_' + attr, kwargs[attr])
         self.backend = \
             GenericBackend('ARMSTRONG_EXTERNAL_AUDIO_METADATA_BACKEND')\
             .get_backend()
-        
 
     def _transcode(self, toformat):
         """
@@ -36,10 +35,11 @@ class AudioFile(FieldFile):
         raise NotImplementedError
 
     def render(self, *args, **kwargs):
-        audio_player_template=get_template('audio/player.html')
-        return audio_player_template.render(Context({'url':self.url,
-                                            'filetype':self.filetype,
-                                            'playerdivid': "div_id_fileno_"+str(self.fileno())}))
+        audio_player_template = get_template('audio/player.html')
+        return audio_player_template.render(Context(
+                                {'url': self.url,
+                                'filetype': self.filetype,
+                                'playerdivid': "div_id_fileno_" + str(self.fileno())}))
 
     @property
     def filetype(self):
@@ -89,8 +89,10 @@ class AudioFileDescriptor(FileDescriptor):
         if previous_file is not None:
             self.field.update_metadata(instance, )
 
+
 class AudioFormField(FileFormField):
     widget = AudioFileWidget
+
 
 class AudioField(FileField):
     attr_class = AudioFile
@@ -103,7 +105,6 @@ class AudioField(FileField):
                 self.overrides[key] = kwargs[key]
                 del(kwargs[key])
         return super(AudioField, self).__init__(self, *args, **kwargs)
-
 
     def contribute_to_class(self, cls, name):
         super(AudioField, self).contribute_to_class(cls, name)
@@ -118,7 +119,6 @@ class AudioField(FileField):
         defaults = {'form_class': AudioFormField}
         defaults.update(kwargs)
         return super(FileField, self).formfield(**defaults)
-
 
     def update_metadata(self, instance, *args, **kwargs):
         """
@@ -137,4 +137,3 @@ class AudioField(FileField):
                         pass
                 elif hasattr(instance, field_name) and audio_file.metadata[key]:
                     setattr(instance, field_name, audio_file.metadata[key])
-

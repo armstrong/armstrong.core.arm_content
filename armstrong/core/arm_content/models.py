@@ -42,3 +42,6 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
     # TODO: add secondary sections
     class Meta:
         abstract = True
+
+    def __unicode__(self):
+        return self.title

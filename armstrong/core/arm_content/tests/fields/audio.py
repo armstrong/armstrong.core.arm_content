@@ -72,10 +72,10 @@ class Id3readerTest(AudioFieldMetadataTestCase):
     filename = 'test.mp3'
     filetype = 'mp3'
     playtime = '4'
-    audio_metadata = {'album': u'Quod Libet Test Data',
-                     'title': u'Silence',
-                     'artist': u'piman',
-                     'genre': u'Darkwave',
-                     'date': u'2004',
-                     'tracknumber': u'2'}
+    audio_metadata = {'album': u'from the internet',
+                     'title': u'im chargin my laser',
+                     'artist': u'armstrong',
+                     'genre': u'Satire',
+                     'date': u'2011',
+                     'tracknumber': u'1'}
 

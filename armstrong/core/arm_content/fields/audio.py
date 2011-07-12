@@ -3,8 +3,6 @@ from django.db.models.fields.files import FileField, FieldFile, FileDescriptor
 from django.forms.fields import FileField as FileFormField
 from django.template.loader import get_template
 from django.template import Context
-from django.conf import settings
-
 
 from armstrong.core.arm_content.fields.widgets import AudioFileWidget
 from armstrong.utils.backends import GenericBackend

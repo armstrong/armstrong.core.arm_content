@@ -1,21 +1,17 @@
 # coding=utf-8
-from django.contrib.auth.models import User
-from django.db import models
 from django.conf import settings
 
-from ..arm_content_support.models import AudioModel, OverrideAudioModel
+from ..arm_content_support.models import OverrideAudioModel
 from ..arm_content_support.forms import AudioModelForm
-from ..arm_content_support.models import SimpleProfile
 
 from .._utils import *
-from ...fields import AudioField
 from ...fields.widgets.audio import AudioFileWidget
 
 
 class AudioFieldMetadataTestCase(ArmContentTestCase):
     def setUp(self):
         if type(self) is AudioFieldMetadataTestCase:
-            return self.skipTest('parrent class')
+            return self.skipTest('parent class')
         self.audio_model = load_audio_model(self.filename)
         self.override_audio_model =\
             load_audio_model(self.filename, model=OverrideAudioModel)

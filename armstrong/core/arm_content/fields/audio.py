@@ -27,7 +27,7 @@ class AudioFile(FieldFile):
     def _transcode(self, toformat):
         """
         returns a transcoded file
-        perhaps should do more complex and diffrent things
+        perhaps should do more complex and different things
         like transcode via zencoder
         """
         raise NotImplementedError

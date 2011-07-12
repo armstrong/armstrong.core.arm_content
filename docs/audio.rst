@@ -56,7 +56,27 @@ You can add it to your model like any other field.
         title = models.CharField(max_length=100)
         comment =  models.CharField(max_length=100) 
 
-you can expose the audio file as a player via:
+You can also call the metadata fields whatever you want 
+
+::
+
+    from armstrong.core.arm_content import fields
+    from django.db import models
+
+    class Audio(models.Model):
+        audio_file = fields.AudioFileField(artist_field_name='foo',
+                                           genre_field_name='bar',
+                                           album_field_name='baz',
+                                           title_field_name='qrs',
+                                           comment_field_name='tkc')
+        #optional fields that audio will pre populate
+        foo = models.CharField(max_length=100)
+        bar = models.CharField(max_length=100)
+        baz = models.CharField(max_length=100)
+        qrs = models.CharField(max_length=100)
+        tkc =  models.CharField(max_length=100) 
+
+You can expose the audio file as a player via:
 
 ::
 
@@ -89,7 +109,7 @@ you can expose the audio file as a player via:
         });
         //]]>
 
-This code can be devided into tiwo parts, one part right below //<!CDATA[, which is the conditiontal include of the jplayer.js file, and the actual invocation of the player itself.  The important values to note are the url ``/static/audio/test.mp3``, which is the file url, ``/static/`` which is the static file prefix, ``mp3`` which is the file type.
+This code can be divided into tiwo parts, one part right below //<!CDATA[, which is the conditiontal include of the jplayer.js file, and the actual invocation of the player itself.  The important values to note are the url ``/static/audio/test.mp3``, which is the file url, ``/static/`` which is the static file prefix, ``mp3`` which is the file type.
 
 
 Creating Custom Backends

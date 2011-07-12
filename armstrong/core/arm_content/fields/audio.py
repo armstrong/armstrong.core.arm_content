@@ -99,7 +99,7 @@ class AudioField(FileField):
     def __init__(self, *args, **kwargs):
         self.overrides = {}
         for key in kwargs.keys():
-            if '_field_name' in key:
+            if key.endswith('_field_name'):
                 self.overrides[key] = kwargs[key]
                 del(kwargs[key])
         return super(AudioField, self).__init__(self, *args, **kwargs)

@@ -109,7 +109,7 @@ You can expose the audio file as a player via:
         });
         //]]>
 
-This code can be divided into tiwo parts, one part right below //<!CDATA[, which is the conditiontal include of the jplayer.js file, and the actual invocation of the player itself.  The important values to note are the url ``/static/audio/test.mp3``, which is the file url, ``/static/`` which is the static file prefix, ``mp3`` which is the file type.
+This code can be divided into two parts, one part right below //<!CDATA[, which is the conditiontal include of the jplayer.js file, and the actual invocation of the player itself.  The important values to note are the url ``/static/audio/test.mp3``, which is the file url, ``/static/`` which is the static file prefix, ``mp3`` which is the file type.
 
 
 Creating Custom Backends

@@ -34,15 +34,11 @@ class AudioFile(FieldFile):
 
     def render(self, *args, **kwargs):
         audio_player_template = get_template('audio/player.html')
-        if 'title' in self.metadata:
-            title = self.metadata['title']
-        else: 
-            title = self.name
         return audio_player_template.render(
                             Context(
                                 {'url': self.url,
                                 'filetype': self.filetype,
-                                'name': title,
+                                'name': self.metadata['title'],
                                 'fileno': str(self.fileno())
                                 }
                             )

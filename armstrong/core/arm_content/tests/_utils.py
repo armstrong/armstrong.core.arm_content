@@ -35,10 +35,10 @@ def random_authored_model(klass, *authors):
     return article
 
 
-def load_audio_model(filename, model=AudioModel, model_args={}):
+def load_audio_model(filename, file_field_name='audio_file', model=AudioModel, model_args={}):
     f = open(settings.STATIC_ROOT + 'audio/' + filename, "rb+")
     uf = File(file=f)
-    model_args['audio_file'] = uf
+    model_args[file_field_name] = uf
     am = model(**model_args)
     am.save()
     return am

@@ -28,7 +28,7 @@ class AudioFieldMetadataTestCase(ArmContentTestCase):
         form2 = AudioModelForm(initial={
                                "audio_file": self.audio_model.audio_file})
         self.assertTrue(self.audio_model.audio_file.url in form2.as_ul())
-        self.assertTrue("jplayer.js" in form2.as_ul())
+        self.assertTrue("jplayer" in form2.as_ul())
                 
 
     def test_audiofield_filetype(self):

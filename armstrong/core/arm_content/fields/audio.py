@@ -104,6 +104,12 @@ class AudioField(FileField):
                 del(kwargs[key])
         return super(AudioField, self).__init__(self, *args, **kwargs)
 
+    def __unicode__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return self.name
+
     def contribute_to_class(self, cls, name):
         super(AudioField, self).contribute_to_class(cls, name)
         # Attach update_metadata so that dimension fields declared

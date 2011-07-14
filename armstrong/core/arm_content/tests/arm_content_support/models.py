@@ -7,13 +7,14 @@ from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
 from ...mixins.images.sorl import SorlImageMixin
+from ...mixins.publication import PublishedManager
 from ...models import ContentBase
 
 
 from armstrong.apps.content.models import Content as ConcreteContent
 
 class ConcreteArticle(ConcreteContent):
-    pass
+    published = PublishedManager()
 
 
 class ConcreteCommentary(ConcreteContent):

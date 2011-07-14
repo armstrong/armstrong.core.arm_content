@@ -2,7 +2,7 @@
 {% get_static_prefix as STATIC_PREFIX %}
  
 <script type="text/javascript">
-    //<![CDATA[
+(function($){
     $(document).ready(function(){
         $("#af_player_{{fileno}}").jPlayer({
             ready: function () {
@@ -20,7 +20,7 @@
                 $(this).jPlayer("pauseOthers");
          });
     });
-    //]]>
+})(jQuery || django.jQuery);
 </script>
 <div class="jp-audio">
     <div class="jp-type-single">

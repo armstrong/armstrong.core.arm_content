@@ -1,6 +1,6 @@
 from django.utils.safestring import mark_safe
 from django.forms.widgets import ClearableFileInput
-
+from django.conf import settings
 
 class AudioFileWidget(ClearableFileInput):
     class Media:
@@ -9,7 +9,7 @@ class AudioFileWidget(ClearableFileInput):
         }
         js = ("https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js",
             settings.STATIC_URL + "js/jquery.jplayer.min.js"
-        }
+        )
  
     def render(self, name, value, attrs):
         self.attrs=attrs

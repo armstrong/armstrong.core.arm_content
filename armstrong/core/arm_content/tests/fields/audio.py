@@ -7,6 +7,7 @@ from ..arm_content_support.forms import AudioModelForm
 from .._utils import *
 from ...fields.widgets.audio import AudioFileWidget
 
+__all__ = ["Mp3Test"]
 
 class AudioFieldMetadataTestCase(ArmContentTestCase):
     def setUp(self):
@@ -61,10 +62,7 @@ class AudioFieldMetadataTestCase(ArmContentTestCase):
             self.assertEqual('qr', overridden.artist)
 
 
-class Id3readerTest(AudioFieldMetadataTestCase):
-    """
-    test id3reader
-    """
+class Mp3Test(AudioFieldMetadataTestCase):
     filename = 'test.mp3'
     filetype = 'mp3'
     playtime = '4'

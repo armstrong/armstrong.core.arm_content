@@ -27,13 +27,13 @@ class AudioMixin(models.Model):
                             )
 
     def __unicode__(self):
-        return self.__str__()
+        return unicode(self.__str__())
 
     def __str__(self):
-        return "%s by %s authored by %s" % (self.file, self.artist, self.authors)
+        return "%s by %s on %s" % (self.file, self.artist, self.album)
 
     @property
-    def player_as_html(self):
+    def html(self):
         return self.file.render()
 
     class Meta:

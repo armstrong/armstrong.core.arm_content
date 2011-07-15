@@ -66,12 +66,15 @@ class SimpleProfile(models.Model):
 
 
 class AudioModel(models.Model):
-    audio_file = AudioField(upload_to = 'audio')
+    file = AudioField(upload_to = 'audio')
 
 
 class OverrideAudioModel(models.Model):
-    audio_file = AudioField(upload_to='audio')
+    file = AudioField(upload_to='audio')
     artist = models.CharField(max_length=100, blank=True, null=True)
+
+
+class AudioMixinModel(mixins.AudioMixin): pass
 
 
 class SorlImage(SorlImageMixin, models.Model):

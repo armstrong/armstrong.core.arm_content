@@ -24,11 +24,11 @@ class AudioFieldMetadataTestCase(ArmContentTestCase):
         """
         form = AudioModelForm()
         self.assertTrue(
-            type(form.fields['audio_file'].widget) is
+            type(form.fields['file'].widget) is
             AudioFileWidget)
         form2 = AudioModelForm(initial={
-                               "audio_file": self.audio_model.audio_file})
-        self.assertTrue(self.audio_model.audio_file.url in form2.as_ul())
+                               "file": self.audio_model.file})
+        self.assertTrue(self.audio_model.file.url in form2.as_ul())
         self.assertTrue("jplayer" in form2.as_ul())
                 
 
@@ -36,7 +36,7 @@ class AudioFieldMetadataTestCase(ArmContentTestCase):
         """
         test that the file type returned by the file field is correct
         """
-        self.assertEqual(self.audio_model.audio_file.filetype, self.filetype)
+        self.assertEqual(self.audio_model.file.filetype, self.filetype)
 
     def test_audiofield_metadata(self):
         """
@@ -45,7 +45,7 @@ class AudioFieldMetadataTestCase(ArmContentTestCase):
         for key in self.audio_metadata.keys():
             self.assertEqual(
                     self.audio_metadata[key],
-                    self.audio_model.audio_file.metadata[key])
+                    self.audio_model.file.metadata[key])
 
     def test_audio_model_overriding(self):
             '''test the audio model field pre population'''

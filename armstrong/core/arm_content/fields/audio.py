@@ -138,11 +138,6 @@ class AudioField(FileField):
         audio_file = getattr(instance, self.name)
         if hasattr(audio_file, "file"):
             for key in audio_file.metadata.keys():
-                if key + '_field_name' in self.overrides:
-                    field_name = self.overrides[key + '_field_name']
-                else:
-                    field_name = key
-                if hasattr(instance, field_name) and getattr(instance, field_name):
-                        pass
-                elif hasattr(instance, field_name) and audio_file.metadata[key]:
+                field_name = self.overrides.get(key + '_field_name', key)
+                if not (hasattr(instance, field_name) and  getattr(instance, field_name)):
                     setattr(instance, field_name, audio_file.metadata[key])

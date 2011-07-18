@@ -80,36 +80,70 @@ You can expose the audio file as a player via:
 
 ::
 
-    a=Audio(audio_file='test.mp3') 
-    html_code=a.render()
+    a = Audio(audio_file='test.mp3') 
+    print a.html
 
-``html_code`` is now a string that looks like this, without the comments.::
-
-    <div id="%(playerdivid)" class="jp-jplayer"></div>
-        <script type="text/javascript">
-        //<![CDATA[
-        //if jquery is included allready, we dont need load it again 
-        if (!window.jQuery){
-            document.write('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" />')
-        }
-        //if jplayer is included allready, we dont need load it again
-        if (!window.jQuery.jPlayer){
-            document.write('<script type="text/javascript" src="/static/js/jplayer.js" />')
-        }
+``a.html`` is now a string that looks roughly like this.::
+    <script type="text/javascript">
+    (function($){
         $(document).ready(function(){
-            $("#jquery_jplayer_1").jPlayer({
+            $("#af_player_6").jPlayer({
                 ready: function () {
                     $(this).jPlayer("setMedia", {
-                        mp3: "/static/audio/test.mp3"
-                    },
-                swfPath: "../js",
+                        mp3: "test.mp3"
+                    });
+                },
+                solution: "html, flash",
+                swfPath: "/static/js",
+                cssSelectorAncestor: "#jp_interface_6",
                 supplied: "mp3"
-                }).jPlayer("load");   
-            });
+             }).jPlayer("load")
+               .bind($.jPlayer.event.play, function() { 
+                    // Using a jPlayer event to avoid both jPlayers playing together.
+                    $(this).jPlayer("pauseOthers");
+             });
         });
-        //]]>
+    })(jQuery || django.jQuery);
+    </script>
+    <div class="jp-audio">
+        <div class="jp-type-single">
+            <div id="af_player_6" class="jp-jplayer"></div>
+            <div id="jp_interface_6" class="jp-interface">
+                <ul class="jp-controls">
+                    <li><a href="#" class="jp-play" tabindex="1">play</a></li>
+                    <li><a href="#" class="jp-pause" tabindex="1">pause</a></li>
+                    <li><a href="#" class="jp-stop" tabindex="1">stop</a></li>
+                    <li><a href="#" class="jp-mute" tabindex="1">mute</a></li>
+                    <li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>
+                </ul>
+                <div class="jp-progress">
+                    <div class="jp-seek-bar">
+                        <div class="jp-play-bar"></div>
+                    </div>
+                </div>
+                <div class="jp-volume-bar">
+                    <div class="jp-volume-bar-value"></div>
+                </div>
+                <div class="jp-current-time"></div>
+                <div class="jp-duration"></div>
+            </div>
+            <div id="jp_playlist_6" class="jp-playlist">
+                <ul>
+                    <li>test audio file</li>
+                </ul>
+            </div>
 
-This code can be divided into two parts, one part right below //<!CDATA[, which is the conditiontal include of the jplayer.js file, and the actual invocation of the player itself.  The important values to note are the url ``/static/audio/test.mp3``, which is the file url, ``/static/`` which is the static file prefix, ``mp3`` which is the file type.
+        </div>
+    </div>
+
+This code can be divided into two parts, javascript, which is the actual invocation of the player, and the html that makes up the gui of the player.  At the end of the javascript section you may notice ``(jQuery || django.jQuery)``, which is basically a way to allow the same javascript to work inside the admin, which djangos version of jQuery, or in a template with jQuery in the usual place. The important values to note are the url ``test.mp3``, which is the file url, ``/static/`` which is the static file prefix, ``mp3`` which is the file type.
+
+
+Using the Audio Mixin
+------------------------
+The audio mixin just makes it easier to include the standard audio metadata fields in your model. Instead of the first Audio model above, which is long and convoluted, you can just write::
+    from armstrong.core.arm_content import mixins
+    class Audio(mixins.AudioMixin): pass
 
 
 Creating Custom Backends

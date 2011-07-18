@@ -138,6 +138,25 @@ You can expose the audio file as a player via:
 
 This code can be divided into two parts, javascript, which is the actual invocation of the player, and the html that makes up the gui of the player.  At the end of the javascript section you may notice ``(jQuery || django.jQuery)``, which is basically a way to allow the same javascript to work inside the admin, which djangos version of jQuery, or in a template with jQuery in the usual place. The important values to note are the url ``test.mp3``, which is the file url, ``/static/`` which is the static file prefix, ``mp3`` which is the file type.
 
+.. warning:: if you use the audiomodel.html in a template YOU MUST INCLUDE JQUERY AND JPLAYER. 
+
+What you would do to include js files required would look something like:
+
+::
+    {% load static %}
+    {% get_static_prefix as STATIC_PREFIX %}
+
+    <html>
+    <head>
+    <title>audio lists</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" ></script>
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/jquery.jplayer.min.js"> </script>
+    <link href="{{STATIC_PREFIX}}skin/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+The player will also be used as part of a form if the ``AudioField`` of the form has allready been filled in and uploaded.
+
 
 Using the Audio Mixin
 ------------------------

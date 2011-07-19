@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.sites.models import Site
+from datetime import datetime
+from model_utils.managers import InheritanceManager
 
 PUB_STATUS_CHOICES = (
     ('D', 'Draft'),
@@ -26,3 +28,11 @@ class PublicationMixin(SimplePublicationMixin, models.Model):
 
     class Meta:
         abstract = True
+
+
+class PublishedManager(InheritanceManager):
+    """ Returns published objects where the pub_date has already passed """
+    def get_query_set(self):
+        return super(PublishedManager, self).get_query_set()\
+                .filter(pub_date__lte=datetime.now())\
+                .filter(pub_status="P")

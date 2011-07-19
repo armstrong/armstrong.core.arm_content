@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import unittest
+from django.template import Template, Context
 import fudge
 try:
     import south
@@ -181,6 +182,15 @@ class AuthorsFieldTestCase(ArmContentTestCase):
 
         field = authors.AuthorsField(to=MyUser)
         self.assertEqual(field.rel.to, MyUser)
+
+    def test_can_render_in_templates(self):
+        [bob, ] = generate_random_staff_users(n=1)
+        article = SimpleAuthoredModel.objects.create()
+        article.authors.add(bob)
+        t = Template("{{ article.authors }}")
+        context = Context({"article": article})
+        self.assertEqual(bob.get_full_name(), t.render(context))
+
 
 
 class AuthorsDescriptorTestCase(ArmContentTestCase):

@@ -68,3 +68,20 @@ class InjectDefaultsDecoratorTestCase(ArmContentTestCase):
         with fudge.patched_context(helpers, "settings", settings):
             foo = helpers.inject_defaults(fake)
             foo(self, embed)
+
+    def test_kwargs_are_passed_through_to_backend(self):
+        random_kwargs = dict(
+                [("key_%d" % i, i) for i in range(random.randint(10, 20))])
+        random_width = random.randint(1000, 2000)
+        random_height = random.randint(1000, 2000)
+        embed = object()
+        settings = fudge.Fake()
+        settings.has_attr(ARMSTRONG_EMBED_VIDEO_WIDTH=random_width,
+                ARMSTRONG_EMBED_VIDEO_HEIGHT=random_height)
+        fake = fudge.Fake()
+        fake.is_callable().with_args(self, embed, random_width, random_height,
+                **random_kwargs)
+
+        with fudge.patched_context(helpers, "settings", settings):
+            foo = helpers.inject_defaults(fake)
+            foo(self, embed, **random_kwargs)

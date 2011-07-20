@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.db import models
 from ..fields import AudioField
 
 
 class AudioMixin(models.Model):
-
-    file = AudioField(upload_to='audio/')
+    file = AudioField(upload_to='%saudio/' % settings.MEDIA_ROOT)
     playtime = models.PositiveIntegerField("playtime in seconds",
                                            null=True,
                                            blank=True)

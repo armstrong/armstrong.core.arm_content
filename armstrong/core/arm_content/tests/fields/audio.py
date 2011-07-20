@@ -12,8 +12,8 @@ __all__ = ["Mp3Test"]
 class AudioFieldMetadataTestCase(ArmContentTestCase):
     def setUp(self):
         self.audio_model = load_audio_model(self.filename)
-        self.override_audio_model =\
-            load_audio_model(self.filename, model=OverrideAudioModel)
+        self.override_audio_model = load_audio_model(self.filename,
+                model=OverrideAudioModel)
 
     def test_audiofield_default_widget(self):
         """

@@ -1,7 +1,7 @@
-from .base import BaseImageMixin
+from .base import BaseThumbnailMixin
 from ...images.sorl import get_preset_thumbnail
 
-class SorlImageMixin(BaseImageMixin):
+class SorlThumbnailMixin(BaseThumbnailMixin):
     visual_field_name = 'image'
 
     def render_visual(self, preset_label, presets=None, defaults=None, *args, **kwargs):

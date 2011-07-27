@@ -6,7 +6,7 @@ import sorl.thumbnail
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
-from ...mixins.images.sorl import SorlImageMixin
+from ...mixins.images.sorl import SorlThumbnailMixin
 from ...mixins.publication import PublishedManager
 from ...models import ContentBase
 
@@ -65,5 +65,5 @@ class SimpleProfile(models.Model):
         return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')
 
 
-class SorlImage(SorlImageMixin, models.Model):
+class SorlImage(SorlThumbnailMixin, models.Model):
     image = sorl.thumbnail.ImageField(upload_to='images/')

@@ -2,12 +2,16 @@ from django.utils.safestring import mark_safe
 from django.forms.widgets import ClearableFileInput
 from django.conf import settings
 
+
+STATIC_URL = getattr(settings, settings.STATIC_URL, "/static/")
+
+
 class AudioFileWidget(ClearableFileInput):
     class Media:
         css = {
-                "all": [settings.STATIC_URL + "skin/jplayer.blue.monday.css",]
+                "all": [STATIC_URL + "skin/jplayer.blue.monday.css",]
         }
-        js = [settings.STATIC_URL + "js/jquery.jplayer.min.js",]
+        js = [STATIC_URL + "js/jquery.jplayer.min.js",]
  
     def render(self, name, value, attrs):
         self.attrs=attrs

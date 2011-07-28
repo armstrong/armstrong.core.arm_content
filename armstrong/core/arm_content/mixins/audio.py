@@ -3,8 +3,10 @@ from django.db import models
 from ..fields import AudioField
 
 
+UPLOAD_TO = getattr(settings, "MEDIA_ROOT", "./media")
+
 class AudioMixin(models.Model):
-    file = AudioField(upload_to='%saudio/' % settings.MEDIA_ROOT)
+    file = AudioField(upload_to='%saudio/' % UPLOAD_TO)
     playtime = models.PositiveIntegerField("playtime in seconds",
                                            null=True,
                                            blank=True)

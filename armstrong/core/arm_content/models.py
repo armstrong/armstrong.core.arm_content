@@ -30,7 +30,7 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
     slug = models.SlugField()
 
     sections = models.ManyToManyField(Section, null=True, blank=True,
-            related_name="alternates")
+            related_name="%(app_label)s_%(class)s_alternates")
 
     tags = TaggableManager(blank=True)
     with_section = SectionSlugManager(section_field="sections")

@@ -80,3 +80,18 @@ class AudioMixinModel(mixins.AudioMixin): pass
 
 class SorlImage(SorlImageMixin, models.Model):
     image = sorl.thumbnail.ImageField(upload_to='images/')
+
+
+class ContentOne(ContentBase):
+    """
+    This makes sure we have at least one model with sections and its reverse
+    name.
+    """
+    pass
+
+class ContentTwo(ContentBase):
+    """
+    This makes sure we have a second ContentBase sub-class that explicitly
+    breaks the reverse name of the sections field.
+    """
+    pass

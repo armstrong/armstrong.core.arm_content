@@ -38,10 +38,6 @@ class ContentBaseTestCase(ArmContentTestCase):
                 pub_status="Published")
         self.assertModelHasField(model, "tags", TaggableManager)
 
-    def test_has_primary_section(self):
-        model = self.model()
-        self.assertRelatedTo(model, "primary_section", Section)
-
     def test_has_sections(self):
         model = self.model.objects.create(pub_date=now(),
                 pub_status="Published")
@@ -82,9 +78,9 @@ class ConcreteContentBaseTestCase(ArmContentTestCase):
         slug = "random-%d" % random.randint(100, 200)
         article_slug = "some-random-article-slug-%d" % random.randint(100, 200)
         section = Section.objects.create(title="Random", slug=slug)
-        self.some_model.objects.create(title=title, pub_date=now(),
-                slug=article_slug, pub_status="Published",
-                primary_section=section)
+        m = self.some_model.objects.create(title=title, pub_date=now(),
+                slug=article_slug, pub_status="Published")
+        m.sections.add(section)
 
         article = self.some_model.with_section.get_by_slug("%s/%s" % (slug,
             article_slug))
@@ -98,9 +94,9 @@ class ConcreteContentBaseTestCase(ArmContentTestCase):
         section = Section.objects.create(title="Random", slug=slug)
         child = Section.objects.create(title="Random Child", slug=slug,
                 parent=section)
-        self.some_model.objects.create(title=title, pub_date=now(),
-                slug=article_slug, pub_status="Published",
-                primary_section=child)
+        m = self.some_model.objects.create(title=title, pub_date=now(),
+                slug=article_slug, pub_status="Published")
+        m.sections.add(child)
 
         article = self.some_model.with_section.get_by_slug("%s%s" %
                 (child.full_slug, article_slug))

@@ -29,12 +29,11 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
     summary = models.TextField()
     slug = models.SlugField()
 
-    primary_section = models.ForeignKey(Section, null=True)
     sections = models.ManyToManyField(Section, null=True, blank=True,
-            related_name="alternates")
+            related_name="%(app_label)s_%(class)s_alternates")
 
-    tags = TaggableManager()
-    with_section = SectionSlugManager()
+    tags = TaggableManager(blank=True)
+    with_section = SectionSlugManager(section_field="sections")
 
     objects = InheritanceManager()
 

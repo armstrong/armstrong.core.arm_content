@@ -5,3 +5,7 @@ AUTHORS = ('Author Information', {
 PUBLICATION = ('Publication Information', {
     'fields': ('pub_date', 'pub_status', 'sites', ),
 })
+
+TAXONOMY = ('Taxonomy', {
+    'fields': ('sections', 'tags', ),
+})

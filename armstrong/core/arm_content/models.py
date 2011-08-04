@@ -32,7 +32,7 @@ class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
     sections = models.ManyToManyField(Section, null=True, blank=True,
             related_name="alternates")
 
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     with_section = SectionSlugManager(section_field="sections")
 
     objects = InheritanceManager()

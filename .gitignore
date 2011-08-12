@@ -6,3 +6,5 @@ build/*
 docs/_build
 MANIFEST
 dist/
+mydatabase
+

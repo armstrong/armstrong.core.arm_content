@@ -5,11 +5,12 @@ from taggit.managers import TaggableManager
 
 from armstrong.core.arm_sections.managers import SectionSlugManager
 from armstrong.core.arm_sections.models import Section
+from armstrong.core.arm_access.mixins import AccessMixin
 
-from . import mixins
+from .mixins import AuthorsMixin, PublicationMixin
 
 
-class ContentBase(mixins.AuthorsMixin, mixins.PublicationMixin, models.Model):
+class ContentBase(AuthorsMixin, PublicationMixin, AccessMixin, models.Model):
     """
     The base class providing the basic "armstrong" behavior for a model.
 

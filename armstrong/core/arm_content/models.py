@@ -43,5 +43,9 @@ class ContentBase(AuthorsMixin, PublicationMixin, AccessMixin, models.Model):
     class Meta:
         abstract = True
 
+    def get_absolute_url(self):
+        from urls import get_url_for_model
+        return get_url_for_model(self)
+
     def __unicode__(self):
         return self.title

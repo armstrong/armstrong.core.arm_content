@@ -7,3 +7,5 @@ docs/_build
 MANIFEST
 dist/
 audio/*
+mydatabase
+

@@ -7,7 +7,7 @@ from ...fields import AudioField
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
-from ...mixins.images.sorl import SorlImageMixin
+from ...mixins.images.sorl import SorlThumbnailMixin
 from ...mixins.publication import PublishedManager
 from ...models import ContentBase
 
@@ -78,7 +78,7 @@ class OverrideAudioModel(models.Model):
 class AudioMixinModel(mixins.AudioMixin): pass
 
 
-class SorlImage(SorlImageMixin, models.Model):
+class SorlImage(SorlThumbnailMixin, models.Model):
     image = sorl.thumbnail.ImageField(upload_to='images/')
 
 

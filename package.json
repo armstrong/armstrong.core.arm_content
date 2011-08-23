@@ -1,6 +1,6 @@
 {
     "name": "armstrong.core.arm_content",
-    "version": "0.8.0.alpha.0",
+    "version": "0.8.0",
     "description": "A library for building news sites with multiple content types",
     "install_requires": [
       "Django==1.3",

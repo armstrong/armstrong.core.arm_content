@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.db.models.query import QuerySet
 from model_utils.managers import InheritanceManager
@@ -44,8 +45,11 @@ class ContentBase(AuthorsMixin, PublicationMixin, AccessMixin, models.Model):
         abstract = True
 
     def get_absolute_url(self):
-        from urls import get_url_for_model
-        return get_url_for_model(self)
+        urlconf = __import__(settings.ROOT_URLCONF,
+                             globals(),
+                             locals(),
+                             ['get_url_for_model'])
+        return urlconf.get_url_for_model(self)
 
     def __unicode__(self):
         return self.title

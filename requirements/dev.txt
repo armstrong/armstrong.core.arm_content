@@ -3,4 +3,3 @@ armstrong.apps.content
 armstrong.dev>=1.4.0
 -e git://github.com/tswicegood/lettuce.git@fix-port-issues#egg=lettuce
 -r ./sorl.txt
--e git://github.com/armstrong/armstrong.apps.audio.backends.id3reader#egg=armstrong.apps.audio.backends.id3reader

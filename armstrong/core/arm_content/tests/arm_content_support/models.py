@@ -3,7 +3,6 @@ from django.db import models
 
 import sorl.thumbnail
 
-from ...fields import AudioField
 from ...fields import AuthorsField
 from ...fields import EmbeddedVideoField
 from ... import mixins
@@ -64,18 +63,6 @@ class SimpleProfile(models.Model):
 
     def get_absolute_url(self):
         return '/%s/' % self.user.get_full_name().lower().replace(' ', '-')
-
-
-class AudioModel(models.Model):
-    file = AudioField(upload_to = 'audio')
-
-
-class OverrideAudioModel(models.Model):
-    file = AudioField(upload_to='audio')
-    artist = models.CharField(max_length=100, blank=True, null=True)
-
-
-class AudioMixinModel(mixins.AudioMixin): pass
 
 
 class SorlImage(SorlThumbnailMixin, models.Model):

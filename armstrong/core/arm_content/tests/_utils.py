@@ -8,7 +8,6 @@ from armstrong.dev.tests.utils.users import *
 
 import fudge
 
-from .arm_content_support.models import AudioModel
 
 class ArmContentTestCase(ArmstrongTestCase):
     pass
@@ -34,14 +33,3 @@ def random_authored_model(klass, *authors):
     article = klass.objects.create()
     add_authors_to(article, *authors)
     return article
-
-
-def load_audio_model(filename, file_field_name='file', model=AudioModel, model_args={}):
-    f = open(settings.STATIC_ROOT + 'audio/' + filename, "rb+")
-    uf = File(file=f)
-    model_args[file_field_name] = uf
-    am = model(**model_args)
-    am.save()
-    return am
-
-

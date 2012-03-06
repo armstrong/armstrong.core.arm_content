@@ -27,3 +27,4 @@ class ThumbnailTestCase(ArmContentTestCase):
                     get_preset_thumbnail):
             result = t.render(template.Context({'obj': obj}))
         self.assertEqual(result, thumb_url)
+        fudge.verify()

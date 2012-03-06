@@ -29,6 +29,7 @@ class ContentBase(AuthorsMixin, PublicationMixin, AccessMixin, models.Model):
 
     title = models.CharField(max_length=255)
     summary = models.TextField()
+    # TODO: Increase max length for SlugField (see Issue #43)
     slug = models.SlugField()
 
     sections = models.ManyToManyField(Section, null=True, blank=True,

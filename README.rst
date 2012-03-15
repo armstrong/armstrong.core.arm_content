@@ -29,6 +29,8 @@ unless you want to use the include template tags.  You can add it like this:
 
 	INSTALLED_APPS += ["armstrong.core.arm_content", ]
 
+Note that you do not need to run ``syncdb`` or ``migrate`` after installing
+``armstrong.core.arm_content`` as it does not have any models.
 
 .. _pip: http://www.pip-installer.org/
 

@@ -51,3 +51,20 @@ probably looking for that.
 .. _John S. and James L. Knight Foundation: http://www.knightfoundation.org/
 .. _Texas Tribune: http://www.texastribune.org/
 .. _Google Group: http://groups.google.com/group/armstrongcms
+
+
+License
+-------
+Copyright 2011-2012 Bay Citizen and Texas Tribune
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

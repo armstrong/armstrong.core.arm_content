@@ -1,6 +1,36 @@
 armstrong.core.arm_content
 ==========================
-This package provides the basic content models and code specific to them.
+Provides the foundation for all content inside Armstrong.
+
+Usage
+-----
+You can use ``armstrong.core.arm_content`` to build out the custom models of
+your site while following the DRY (Don't Repeat Yourself) principle.  It is the
+foundation that the rest of the Armstrong content types are built off of.
+
+For more information, please see the `full documentation`_.
+
+.. change this link to point to docs inside docs.armstrongcms.org once its done
+.. _full documentation: http://armstrong.github.com/armstrong.core.arm_content/
+
+Installation & Configuration
+----------------------------
+You can install the latest release of ``armstrong.core.arm_content`` using
+`pip`_:
+
+::
+
+    pip install armstrong.core.arm_content
+
+You don't need to add ``armstrong.core.arm_content`` to your installed apps
+unless you want to use the include template tags.  You can add it like this:
+
+::
+
+	INSTALLED_APPS += ["armstrong.core.arm_content", ]
+
+
+.. _pip: http://www.pip-installer.org/
 
 
 State of Project
@@ -8,7 +38,7 @@ State of Project
 Armstrong is an open-source news platform that is freely available to any
 organization.  It is the result of a collaboration between the `Texas Tribune`_
 and `Bay Citizen`_, and a grant from the `John S. and James L. Knight
-Foundation`_.  The first release is scheduled for June, 2011.
+Foundation`_.
 
 To follow development, be sure to join the `Google Group`_.
 

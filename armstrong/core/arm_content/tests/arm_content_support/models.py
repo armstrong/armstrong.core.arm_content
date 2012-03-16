@@ -15,7 +15,7 @@ from armstrong.apps.content.models import Content as ConcreteContent
 
 
 class ConcreteArticle(ConcreteContent):
-    published = PublishedManager()
+    pass
 
 
 class ConcreteCommentary(ConcreteContent):

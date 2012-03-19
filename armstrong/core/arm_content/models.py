@@ -9,6 +9,7 @@ from armstrong.core.arm_sections.models import Section
 from armstrong.core.arm_access.mixins import AccessMixin
 
 from .mixins import AuthorsMixin, PublicationMixin
+from .mixins.publication import PublishedManager
 
 
 class ContentBase(AuthorsMixin, PublicationMixin, AccessMixin, models.Model):
@@ -39,6 +40,7 @@ class ContentBase(AuthorsMixin, PublicationMixin, AccessMixin, models.Model):
     with_section = SectionSlugManager(section_field="sections")
 
     objects = InheritanceManager()
+    published = PublishedManager()
 
     # TODO: add required primary section
     # TODO: add secondary sections

@@ -39,9 +39,9 @@ class PublicationManagerTestCase(ArmContentTestCase):
 
     def test_published_manager_only_pulls_published_content(self):
         all_published = ConcreteArticle.published.all().select_subclasses()
-        self.assertTrue(self.published in all_published)
-        self.assertTrue(not self.draft_art in all_published)
-        self.assertTrue(not self.scheduled in all_published)
+        self.assertIn(self.published, all_published)
+        self.assertNotIn(self.draft_art, all_published)
+        self.assertNotIn(self.scheduled, all_published)
 
     def test_is_published(self):
         self.assertTrue(self.published.is_published)

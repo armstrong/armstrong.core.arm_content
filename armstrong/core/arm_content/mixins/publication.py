@@ -19,6 +19,11 @@ class SimplePublicationMixin(models.Model):
         choices=PUB_STATUS_CHOICES, help_text=(
             u'Only published items will appear on the site'))
 
+    @property
+    def is_published(self):
+        return self.pub_date <= datetime.now() \
+            and self.pub_status == "P"
+
     class Meta:
         abstract = True
 

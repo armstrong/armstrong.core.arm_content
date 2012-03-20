@@ -86,7 +86,7 @@ setup_kwargs = {
     "package_data": {info["name"]: data_files, },
     "namespace_packages": NAMESPACE_PACKAGES,
     "classifiers": [
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',

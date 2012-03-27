@@ -1,4 +1,3 @@
--r ./base.txt
 armstrong.apps.content
 armstrong.dev>=1.4.0
 -e git://github.com/tswicegood/lettuce.git@fix-port-issues#egg=lettuce

@@ -71,18 +71,25 @@ class AuthorsDescriptor(object):
 
         RelatedManager = create_many_related_manager(AuthorsManager,
                 self.field.rel)
-        core_filters = {
-            '%s__pk' % self.field.related_query_name(): instance._get_pk_val(),
+        kwargs = {
+            "model": self.field.rel.to,
+            "instance": instance,
+            "symmetrical": self.field.rel.symmetrical,
+            "source_field_name": self.field.m2m_field_name(),
+            "target_field_name": self.field.m2m_reverse_field_name(),
+            "reverse": False,
         }
-        manager = RelatedManager(
-            model=self.field.rel.to,
-            core_filters=core_filters,
-            instance=instance,
-            symmetrical=self.field.rel.symmetrical,
-            source_field_name=self.field.m2m_field_name(),
-            target_field_name=self.field.m2m_reverse_field_name(),
-            reverse=False,
-        )
+
+        # work with Django <= 1.4
+        import django
+        if django.VERSION[:2] == (1, 3):
+            kwarg["core_filters"] = {
+                '%s__pk' % self.field.related_query_name(): instance._get_pk_val(),
+            }
+        else:
+            kwargs["query_field_name"] = self.field.related_query_name()
+            kwargs["through"] = self.field.rel.through
+        manager = RelatedManager(**kwargs)
 
         # Set this after the fact because AuthorsManager is the superclass and
         # RelatedManager doesn't know about these attributes

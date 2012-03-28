@@ -32,6 +32,7 @@ settings = {
         'small_square': {'width': 75, 'height': 75, 'crop': '50%'},
         'qvga': {'width': 320, 'height': 240},
     },
+    'SITE_ID': '1',
 }
 
 full_name = "armstrong.core.arm_content"

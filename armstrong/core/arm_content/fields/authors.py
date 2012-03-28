@@ -82,7 +82,7 @@ class AuthorsDescriptor(object):
 
         # work with Django <= 1.4
         import django
-        if django.VERSION[:2] == (1, 3):
+        if django.VERSION[:2] < (1, 4):
             kwargs["core_filters"] = {
                 '%s__pk' % self.field.related_query_name(): instance._get_pk_val(),
             }

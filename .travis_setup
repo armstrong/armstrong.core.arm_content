@@ -1,5 +1,4 @@
 #!/bin/bash
-pip install Django==$DJANGO_VERSION
 pip install -i http://armstrong.github.com/pypi.armstrongcms.org/index/ -r requirements/dev.txt
 pip install .
-
+pip install Django==$DJANGO_VERSION

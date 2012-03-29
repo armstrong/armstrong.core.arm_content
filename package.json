@@ -1,6 +1,6 @@
 {
     "name": "armstrong.core.arm_content",
-    "version": "1.3.1alpha.0",
+    "version": "1.3.1",
     "description": "A library for building news sites with multiple content types",
     "install_requires": [
       "Django==1.3.1,==1.4",
@@ -8,8 +8,8 @@
       "django-reversion==1.4",
       "django-taggit==0.9.3",
       "sorl-thumbnail==11.05.2",
-      "armstrong.core.arm_sections>=1.0.1,<2.0",
-      "armstrong.core.arm_access>=1.0.5,<2.0",
+      "armstrong.core.arm_sections>=1.5.2,<2.0",
+      "armstrong.core.arm_access>=1.0.6,<2.0",
       "armstrong.utils.backends>=1.0.0,<2.0"
     ]
 }

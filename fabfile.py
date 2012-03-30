@@ -8,6 +8,7 @@ settings = {
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
+        'django.contrib.sites',
         'django.contrib.staticfiles',
         'armstrong.apps.content',
         'armstrong.core.arm_access',
@@ -18,6 +19,7 @@ settings = {
         'south',
         'lettuce.django',
         'sorl.thumbnail',
+        'taggit',
     ),
     'AUTH_PROFILE_MODULE': 'arm_content_support.SimpleProfile',
     'ROOT_URLCONF': 'armstrong.core.arm_content.tests.arm_content_support.urls',
@@ -30,6 +32,7 @@ settings = {
         'small_square': {'width': 75, 'height': 75, 'crop': '50%'},
         'qvga': {'width': 320, 'height': 240},
     },
+    'SITE_ID': '1',
 }
 
 full_name = "armstrong.core.arm_content"

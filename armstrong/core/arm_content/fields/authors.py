@@ -71,18 +71,25 @@ class AuthorsDescriptor(object):
 
         RelatedManager = create_many_related_manager(AuthorsManager,
                 self.field.rel)
-        core_filters = {
-            '%s__pk' % self.field.related_query_name(): instance._get_pk_val(),
-        }
         manager = RelatedManager(
             model=self.field.rel.to,
-            core_filters=core_filters,
             instance=instance,
             symmetrical=self.field.rel.symmetrical,
             source_field_name=self.field.m2m_field_name(),
             target_field_name=self.field.m2m_reverse_field_name(),
             reverse=False,
         )
+
+        # These two attributes are set after the instance is created to
+        # maintain compatibility between Django 1.3.1 and >= 1.4.
+        # ``core_filters`` is no longer a valid kwarg as of Django 1.4, and the
+        # class returned by ``create_many_related_manager`` now expects
+        # ``through`` to be explicitly set.  Instead of providing different
+        # kwargs based on the version, we set them here.
+        manager.core_filters = {
+            '%s__pk' % self.field.related_query_name(): instance._get_pk_val(),
+        }
+        manager.through = self.field.rel.through
 
         # Set this after the fact because AuthorsManager is the superclass and
         # RelatedManager doesn't know about these attributes

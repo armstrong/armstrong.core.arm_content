@@ -8,7 +8,7 @@
       "django-reversion==1.4",
       "django-taggit==0.9.3",
       "sorl-thumbnail==11.05.2",
-      "armstrong.core.arm_sections>=1.5.2,<2.0",
+      "armstrong.core.arm_sections>=1.5.3,<2.0",
       "armstrong.core.arm_access>=1.0.6,<2.0",
       "armstrong.utils.backends>=1.0.0,<2.0"
     ]

@@ -78,6 +78,7 @@ class AuthorsDescriptor(object):
             source_field_name=self.field.m2m_field_name(),
             target_field_name=self.field.m2m_reverse_field_name(),
             reverse=False,
+            through=self.field.rel.through
         )
 
         # These two attributes are set after the instance is created to

@@ -71,15 +71,22 @@ class AuthorsDescriptor(object):
 
         RelatedManager = create_many_related_manager(AuthorsManager,
                 self.field.rel)
-        manager = RelatedManager(
-            model=self.field.rel.to,
-            instance=instance,
-            symmetrical=self.field.rel.symmetrical,
-            source_field_name=self.field.m2m_field_name(),
-            target_field_name=self.field.m2m_reverse_field_name(),
-            reverse=False,
-            through=self.field.rel.through
-        )
+        kwargs = {
+            'model': self.field.rel.to,
+            'instance': instance,
+            'symmetrical': self.field.rel.symmetrical,
+            'source_field_name': self.field.m2m_field_name(),
+            'target_field_name': self.field.m2m_reverse_field_name(),
+            'reverse': False,
+            'through': self.field.rel.through
+        }
+        try:
+            manager = RelatedManager(**kwargs)
+        except TypeError:
+            # Django 1.3.x does not have a through kwarg, so try
+            # removing it and instantiating it one more time.
+            del kwargs['through']
+            manager = RelatedManager(**kwargs)
 
         # These two attributes are set after the instance is created to
         # maintain compatibility between Django 1.3.1 and >= 1.4.
